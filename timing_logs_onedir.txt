@@ -1,0 +1,31 @@
+Start imports: 1744408275.4418967
+openpyxl imported successfully.
+tkinter imported successfully.
+User site-packages: C:\Users\JWaldrip\AppData\Roaming\Python\Python313\site-packages
+System site-packages: ['C:\\Users\\JWaldrip\\OneDrive - TOPOGRAPHIC LAND SURVEYORS\\Desktop\\PROGRAMS\\DataValidationTool\\DataValidationTool\\dist\\DataValidationTool\\_internal', 'C:\\Users\\JWaldrip\\OneDrive - TOPOGRAPHIC LAND SURVEYORS\\Desktop\\PROGRAMS\\DataValidationTool\\DataValidationTool\\dist\\DataValidationTool\\_internal\\Lib\\site-packages']
+tkinterdnd2 module imported successfully.
+TkinterDnD2 and DND_FILES imported successfully.
+xml.etree.ElementTree imported successfully.
+re imported successfully.
+enchant imported successfully.
+Imports completed: 4.493504285812378 seconds
+Start initialization: 1744408279.9355876
+Root window initialized.
+Launching Data Validation Tool...
+Basic setup done: 2.009669303894043 seconds
+Enchant dictionary initialized successfully.
+Enchant setup done: 2.2808265686035156 seconds
+Loaded custom dictionary: {'BRKR', 'AGM', 'PYTCO', 'ERW'}
+Custom dict loaded: 2.282299280166626 seconds
+Error counts setup done: 2.282334566116333 seconds
+Styles setup done: 2.2846994400024414 seconds
+Setting up UI...
+Start setup_ui: 1744408282.2203434
+Button frame setup done: 0.025692462921142578 seconds
+Canvas setup done: 0.031887054443359375 seconds
+UI setup complete.
+UI setup done: 2.316694974899292 seconds
+Registering drop target...
+Drag-and-drop enabled.
+Drag-and-drop setup done: 2.340938091278076 seconds
+Total initialization time: 2.3409688472747803 seconds

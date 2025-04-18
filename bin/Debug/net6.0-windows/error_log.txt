@@ -1,0 +1,4 @@
+Unhandled exception. System.NullReferenceException: Object reference not set to an instance of an object.
+   at DataValidationTool.MainForm.InitializeComponent() in C:\Users\JWaldrip\OneDrive - TOPOGRAPHIC LAND SURVEYORS\Desktop\PROGRAMS\DataValidationTool\DataValidationTool\MainForm.Designer.cs:line 45
+   at DataValidationTool.MainForm..ctor() in C:\Users\JWaldrip\OneDrive - TOPOGRAPHIC LAND SURVEYORS\Desktop\PROGRAMS\DataValidationTool\DataValidationTool\MainForm.cs:line 23
+   at DataValidationTool.Program.Main() in C:\Users\JWaldrip\OneDrive - TOPOGRAPHIC LAND SURVEYORS\Desktop\PROGRAMS\DataValidationTool\DataValidationTool\Program.cs:line 13

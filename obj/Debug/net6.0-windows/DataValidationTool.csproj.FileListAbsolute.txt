@@ -1,0 +1,5 @@
+C:\Users\JWaldrip\OneDrive - TOPOGRAPHIC LAND SURVEYORS\Desktop\PROGRAMS\DataValidationTool\DataValidationTool\obj\Debug\net6.0-windows\DataValidationTool.csproj.AssemblyReference.cache
+C:\Users\JWaldrip\OneDrive - TOPOGRAPHIC LAND SURVEYORS\Desktop\PROGRAMS\DataValidationTool\DataValidationTool\obj\Debug\net6.0-windows\DataValidationTool.MainForm.resources
+C:\Users\JWaldrip\OneDrive - TOPOGRAPHIC LAND SURVEYORS\Desktop\PROGRAMS\DataValidationTool\DataValidationTool\obj\Debug\net6.0-windows\DataValidationTool.csproj.GenerateResource.cache
+C:\Users\JWaldrip\OneDrive - TOPOGRAPHIC LAND SURVEYORS\Desktop\PROGRAMS\DataValidationTool\DataValidationTool\obj\Debug\net6.0-windows\DataValidationTool.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\JWaldrip\OneDrive - TOPOGRAPHIC LAND SURVEYORS\Desktop\PROGRAMS\DataValidationTool\DataValidationTool\obj\Debug\net6.0-windows\DataValidationTool.csproj.CoreCompileInputs.cache

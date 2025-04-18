@@ -1,0 +1,31 @@
+Start imports: 1744406807.047604
+openpyxl imported successfully.
+tkinter imported successfully.
+User site-packages: C:\Users\JWaldrip\AppData\Roaming\Python\Python313\site-packages
+System site-packages: ['C:\\Users\\JWaldrip\\AppData\\Local\\Temp\\_MEI204242', 'C:\\Users\\JWaldrip\\AppData\\Local\\Temp\\_MEI204242\\Lib\\site-packages']
+tkinterdnd2 module imported successfully.
+TkinterDnD2 and DND_FILES imported successfully.
+xml.etree.ElementTree imported successfully.
+re imported successfully.
+enchant imported successfully.
+Imports completed: 0.9799933433532715 seconds
+Start initialization: 1744406808.0279121
+Root window initialized.
+Launching Data Validation Tool...
+Basic setup done: 0.6335053443908691 seconds
+Enchant dictionary initialized successfully.
+Enchant setup done: 0.8645200729370117 seconds
+Loaded custom dictionary: {'AGM', 'ERW', 'BRKR', 'PYTCO'}
+Custom dict loaded: 0.8657729625701904 seconds
+Error counts setup done: 0.8658058643341064 seconds
+Styles setup done: 0.8676035404205322 seconds
+Setting up UI...
+Start setup_ui: 1744406808.8955588
+Button frame setup done: 0.021022796630859375 seconds
+Canvas setup done: 0.029392004013061523 seconds
+UI setup complete.
+UI setup done: 0.8970518112182617 seconds
+Registering drop target...
+Drag-and-drop enabled.
+Drag-and-drop setup done: 0.9148445129394531 seconds
+Total initialization time: 0.9148654937744141 seconds
