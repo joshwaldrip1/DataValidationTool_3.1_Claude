@@ -287,52 +287,56 @@ if tk:
             print(f"Loading CSV from: {file_path}")
             try:
                 self.csv_path = file_path
-                self.df = None  # Initialize to None
+                self.df = None
+                self.raw_df = None  # Store the raw CSV data
+                # Read the CSV as raw text to preprocess
+                with open(file_path, 'r', encoding='utf-8') as f:
+                    lines = f.readlines()
+
+                # Skip empty lines
+                lines = [line.strip() for line in lines if line.strip()]
+                if not lines:
+                    messagebox.showerror("Error", f"Failed to load CSV: '{file_path}'\n\nFile is empty.")
+                    return
+
                 # Attempt to detect delimiter using csv.Sniffer
                 try:
-                    with open(file_path, 'r', encoding='utf-8') as f:
-                        sample = f.read(1024)
-                        sniffer = csv.Sniffer()
-                        dialect = sniffer.sniff(sample)
-                        delimiter = dialect.delimiter
-                        print(f"Detected delimiter: '{delimiter}'")
+                    sample = '\n'.join(lines[:5])
+                    sniffer = csv.Sniffer()
+                    dialect = sniffer.sniff(sample)
+                    delimiter = dialect.delimiter
+                    print(f"Detected delimiter: '{delimiter}'")
                 except Exception as e:
                     print(f"Delimiter detection failed: {e}, defaulting to comma")
                     delimiter = ','
 
-                # Try loading CSV with multiple delimiters and encodings
-                delimiters = [delimiter] + [d for d in [',', '\t', ';', '|'] if d != delimiter]
-                encodings = ['utf-8', 'latin1', 'iso-8859-1', 'cp1252']
-                for enc in encodings:
-                    for delim in delimiters:
-                        try:
-                            print(f"Attempting to load CSV with encoding '{enc}' and delimiter '{delim}'")
-                            self.df = pd.read_csv(file_path, header=None, dtype=str, on_bad_lines='warn', encoding=enc, sep=delim)
-                            if self.df is not None and not self.df.empty:
-                                print(f"CSV loaded successfully with encoding '{enc}' and delimiter '{delim}'")
-                                break
-                            else:
-                                print(f"CSV loaded but empty with encoding '{enc}' and delimiter '{delim}'")
-                                self.df = None
-                        except pd.errors.ParserError as e:
-                            print(f"ParserError with encoding '{enc}' and delimiter '{delim}': {e}")
-                        except Exception as e:
-                            print(f"Unexpected error with encoding '{enc}' and delimiter '{delim}': {e}")
-                    if self.df is not None and not self.df.empty:
-                        break
+                # Parse the CSV lines
+                reader = csv.reader(lines, delimiter=delimiter)
+                data = list(reader)
 
-                # Check if DataFrame was successfully loaded
+                # Check if the first row is a metadata row (contains Job:, Version:, Units:)
+                if any('Job:' in cell or 'Version:' in cell or 'Units:' in cell for cell in data[0]):
+                    print("Metadata row detected in first row, removing it...")
+                    data = data[1:]
+
+                # Create raw DataFrame with all columns
+                max_cols_raw = max(len(row) for row in data)
+                processed_data_raw = []
+                for row in data:
+                    processed_row = row + [''] * (max_cols_raw - len(row))  # Pad with empty strings
+                    processed_data_raw.append(processed_row)
+                self.raw_df = pd.DataFrame(processed_data_raw)
+
+                # Create processed DataFrame with only the first 5 columns for validation
+                max_cols = 5  # Point Number, Easting, Northing, Elevation, Field Code
+                processed_data = []
+                for row in data:
+                    processed_row = row[:max_cols] + [''] * (max_cols - min(len(row), max_cols))
+                    processed_data.append(processed_row)
+                self.df = pd.DataFrame(processed_data)
+
                 if self.df is None or self.df.empty:
-                    try:
-                        with open(file_path, 'r', encoding='utf-8') as f:
-                            lines = f.readlines()[:2]
-                            line_info = f"Line 1: {lines[0].strip()}\nLine 2: {lines[1].strip()}" if len(lines) >= 2 else "File has fewer than 2 lines"
-                            line_2_fields = lines[1].strip().split(',') if len(lines) >= 2 else []
-                            field_count = len(line_2_fields)
-                            line_info += f"\nLine 2 field count: {field_count} (fields: {line_2_fields})"
-                        messagebox.showerror("Error", f"Failed to load CSV: '{file_path}'\n\nUnable to parse the CSV file. Tried multiple delimiters (comma, tab, semicolon, pipe) and encodings (UTF-8, latin1, iso-8859-1, cp1252). Please check the file for consistent column counts, proper quoting of commas within fields, and UTF-8 encoding.\n\n{line_info}")
-                    except Exception as e:
-                        messagebox.showerror("Error", f"Failed to load CSV: '{file_path}'\n\nUnable to parse the CSV file: {e}\n\nPlease check the file format and content.")
+                    messagebox.showerror("Error", f"Failed to load CSV: '{file_path}'\n\nNo data after processing. Please check the file format.")
                     return
 
                 print("Setting headers...")
@@ -395,110 +399,48 @@ if tk:
             print(f"Headers set: {self.df.columns.tolist()}")
 
         def show_table(self):
-            start_time = time.time()
-            print(f"Start show_table: {start_time}")
-
-            print("Showing table...")
-            for w in self.table.winfo_children():
-                w.destroy()
-            for w in self.header_frame.winfo_children():
-                w.destroy()
+            # Clear existing widgets
+            for widget in self.canvas_frame.winfo_children():
+                widget.destroy()
             self.cells = {}
-            codes = list(self.fxl_data.keys())
-            print(f"FXL codes: {codes}")
-            print(f"Table cleared: {time.time() - start_time} seconds")
 
-            fixed_width = 24
-            column_widths = [fixed_width for _ in self.df.columns]
-            temp_label = ttk.Label(self.header_frame, text="A" * fixed_width, font=("Helvetica", "8"))
-            temp_label.grid(row=0, column=0)
-            self.update()
-            pixel_width = temp_label.winfo_reqwidth()
-            temp_label.destroy()
-            total_width = pixel_width * len(self.df.columns)
-            print(f"Column widths calculated: {time.time() - start_time} seconds")
+            if self.df is None or self.df.empty:
+                return
 
-            for col, name in enumerate(self.df.columns):
-                label = ttk.Label(self.header_frame, text=name, style="Header.TLabel", width=column_widths[col], anchor="center")
-                label.grid(row=0, column=col, sticky="nsew", padx=2, pady=2, ipady=0)
-                self.header_frame.grid_columnconfigure(col, minsize=pixel_width)
-                Tooltip(label, lambda: f"Column: {name}")
-                print(f"Added header: {name} at column {col} with width {column_widths[col]} (pixels: {pixel_width})")
-            print(f"Headers added: {time.time() - start_time} seconds")
+            # Create headers
+            headers = ["Point Number", "Easting", "Northing", "Elevation", "Field Code"]
+            # Add attribute headers from raw_df
+            if self.raw_df is not None:
+                for col in range(5, self.raw_df.shape[1]):
+                    headers.append(f"Attribute {col - 4}")
 
+            for col, header in enumerate(headers):
+                label = ttk.Label(self.canvas_frame, text=header, borderwidth=1, relief="solid", anchor="center")
+                label.grid(row=0, column=col, sticky="nsew")
+
+            # Populate the table
             for row in range(self.df.shape[0]):
-                code = self.get_base_field_code(self.df.iat[row, 4]) if self.df.shape[1] > 4 else ""
-                attrs = self.fxl_data.get(code, [])
-                print(f"Row {row}, Code: {code}, Attributes: {attrs}")
-                for col, name in enumerate(self.df.columns):
-                    val = str(self.df.iat[row, col])
-                    if val.lower() == "nan":
-                        val = ""
-                    if name in ["Northing", "Easting", "Elevation"]:
-                        val = f"{float(val):.10f}" if val and val.strip() else ""
-                    if col == 4:
-                        widget = ttk.Combobox(self.table, values=codes, style="Normal.TCombobox", width=column_widths[col], justify="center")
-                    elif col > 4 and (col - 5) < len(attrs) and attrs[col - 5]["type"] == "list":
-                        widget = ttk.Combobox(self.table, values=attrs[col - 5]["items"], style="Normal.TCombobox", width=column_widths[col], justify="center")
-                    else:
-                        widget = ttk.Entry(self.table, style="Normal.TEntry", width=column_widths[col], justify="center")
-                    if isinstance(widget, ttk.Combobox):
-                        # Prevent canvas scrolling when dropdown is open
-                        widget.bind("<MouseWheel>", lambda e: "break")
-                        widget.bind("<Button-4>", lambda e: "break")
-                        widget.bind("<Button-5>", lambda e: "break")
-                        # Bind wheel events to the popup listbox
-                        def bind_popup_wheel(event, cb=widget):
-                            try:
-                                popup = cb.winfo_toplevel().tk.call(cb._w, "get-popup")
-                                if popup:
-                                    cb.tk.eval(f"""
-                                        bind {popup}.f.l <MouseWheel> {{
-                                            %W yview scroll [expr {{- (%D / 120)}}] units
-                                            break
-                                        }}
-                                        bind {popup}.f.l <Button-4> {{
-                                            %W yview scroll -1 units
-                                            break
-                                        }}
-                                        bind {popup}.f.l <Button-5> {{
-                                            %W yview scroll 1 units
-                                            break
-                                        }}
-                                    """)
-                                    # Temporarily unbind canvas wheel events
-                                    self.canvas.unbind_all("<MouseWheel>")
-                                    self.canvas.unbind_all("<Button-4>")
-                                    self.canvas.unbind_all("<Button-5>")
-                            except tk.TclError:
-                                pass
-                        def restore_canvas_wheel(event, cb=widget):
-                            # Restore canvas wheel bindings when dropdown closes
-                            self.canvas.bind_all("<MouseWheel>", self._on_mousewheel)
-                            self.canvas.bind_all("<Button-4>", self._on_mousewheel_up)
-                            self.canvas.bind_all("<Button-5>", self._on_mousewheel_down)
-                        widget.bind("<Button-1>", bind_popup_wheel)
-                        widget.bind("<FocusOut>", restore_canvas_wheel)
-                        widget.bind("<<ComboboxSelected>>", restore_canvas_wheel)
-                    widget.insert(0, val)
-                    widget.grid(row=row, column=col, sticky="nsew", padx=2, pady=2, ipady=0)
-                    self.table.grid_columnconfigure(col, minsize=pixel_width)
-                    self.cells[(row, col)] = widget
-                    widget.bind("<FocusOut>", lambda e, r=row, c=col: self.on_cell_edit(r, c))
-                    Tooltip(widget, lambda w=widget, r=row, c=col: self.get_cell_tooltip(w, r, c))
-                    widget.bind("<Button-3>", lambda e, w=widget, r=row, c=col: self.show_error_menu(e, w, r, c))
-                    print(f"Added widget at row {row}, column {col} with value: {val} and width {column_widths[col]} (pixels: {pixel_width})")
-            print(f"Data rows added: {time.time() - start_time} seconds")
+                for col in range(len(headers)):
+                    if col < 5:  # Use self.df for the first 5 columns
+                        value = self.df.iloc[row, col] if col < self.df.shape[1] else ""
+                    else:  # Use self.raw_df for attribute columns
+                        raw_col = col
+                        value = self.raw_df.iloc[row, raw_col] if raw_col < self.raw_df.shape[1] else ""
 
-            for i in range(self.df.shape[1]):
-                self.table.grid_columnconfigure(i, weight=0)
-                self.header_frame.grid_columnconfigure(i, weight=0)
-            self.canvas.itemconfig(self.canvas_frame, width=total_width)
-            self.canvas.configure(scrollregion=(0, 0, total_width, self.main_frame.winfo_reqheight()))
-            self.validate_all()
-            print("Table display complete.")
-            self.update()
-            print(f"Table display completed: {time.time() - start_time} seconds")
+                    entry = ttk.Entry(self.canvas_frame, justify="center")
+                    entry.insert(0, value)
+                    entry.grid(row=row + 1, column=col, sticky="nsew")
+                    self.cells[(row, col)] = entry
+
+            # Configure grid weights
+            for col in range(len(headers)):
+                self.canvas_frame.grid_columnconfigure(col, weight=1)
+            for row in range(self.df.shape[0] + 1):
+                self.canvas_frame.grid_rowconfigure(row, weight=1)
+
+            # Update canvas scrolling
+            self.canvas_frame.update_idletasks()
+            self.canvas.configure(scrollregion=self.canvas.bbox("all"))
 
         def on_cell_edit(self, row, col):
             if hasattr(self, 'is_validating') and self.is_validating:
