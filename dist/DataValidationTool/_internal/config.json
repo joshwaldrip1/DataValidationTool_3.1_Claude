@@ -1,0 +1,35 @@
+{
+  "single_excel_instance": true,
+  "fxl_library_path": "S:\\TOPOGRAPHIC DATA\\TOPOGRAPHIC STANDARDS\\DATA DICTIONARY - GEOID FILES",
+  "numeric_bounds": {
+    "ANGLE": [
+      0,
+      360
+    ],
+    "HORIZONTAL ANGLE": [
+      0,
+      360
+    ],
+    "VERTICAL ANGLE": [
+      -90,
+      90
+    ],
+    "BEND ANGLE": [
+      0,
+      180
+    ],
+    "JOINT LENGTH": [
+      0,
+      80
+    ],
+    "WALL THICKNESS": [
+      0,
+      5
+    ],
+    "DEPTH": [
+      -30,
+      200
+    ]
+  },
+  "last_fxl_path": "S:\\TOPOGRAPHIC DATA\\TOPOGRAPHIC STANDARDS\\DATA DICTIONARY - GEOID FILES\\CLIENT FIELD CODES\\Chevron_Noble\\CHEVRON_DCT_503_R_1.9.fxl"
+}

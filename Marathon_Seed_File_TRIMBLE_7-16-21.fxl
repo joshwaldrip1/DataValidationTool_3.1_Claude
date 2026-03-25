@@ -1,0 +1,3384 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!--This file represents feature coding definitions-->
+<FeatureCodingDefinitions CreationDate="2019-08-22T15:19:12" DateModified="2022-06-21T12:17:46.4585568-05:00" SchemaVersion="3" xmlns="http://trimble.com/schema/fxl">
+  <LineStyleDefinitions Version="2.0" xmlns="http://trimble.com/schema/linestyle">
+    <LineStyleDefinition Name="Solid" Description="">
+      <Units Reference="Ground" Length="Metric" />
+      <PatternType>Default</PatternType>
+      <Pattern TotalLength="10000.000000" EndLength="0.000000">
+        <Line Color="Empty" LineWeight="1">
+          <Location X="0.000000" Y="0.000000" />
+          <Location X="10000.000000" Y="0.000000" />
+        </Line>
+      </Pattern>
+    </LineStyleDefinition>
+  </LineStyleDefinitions>
+  <SymbolDefinitions Version="2" xmlns="http://trimble.com/schema/symbol">
+    <SymbolDefinition Name="Cross">
+      <Units Reference="Paper" Length="Metric" />
+      <Scale Size="Variable" Shape="Fixed" />
+      <Rotation Type="Allow" />
+      <Dimension First="Length" Second="Length" />
+      <Color Name="BlueViolet" Red="138" Green="43" Blue="226" />
+      <Component Number="1" Name="Cross">
+        <Line Color="BlueViolet" LineWeight="1">
+          <Location X="-2.000000" Y="-2.000000" />
+          <Location X="2.000000" Y="2.000000" />
+        </Line>
+        <Line Color="BlueViolet" LineWeight="1">
+          <Location X="-2.000000" Y="2.000000" />
+          <Location X="2.000000" Y="-2.000000" />
+        </Line>
+      </Component>
+      <Component Number="2" Name="" />
+    </SymbolDefinition>
+  </SymbolDefinitions>
+  <LayerDefinitions>
+    <LayerDefinition>
+      <Name>0</Name>
+      <Color>FFFFFFFF</Color>
+      <LineStyleName>Solid</LineStyleName>
+    </LayerDefinition>
+    <LayerDefinition>
+      <Name>Points</Name>
+      <Color>FFFFFFFF</Color>
+      <LineStyleName>Solid</LineStyleName>
+    </LayerDefinition>
+  </LayerDefinitions>
+  <FeatureDefinitions>
+    <PointFeatureDefinition Code="ANODE" Name="ANODE BED" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>CONVENTIONAL</Item>
+            <Item>DEEP</Item>
+            <Item>MAGNESIUM</Item>
+            <Item>IMPRESSED</Item>
+            <Item>GRAPHITE</Item>
+            <Item>STEEL PIPE</Item>
+            <Item>LINEAR AND MIXED METAL OXIDE</Item>
+            <Item>GALVANIC</Item>
+            <Item>ZINC</Item>
+            <Item>CAST IRON</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="POSITION" EntryMethod="Required">
+          <ListItems>
+            <Item>BEGIN</Item>
+            <Item>EDGE</Item>
+            <Item>END</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <DoubleAttribute Name="DEPTH" EntryMethod="Required" DefaultValue="0" MinimumValue="0" MaximumValue="9999" />
+        <DoubleAttribute Name="DIAMETER" EntryMethod="Optional" DefaultValue="0" MinimumValue="0" MaximumValue="0" />
+        <DoubleAttribute Name="LENGTH" EntryMethod="Optional" DefaultValue="0" MinimumValue="0" MaximumValue="0" />
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="PIPE_BEND" Name="BEND" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="BEND_TECH" EntryMethod="Required">
+          <ListItems>
+            <Item>FACTORY BEND</Item>
+            <Item>FIELD BEND</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="HEAT_NUMBER" EntryMethod="Required" />
+        <StringAttribute Name="JOINT_NUMBER" EntryMethod="Required" />
+        <ListAttribute Name="DIRECTION" EntryMethod="Required">
+          <ListItems>
+            <Item>COMBINATION SIDE BEND LEFT SAG</Item>
+            <Item>COMBINATION SIDE BEND LEFT AND OVER BEND</Item>
+            <Item>COMBINATION SIDE BEND RIGHT AND OVER BEND</Item>
+            <Item>COMBINATION SIDE BEND RIGHT AND SAG</Item>
+            <Item>SIDE BEND LEFT</Item>
+            <Item>SIDE BEND RIGHT</Item>
+            <Item>OVER BEND</Item>
+            <Item>SAG BEND</Item>
+          </ListItems>
+        </ListAttribute>
+        <DoubleAttribute Name="HORIZONTAL_ANGLE" EntryMethod="Required" MinimumValue="0" MaximumValue="360" NumberOfDecimals="2" />
+        <DoubleAttribute Name="VERTICAL_ANGLE" EntryMethod="Required" MinimumValue="0" MaximumValue="360" NumberOfDecimals="2" />
+        <DoubleAttribute Name="INSTALLATION_DATE" EntryMethod="Optional" MinimumValue="0" MaximumValue="0" />
+        <StringAttribute Name="NOTES" EntryMethod="Required" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="BLOW_OFF_ASSEMBLY" Name="BLOW OFF ASSEMBLY" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <DoubleAttribute Name="SIZE" EntryMethod="Required" DefaultValue="0" MinimumValue="0" MaximumValue="10000" />
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="BOND_LEAD" Name="BOND LEAD" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>BOND BOX</Item>
+            <Item>BOND LEAD</Item>
+            <Item>NEGATIVELY CHARGED BOND LEAD</Item>
+            <Item>POSITIVELY CHARGED BOND LEAD</Item>
+            <Item>LINE FROM ANODE BED</Item>
+            <Item>UNKNOWN</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="MATERIAL" EntryMethod="Required">
+          <ListItems>
+            <Item>COPPER</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="BONDED_COMPANY" EntryMethod="Required" />
+        <StringAttribute Name="RESISTOR_TYPE" EntryMethod="Optional" />
+        <DoubleAttribute Name="GAUGE_SIZE" EntryMethod="Optional" MinimumValue="0" MaximumValue="0" />
+        <ListAttribute Name="SOURCE" EntryMethod="Optional">
+          <ListItems>
+            <Item>GPS DATA</Item>
+            <Item>FIELD NOTEBOOK</Item>
+            <Item>SURVEY DATA</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="BORE" Name="BORE HORIZONTAL DIRECTIONAL DRILL" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="POSITION" EntryMethod="Required">
+          <ListItems>
+            <Item>ENTRY</Item>
+            <Item>EXIT</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="COATING" EntryMethod="Required">
+          <ListItems>
+            <Item>ARO</Item>
+            <Item>POWERCRETE</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="BRANCH_CONNECT" Name="BRANCH CONNECT" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>CAPPED BRANCH CONNECT</Item>
+            <Item>PIPE COUPLING OR COLLAR</Item>
+            <Item>HOT TAP W / FULL ENCIRCLEMENT SLEEVE</Item>
+            <Item>P&amp;H NIPPLE</Item>
+            <Item>SAV-A-VALVE</Item>
+            <Item>PIPE SADDLE</Item>
+            <Item>ANTI-SEEP RING</Item>
+            <Item>SOCK-O-LET</Item>
+            <Item>SEAL-O-RING</Item>
+            <Item>SIPHON</Item>
+            <Item>STOPPLE</Item>
+            <Item>HOT TAP WITH WELD SADDLE</Item>
+            <Item>THREAD-O-LET</Item>
+            <Item>THREAD-O-RING</Item>
+            <Item>WELD-O-LET</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="TAP_METHOD" EntryMethod="Optional">
+          <ListItems>
+            <Item>COLD</Item>
+            <Item>HOT</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="LOCATION" EntryMethod="Required">
+          <ListItems>
+            <Item>SIDE</Item>
+            <Item>TOP OF PIPE</Item>
+            <Item>AT WELD</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <DoubleAttribute Name="NOM_OD" EntryMethod="Optional" MinimumValue="0" MaximumValue="0" />
+        <DoubleAttribute Name="NOM_WT" EntryMethod="Optional" MinimumValue="0" MaximumValue="0" />
+        <StringAttribute Name="DESCIPTION" EntryMethod="Optional" />
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="BRIDGE" Name="BRIDGE" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>PEDESTRIAN</Item>
+            <Item>PIPELINE</Item>
+            <Item>RAILROAD</Item>
+            <Item>ROAD BRIDGE</Item>
+            <Item>ROAD OVERPASS</Item>
+            <Item>WATERBODY</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="POSITION" EntryMethod="Required">
+          <ListItems>
+            <Item>BEGIN</Item>
+            <Item>EDGE</Item>
+            <Item>END</Item>
+            <Item>EXPANSION JOINT</Item>
+            <Item>HEADWALL</Item>
+            <Item>SUPPORT COLUMN</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="MATERIAL" EntryMethod="Required">
+          <ListItems>
+            <Item>CONCRETE</Item>
+            <Item>STEEL</Item>
+            <Item>WOOD</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="VERTICAL_CLEARANCE" EntryMethod="Optional" />
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="BUILDING" Name="BUILDING" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>AIRPORT</Item>
+            <Item>APARTMENT</Item>
+            <Item>BARN</Item>
+            <Item>CAMPGROUND</Item>
+            <Item>COMMUNITY CENTER</Item>
+            <Item>CHURCH</Item>
+            <Item>CONDOMINIUM</Item>
+            <Item>THEATER</Item>
+            <Item>FACTORY</Item>
+            <Item>FIRE STATION</Item>
+            <Item>HOSPITAL</Item>
+            <Item>HOTEL</Item>
+            <Item>HOUSE</Item>
+            <Item>MALL</Item>
+            <Item>SCHOOL</Item>
+            <Item>METAL BUILDING</Item>
+            <Item>MOBILE HOME</Item>
+            <Item>PORTABLE BUILDING</Item>
+            <Item>BUILDING</Item>
+            <Item>SHED</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="POSITION" EntryMethod="Required">
+          <ListItems>
+            <Item>CORNER</Item>
+            <Item>EDGE</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="MATERIAL" EntryMethod="Required">
+          <ListItems>
+            <Item>BRICK</Item>
+            <Item>BLOCK</Item>
+            <Item>CONCRETE</Item>
+            <Item>METAL</Item>
+            <Item>WOOD</Item>
+            <Item>CLAY</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="OCCUPIED" EntryMethod="Optional">
+          <ListItems>
+            <Item>NO</Item>
+            <Item>UNKNOWN</Item>
+            <Item>YES</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="CAD_WELD" Name="CAD WELD" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>1 WIRE</Item>
+            <Item>2 WIRE</Item>
+            <Item>3 WIRE</Item>
+            <Item>4 WIRE</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="ANODE" EntryMethod="Required">
+          <ListItems>
+            <Item>NO</Item>
+            <Item>UNKNOWN</Item>
+            <Item>YES</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="COLOR" EntryMethod="Optional" />
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="CASING" Name="CASING" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="CROSSING_TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>AIR STRIP</Item>
+            <Item>FOREIGN LINE</Item>
+            <Item>LEVEE</Item>
+            <Item>RAILROAD</Item>
+            <Item>ROADWAY</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+            <Item>WATERWAY</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="POSITION" EntryMethod="Required">
+          <ListItems>
+            <Item>BEGIN</Item>
+            <Item>END</Item>
+            <Item>TOP</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="VENTED" EntryMethod="Required">
+          <ListItems>
+            <Item>NO</Item>
+            <Item>YES</Item>
+          </ListItems>
+        </ListAttribute>
+        <DoubleAttribute Name="QUANTITY_OF_VENTS" EntryMethod="Required" DefaultValue="0" MinimumValue="0" MaximumValue="0" />
+        <ListAttribute Name="INSULATION_TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>CLAMP</Item>
+            <Item>BOW STRING</Item>
+            <Item>MAT</Item>
+            <Item>ROD</Item>
+            <Item>CLAMP WITH RISERS</Item>
+            <Item>NA</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="SEAL_TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>CONCRETE</Item>
+            <Item>EPOXY</Item>
+            <Item>FOAM</Item>
+            <Item>RUBBER</Item>
+            <Item>WRAP</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="MATERIAL" EntryMethod="Required">
+          <ListItems>
+            <Item>POLY</Item>
+            <Item>FIBERGLASS</Item>
+            <Item>HIGH DENSITY POLY ETHYLENE</Item>
+            <Item>STEEL</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="DIAMETER" EntryMethod="Required">
+          <ListItems>
+            <Item>8 in</Item>
+            <Item>6 in</Item>
+            <Item>10 in</Item>
+            <Item>12 in</Item>
+            <Item>54 in</Item>
+            <Item>14 in</Item>
+            <Item>16 in</Item>
+            <Item>18 in</Item>
+            <Item>20 in</Item>
+            <Item>22 in</Item>
+            <Item>24 in</Item>
+            <Item>26 in</Item>
+            <Item>28 in</Item>
+            <Item>30 in</Item>
+            <Item>32 in</Item>
+            <Item>34 in</Item>
+            <Item>36 in</Item>
+            <Item>42 in</Item>
+            <Item>48 in</Item>
+            <Item>60 in</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="WALL_THICKNESS" EntryMethod="Optional">
+          <ListItems>
+            <Item>0.035</Item>
+            <Item>0.049</Item>
+            <Item>0.057</Item>
+            <Item>0.065</Item>
+            <Item>0.068</Item>
+            <Item>0.073</Item>
+            <Item>0.083</Item>
+            <Item>0.088</Item>
+            <Item>0.091</Item>
+            <Item>0.095</Item>
+            <Item>0.109</Item>
+            <Item>0.113</Item>
+            <Item>0.114</Item>
+            <Item>0.117</Item>
+            <Item>0.119</Item>
+            <Item>0.12</Item>
+            <Item>0.125</Item>
+            <Item>0.126</Item>
+            <Item>0.133</Item>
+            <Item>0.134</Item>
+            <Item>0.14</Item>
+            <Item>0.145</Item>
+            <Item>0.147</Item>
+            <Item>0.148</Item>
+            <Item>0.154</Item>
+            <Item>0.156</Item>
+            <Item>0.165</Item>
+            <Item>0.172</Item>
+            <Item>0.179</Item>
+            <Item>0.18</Item>
+            <Item>0.188</Item>
+            <Item>0.19</Item>
+            <Item>0.191</Item>
+            <Item>0.2</Item>
+            <Item>0.203</Item>
+            <Item>0.208</Item>
+            <Item>0.21</Item>
+            <Item>0.215</Item>
+            <Item>0.216</Item>
+            <Item>0.218</Item>
+            <Item>0.219</Item>
+            <Item>0.226</Item>
+            <Item>0.237</Item>
+            <Item>0.247</Item>
+            <Item>0.25</Item>
+            <Item>0.258</Item>
+            <Item>0.26</Item>
+            <Item>0.268</Item>
+            <Item>0.27</Item>
+            <Item>0.276</Item>
+            <Item>0.277</Item>
+            <Item>0.279</Item>
+            <Item>0.28</Item>
+            <Item>0.281</Item>
+            <Item>0.282</Item>
+            <Item>0.286</Item>
+            <Item>0.292</Item>
+            <Item>0.294</Item>
+            <Item>0.3</Item>
+            <Item>0.301</Item>
+            <Item>0.305</Item>
+            <Item>0.307</Item>
+            <Item>0.308</Item>
+            <Item>0.312</Item>
+            <Item>0.3125</Item>
+            <Item>0.318</Item>
+            <Item>0.32</Item>
+            <Item>0.322</Item>
+            <Item>0.33</Item>
+            <Item>0.332</Item>
+            <Item>0.333</Item>
+            <Item>0.337</Item>
+            <Item>0.3375</Item>
+            <Item>0.339</Item>
+            <Item>0.342</Item>
+            <Item>0.343</Item>
+            <Item>0.344</Item>
+            <Item>0.349</Item>
+            <Item>0.35</Item>
+            <Item>0.352</Item>
+            <Item>0.355</Item>
+            <Item>0.358</Item>
+            <Item>0.36</Item>
+            <Item>0.365</Item>
+            <Item>0.37</Item>
+            <Item>0.375</Item>
+            <Item>0.377</Item>
+            <Item>0.382</Item>
+            <Item>0.4</Item>
+            <Item>0.405</Item>
+            <Item>0.406</Item>
+            <Item>0.409</Item>
+            <Item>0.429</Item>
+            <Item>0.432</Item>
+            <Item>0.436</Item>
+            <Item>0.437</Item>
+            <Item>0.438</Item>
+            <Item>0.47</Item>
+            <Item>0.49</Item>
+            <Item>0.495</Item>
+            <Item>0.5</Item>
+            <Item>0.512</Item>
+            <Item>0.515</Item>
+            <Item>0.531</Item>
+            <Item>0.552</Item>
+            <Item>0.562</Item>
+            <Item>0.593</Item>
+            <Item>0.6</Item>
+            <Item>0.605</Item>
+            <Item>0.625</Item>
+            <Item>0.636</Item>
+            <Item>0.639</Item>
+            <Item>0.64</Item>
+            <Item>0.656</Item>
+            <Item>0.687</Item>
+            <Item>0.688</Item>
+            <Item>0.718</Item>
+            <Item>0.719</Item>
+            <Item>0.725</Item>
+            <Item>0.75</Item>
+            <Item>0.796</Item>
+            <Item>0.812</Item>
+            <Item>0.83</Item>
+            <Item>0.843</Item>
+            <Item>0.875</Item>
+            <Item>0.937</Item>
+            <Item>0.94</Item>
+            <Item>0.968</Item>
+            <Item>0.98</Item>
+            <Item>1</Item>
+            <Item>1.031</Item>
+            <Item>1.04</Item>
+            <Item>1.093</Item>
+            <Item>1.125</Item>
+            <Item>1.156</Item>
+            <Item>1.218</Item>
+            <Item>1.25</Item>
+            <Item>1.28</Item>
+            <Item>1.312</Item>
+            <Item>1.375</Item>
+            <Item>1.406</Item>
+            <Item>1.437</Item>
+            <Item>1.49</Item>
+            <Item>1.5</Item>
+            <Item>1.531</Item>
+            <Item>1.562</Item>
+            <Item>1.593</Item>
+            <Item>1.625</Item>
+            <Item>1.66</Item>
+            <Item>1.75</Item>
+            <Item>1.781</Item>
+            <Item>1.812</Item>
+            <Item>1.875</Item>
+            <Item>1.968</Item>
+            <Item>2.062</Item>
+            <Item>2.125</Item>
+            <Item>2.343</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="GRADE" EntryMethod="Optional">
+          <ListItems>
+            <Item>X56</Item>
+            <Item>X80</Item>
+            <Item>X70</Item>
+            <Item>X52</Item>
+            <Item>X42</Item>
+            <Item>GR B</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="SOURCE" EntryMethod="Required">
+          <ListItems>
+            <Item>GPS DATA</Item>
+            <Item>FIELD NOTEBOOK</Item>
+            <Item>SURVEY DATA</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="CATTLE_GUARD" Name="CATTLE GUARD" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="CENTERLINE_DITCH" Name="CENTERLINE DITCH" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>DIRT</Item>
+            <Item>CONCRETE</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="CHECK_SHOT" Name="CHECK SHOT" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <StringAttribute Name="POINT_NUM" EntryMethod="Required" />
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="CONCRETE" Name="CONCRETE" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>BOLLARD</Item>
+            <Item>PIER</Item>
+            <Item>RINGWALL</Item>
+            <Item>SIDEWALK</Item>
+            <Item>SLAB</Item>
+            <Item>SUPPORT</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="POSITION" EntryMethod="Required">
+          <ListItems>
+            <Item>BEGIN</Item>
+            <Item>CENTERLINE</Item>
+            <Item>CORNER</Item>
+            <Item>EDGE</Item>
+            <Item>END</Item>
+            <Item>TOP</Item>
+          </ListItems>
+        </ListAttribute>
+        <DoubleAttribute Name="DIMENSIONS" EntryMethod="Optional" DefaultValue="0" MinimumValue="-1.79E+308" MaximumValue="1.79E+308" />
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="CONTROL_POINT" Name="CONTROL POINT (SET BY CREW)" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>60D NAIL</Item>
+            <Item>90D NAIL</Item>
+            <Item>ALUMINUM CAP</Item>
+            <Item>BRASS CAP</Item>
+            <Item>CONCRETE</Item>
+            <Item>IRON PIPE</Item>
+            <Item>IRON ROD</Item>
+            <Item>MARKED STONE</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+            <Item>PK NAIL</Item>
+            <Item>RAILROAD NAIL</Item>
+            <Item>RAILROAD SPIKE</Item>
+            <Item>X IN CONCRETE</Item>
+            <Item>HUB AXLE</Item>
+            <Item>ROCK PILE</Item>
+            <Item>STONE</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="FOUND_OR_SET" EntryMethod="Optional">
+          <ListItems>
+            <Item>FOUND</Item>
+            <Item>SET</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="STYLE" EntryMethod="Optional">
+          <ListItems>
+            <Item>PRIMARY CONTROL</Item>
+            <Item>SECONDARY CONTROL</Item>
+            <Item>BENCHMARK - VERTICAL</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="SIZE" EntryMethod="Optional">
+          <ListItems>
+            <Item>0.25</Item>
+            <Item>0.38</Item>
+            <Item>0.50</Item>
+            <Item>0.58</Item>
+            <Item>0.75</Item>
+            <Item>2</Item>
+            <Item>1.6</Item>
+            <Item>3</Item>
+            <Item>2.6</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+            <Item>4</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="CORE_BORE_HOLE" Name="CORE BORE HOLE (SOIL SAMPLE)" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <StringAttribute Name="SAMPLE_ID" EntryMethod="Optional" />
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="CORROSION_CONTROL" Name="CORROSION CONTROL" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>ANODE</Item>
+            <Item>BOND</Item>
+            <Item>COUPON</Item>
+            <Item>GROUND BED (ANODE)</Item>
+            <Item>INHIBITOR</Item>
+            <Item>RECTIFIER</Item>
+            <Item>TEST LEAD</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="DESCRIPTION" EntryMethod="Optional" />
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="CROP_LINE" Name="CROP LINE-VEGETATION (NOT BRUSH)" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="POSITION" EntryMethod="Required">
+          <ListItems>
+            <Item>BEGIN</Item>
+            <Item>CORNER</Item>
+            <Item>EDGE</Item>
+            <Item>END</Item>
+            <Item>INSIDE</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="CROP_TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>BARELY</Item>
+            <Item>CORN</Item>
+            <Item>COTTON</Item>
+            <Item>CULTIVATED FIELD</Item>
+            <Item>HAY</Item>
+            <Item>OPEN PASTURE</Item>
+            <Item>PEANUTS</Item>
+            <Item>RICE</Item>
+            <Item>SORGHUM</Item>
+            <Item>SOYBEAN</Item>
+            <Item>SUGARCANE</Item>
+            <Item>SUNFLOWER</Item>
+            <Item>WHEAT</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="LAND_USE" EntryMethod="Optional">
+          <ListItems>
+            <Item>CULTIVATED FARMED</Item>
+            <Item>PASTURE UNCULTIVATED</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="CULVERT" Name="CULVERT" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>BOX</Item>
+            <Item>CMP</Item>
+            <Item>GALVENIZED</Item>
+            <Item>PLASTIC</Item>
+            <Item>PVC</Item>
+            <Item>RCP</Item>
+            <Item>STEEL</Item>
+            <Item>TILE</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <DoubleAttribute Name="SIZE" EntryMethod="Required" DefaultValue="0" MinimumValue="-1.79E+308" MaximumValue="1.79E+308" />
+        <ListAttribute Name="POSITION" EntryMethod="Required">
+          <ListItems>
+            <Item>FLOW LINE</Item>
+            <Item>TOP</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="CONDITION" EntryMethod="Required">
+          <ListItems>
+            <Item>GOOD</Item>
+            <Item>POOR</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="BEGIN_OR_END" EntryMethod="Optional">
+          <ListItems>
+            <Item>BEGIN</Item>
+            <Item>END</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="CURB" Name="CURB" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="POSITION" EntryMethod="Required">
+          <ListItems>
+            <Item>FACE OF CURB -GUTTER</Item>
+            <Item>TOP BACK OF CURB</Item>
+            <Item>TOP FACE OF CURB</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="DEFECT" Name="DEFFECT" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Optional">
+          <ListItems>
+            <Item>CORROSION</Item>
+            <Item>CRACK</Item>
+            <Item>DENT</Item>
+            <Item>FATIGUE</Item>
+            <Item>GOUGE</Item>
+            <Item>LAMINATION</Item>
+            <Item>SCRAPE</Item>
+            <Item>WELD DEFFECT</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="DOC" Name="DEPTH OF COVER" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="MEASUREMENT_METHOD" EntryMethod="Required">
+          <ListItems>
+            <Item>BELLHOLE</Item>
+            <Item>OPEN TRENCH</Item>
+            <Item>PIPE LOCATOR</Item>
+            <Item>POTHOLE</Item>
+            <Item>PROBE</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="DRAIN_TILE" Name="DRAIN TILE" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="MATERIAL" EntryMethod="Required">
+          <ListItems>
+            <Item>CLAY</Item>
+            <Item>CONCRETE</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+            <Item>PVC</Item>
+            <Item>STEEL</Item>
+          </ListItems>
+        </ListAttribute>
+        <DoubleAttribute Name="DIAMETER" EntryMethod="Required" DefaultValue="0" MinimumValue="0" MaximumValue="10000" />
+        <DoubleAttribute Name="DEPTH" EntryMethod="Optional" DefaultValue="0" MinimumValue="-1.79E+308" MaximumValue="1.79E+308" />
+        <DoubleAttribute Name="CLEARANCE" EntryMethod="Optional" DefaultValue="0" MinimumValue="-1.79E+308" MaximumValue="1.79E+308" />
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="DRIP" Name="DRIP" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Optional">
+          <ListItems>
+            <Item>OTHER (SEE NOTES)</Item>
+            <Item>STANDARD</Item>
+            <Item>MODIFIED STANDARD</Item>
+            <Item>INNOPIPE</Item>
+            <Item>IPD</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="MANUFACTURER" EntryMethod="Required">
+          <ListItems>
+            <Item>AMERICAN STEEL</Item>
+            <Item>CAMERON</Item>
+            <Item>CONSOLIDATED WESTERN STEEL CORP</Item>
+            <Item>GROVE</Item>
+            <Item>NORRISEAL</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+            <Item>TENARIS</Item>
+            <Item>US STEEL</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="NOM_DIA" EntryMethod="Required">
+          <ListItems>
+            <Item>1 in</Item>
+            <Item>1 1/4in</Item>
+            <Item>1 1/2in</Item>
+            <Item>2 in</Item>
+            <Item>2 1/2in</Item>
+            <Item>3 in</Item>
+            <Item>4 in</Item>
+            <Item>4.5 in</Item>
+            <Item>5 3/8 in</Item>
+            <Item>5 in</Item>
+            <Item>6 in</Item>
+            <Item>8 in</Item>
+            <Item>10 in</Item>
+            <Item>12 in</Item>
+            <Item>14 in</Item>
+            <Item>16 in</Item>
+            <Item>18 in</Item>
+            <Item>20 in</Item>
+            <Item>22 in</Item>
+            <Item>24 in</Item>
+            <Item>26 in</Item>
+            <Item>28 in</Item>
+            <Item>30 in</Item>
+            <Item>32 in</Item>
+            <Item>34 in</Item>
+            <Item>36 in</Item>
+            <Item>42 in</Item>
+            <Item>48 in</Item>
+            <Item>54 in</Item>
+            <Item>60 in</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="MATERIAL" EntryMethod="Required">
+          <ListItems />
+        </ListAttribute>
+        <ListAttribute Name="NOM_WT" EntryMethod="Optional">
+          <ListItems />
+        </ListAttribute>
+        <ListAttribute Name="LONG_SEAM" EntryMethod="Optional">
+          <ListItems />
+        </ListAttribute>
+        <ListAttribute Name="SMYS" EntryMethod="Optional">
+          <ListItems />
+        </ListAttribute>
+        <ListAttribute Name="SOURCE" EntryMethod="Optional">
+          <ListItems>
+            <Item>GPS DATA</Item>
+            <Item>FIELD NOTEBOOK</Item>
+            <Item>SURVEY DATA</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="DRIP_RISER" Name="DRIP RISER" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="EASEMENT" Name="EASEMENT" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>PIPELINE</Item>
+            <Item>RAILROAD</Item>
+            <Item>ROAD</Item>
+            <Item>UTILITY</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+            <Item>WORKSPACE</Item>
+            <Item>TEMPORARY WORKSPACE</Item>
+            <Item>ADDED TEMPORARY WORKSPACE</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="POSITION" EntryMethod="Required">
+          <ListItems>
+            <Item>BEGIN</Item>
+            <Item>CENTERLINE</Item>
+            <Item>CORNER</Item>
+            <Item>EDGE</Item>
+            <Item>END</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="ELBOW" Name="ELBOW" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>LONG RADIUS</Item>
+            <Item>REDUCING</Item>
+            <Item>3R</Item>
+            <Item>SHORT RADIUS</Item>
+            <Item>STRAIGHT</Item>
+            <Item>RETURN</Item>
+            <Item>SEGMENTABLE</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="DESCRIPTION" EntryMethod="Required" />
+        <StringAttribute Name="HEAT_NUMBER" EntryMethod="Optional" />
+        <StringAttribute Name="MANUFACTURER" EntryMethod="Optional" />
+        <DoubleAttribute Name="RADIUS" EntryMethod="Optional" DefaultValue="0" MinimumValue="-1.79E+308" MaximumValue="1.79E+308" />
+        <DoubleAttribute Name="ANGLE" EntryMethod="Required" DefaultValue="0" MinimumValue="-1.79E+308" MaximumValue="1.79E+308" />
+        <StringAttribute Name="GRADE" EntryMethod="Optional" />
+        <ListAttribute Name="MATERIAL" EntryMethod="Required">
+          <ListItems>
+            <Item>STEEL</Item>
+            <Item>HIGH DENSITY POLY ETHYLENE</Item>
+            <Item>STAINLESS STEEL</Item>
+            <Item>FIBERGLASS</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="SPECIFICATION" EntryMethod="Optional">
+          <ListItems>
+            <Item>WPB SCH STD</Item>
+            <Item>WPB SCH XS</Item>
+            <Item>WPB SCH 40</Item>
+            <Item>WPB SCH 80</Item>
+            <Item>WPB SCH 160</Item>
+            <Item>WPB SCH XXS</Item>
+            <Item>WPHY 52 STD</Item>
+            <Item>WPHY 52 XS</Item>
+            <Item>WPHY 52 SCH 40</Item>
+            <Item>WPHY 52 SCH 80</Item>
+            <Item>WPHY 52 SCH 160</Item>
+            <Item>WPHY 52 XXS</Item>
+            <Item>WPHY 65 STD</Item>
+            <Item>WPHY 65 XS</Item>
+            <Item>WPHY 65 SCH 40</Item>
+            <Item>WPHY 65 SCH 80</Item>
+            <Item>WPHY 65 SCH 160</Item>
+            <Item>WPHY 65 XXS</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="INLET_DIAMETER" EntryMethod="Optional">
+          <ListItems>
+            <Item>1 in</Item>
+            <Item>1 1/4in</Item>
+            <Item>1 1/2in</Item>
+            <Item>2 in</Item>
+            <Item>2 1/2in</Item>
+            <Item>3 in</Item>
+            <Item>4 in</Item>
+            <Item>4.5 in</Item>
+            <Item>5 3/8 in</Item>
+            <Item>5 in</Item>
+            <Item>6 in</Item>
+            <Item>8 in</Item>
+            <Item>10 in</Item>
+            <Item>12 in</Item>
+            <Item>14 in</Item>
+            <Item>16 in</Item>
+            <Item>18 in</Item>
+            <Item>20 in</Item>
+            <Item>22 in</Item>
+            <Item>24 in</Item>
+            <Item>26 in</Item>
+            <Item>28 in</Item>
+            <Item>30 in</Item>
+            <Item>32 in</Item>
+            <Item>34 in</Item>
+            <Item>36 in</Item>
+            <Item>42 in</Item>
+            <Item>48 in</Item>
+            <Item>54 in</Item>
+            <Item>60 in</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="OUTLET_DIAMETER" EntryMethod="Optional">
+          <ListItems>
+            <Item>1 in</Item>
+            <Item>1 1/4in</Item>
+            <Item>1 1/2in</Item>
+            <Item>2 in</Item>
+            <Item>2 1/2in</Item>
+            <Item>3 in</Item>
+            <Item>4 in</Item>
+            <Item>4.5 in</Item>
+            <Item>5 3/8 in</Item>
+            <Item>5 in</Item>
+            <Item>6 in</Item>
+            <Item>8 in</Item>
+            <Item>10 in</Item>
+            <Item>12 in</Item>
+            <Item>14 in</Item>
+            <Item>16 in</Item>
+            <Item>18 in</Item>
+            <Item>20 in</Item>
+            <Item>22 in</Item>
+            <Item>24 in</Item>
+            <Item>26 in</Item>
+            <Item>28 in</Item>
+            <Item>30 in</Item>
+            <Item>32 in</Item>
+            <Item>34 in</Item>
+            <Item>36 in</Item>
+            <Item>42 in</Item>
+            <Item>48 in</Item>
+            <Item>54 in</Item>
+            <Item>60 in</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="WALL_THICKNESS" EntryMethod="Optional">
+          <ListItems>
+            <Item>0.035</Item>
+            <Item>0.049</Item>
+            <Item>0.057</Item>
+            <Item>0.065</Item>
+            <Item>0.068</Item>
+            <Item>0.073</Item>
+            <Item>0.083</Item>
+            <Item>0.088</Item>
+            <Item>0.091</Item>
+            <Item>0.095</Item>
+            <Item>0.109</Item>
+            <Item>0.113</Item>
+            <Item>0.114</Item>
+            <Item>0.117</Item>
+            <Item>0.119</Item>
+            <Item>0.12</Item>
+            <Item>0.125</Item>
+            <Item>0.126</Item>
+            <Item>0.133</Item>
+            <Item>0.134</Item>
+            <Item>0.14</Item>
+            <Item>0.145</Item>
+            <Item>0.147</Item>
+            <Item>0.148</Item>
+            <Item>0.154</Item>
+            <Item>0.156</Item>
+            <Item>0.165</Item>
+            <Item>0.172</Item>
+            <Item>0.179</Item>
+            <Item>0.18</Item>
+            <Item>0.188</Item>
+            <Item>0.19</Item>
+            <Item>0.191</Item>
+            <Item>0.2</Item>
+            <Item>0.203</Item>
+            <Item>0.208</Item>
+            <Item>0.21</Item>
+            <Item>0.215</Item>
+            <Item>0.216</Item>
+            <Item>0.218</Item>
+            <Item>0.219</Item>
+            <Item>0.226</Item>
+            <Item>0.237</Item>
+            <Item>0.247</Item>
+            <Item>0.25</Item>
+            <Item>0.258</Item>
+            <Item>0.26</Item>
+            <Item>0.268</Item>
+            <Item>0.27</Item>
+            <Item>0.276</Item>
+            <Item>0.277</Item>
+            <Item>0.279</Item>
+            <Item>0.28</Item>
+            <Item>0.281</Item>
+            <Item>0.282</Item>
+            <Item>0.286</Item>
+            <Item>0.292</Item>
+            <Item>0.294</Item>
+            <Item>0.3</Item>
+            <Item>0.301</Item>
+            <Item>0.305</Item>
+            <Item>0.307</Item>
+            <Item>0.308</Item>
+            <Item>0.312</Item>
+            <Item>0.3125</Item>
+            <Item>0.318</Item>
+            <Item>0.32</Item>
+            <Item>0.322</Item>
+            <Item>0.33</Item>
+            <Item>0.332</Item>
+            <Item>0.333</Item>
+            <Item>0.337</Item>
+            <Item>0.3375</Item>
+            <Item>0.339</Item>
+            <Item>0.342</Item>
+            <Item>0.343</Item>
+            <Item>0.344</Item>
+            <Item>0.349</Item>
+            <Item>0.35</Item>
+            <Item>0.352</Item>
+            <Item>0.355</Item>
+            <Item>0.358</Item>
+            <Item>0.36</Item>
+            <Item>0.365</Item>
+            <Item>0.37</Item>
+            <Item>0.375</Item>
+            <Item>0.377</Item>
+            <Item>0.382</Item>
+            <Item>0.4</Item>
+            <Item>0.405</Item>
+            <Item>0.406</Item>
+            <Item>0.409</Item>
+            <Item>0.429</Item>
+            <Item>0.432</Item>
+            <Item>0.436</Item>
+            <Item>0.437</Item>
+            <Item>0.438</Item>
+            <Item>0.47</Item>
+            <Item>0.49</Item>
+            <Item>0.495</Item>
+            <Item>0.5</Item>
+            <Item>0.512</Item>
+            <Item>0.515</Item>
+            <Item>0.531</Item>
+            <Item>0.552</Item>
+            <Item>0.562</Item>
+            <Item>0.593</Item>
+            <Item>0.6</Item>
+            <Item>0.605</Item>
+            <Item>0.625</Item>
+            <Item>0.636</Item>
+            <Item>0.639</Item>
+            <Item>0.64</Item>
+            <Item>0.656</Item>
+            <Item>0.687</Item>
+            <Item>0.688</Item>
+            <Item>0.718</Item>
+            <Item>0.719</Item>
+            <Item>0.725</Item>
+            <Item>0.75</Item>
+            <Item>0.796</Item>
+            <Item>0.812</Item>
+            <Item>0.83</Item>
+            <Item>0.843</Item>
+            <Item>0.875</Item>
+            <Item>0.937</Item>
+            <Item>0.94</Item>
+            <Item>0.968</Item>
+            <Item>0.98</Item>
+            <Item>1</Item>
+            <Item>1.031</Item>
+            <Item>1.04</Item>
+            <Item>1.093</Item>
+            <Item>1.125</Item>
+            <Item>1.156</Item>
+            <Item>1.218</Item>
+            <Item>1.25</Item>
+            <Item>1.28</Item>
+            <Item>1.312</Item>
+            <Item>1.375</Item>
+            <Item>1.406</Item>
+            <Item>1.437</Item>
+            <Item>1.49</Item>
+            <Item>1.5</Item>
+            <Item>1.531</Item>
+            <Item>1.562</Item>
+            <Item>1.593</Item>
+            <Item>1.625</Item>
+            <Item>1.66</Item>
+            <Item>1.75</Item>
+            <Item>1.781</Item>
+            <Item>1.812</Item>
+            <Item>1.875</Item>
+            <Item>1.968</Item>
+            <Item>2.062</Item>
+            <Item>2.125</Item>
+            <Item>2.343</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="END_CONNECT" EntryMethod="Optional">
+          <ListItems>
+            <Item>ARC WELD</Item>
+            <Item>FLANGED END</Item>
+            <Item>PLAIN END</Item>
+            <Item>RAISED FACE FLANGED END</Item>
+            <Item>SCREW END</Item>
+            <Item>WELD END</Item>
+            <Item>WELD ECCENTRIC END</Item>
+            <Item>WELD ECCENTRIC RING TYPE JOINT</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="DIRECTION" EntryMethod="Optional">
+          <ListItems>
+            <Item>COMBINATION SIDE  LEFT SAG</Item>
+            <Item>COMBINATION SIDE  LEFT AND OVER</Item>
+            <Item>COMBINATION SIDE  RIGHT AND OVER</Item>
+            <Item>COMBINATION SIDE  RIGHT AND SAG</Item>
+            <Item>LEFT</Item>
+            <Item>OVER</Item>
+            <Item>SAG</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+            <Item>RIGHT</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="ENVIRONMENTAL" Name="ENVIRONMENTAL" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Optional">
+          <ListItems>
+            <Item>ANIMALS</Item>
+            <Item>ARCHAEOLOGICAL</Item>
+            <Item>BIRDS</Item>
+            <Item>INSECTS</Item>
+            <Item>FOSSILS</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="POSITION" EntryMethod="Optional">
+          <ListItems>
+            <Item>BEGIN</Item>
+            <Item>END</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="NAME" EntryMethod="Optional" />
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="ERROSION_CONTROL" Name="ERROSION CONTROL" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Optional">
+          <ListItems>
+            <Item>BREAKER</Item>
+            <Item>CLAY</Item>
+            <Item>FOAM</Item>
+            <Item>RIP RAP</Item>
+            <Item>SACKRETE</Item>
+            <Item>SAND BAG</Item>
+            <Item>TERRACE</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+            <Item>STRAW WADDLE</Item>
+            <Item>MATTING</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="POSITION" EntryMethod="Optional">
+          <ListItems>
+            <Item>BEGIN</Item>
+            <Item>END</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="EXPOSURE" Name="EXPOSURE" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>ABOVE GROUND (ELEVATED SUPPORTED)</Item>
+            <Item>EXPOSURE (ERROSION)</Item>
+            <Item>SPAN (UNSUPPORTED)</Item>
+            <Item>SURFACE (ON GROUND)</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="POSITION" EntryMethod="Required">
+          <ListItems>
+            <Item>BEGIN</Item>
+            <Item>END</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="ORIGINAL_CONST" EntryMethod="Required">
+          <ListItems>
+            <Item>YES</Item>
+            <Item>NO</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="INTENTIONAL" EntryMethod="Required">
+          <ListItems>
+            <Item>YES</Item>
+            <Item>NO</Item>
+          </ListItems>
+        </ListAttribute>
+        <DoubleAttribute Name="HEIGHT_FT" EntryMethod="Required" DefaultValue="0" MinimumValue="0" MaximumValue="0" />
+        <ListAttribute Name="COATING_CONDITION" EntryMethod="Required">
+          <ListItems>
+            <Item>BARE PIPE</Item>
+            <Item>BARE SPOTS</Item>
+            <Item>COMPLETE COATING</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="SUPPORT_TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>PIPE ANCHOR</Item>
+            <Item>BEAM</Item>
+            <Item>CABLE</Item>
+            <Item>MUDMAT</Item>
+            <Item>PROTECTION FRAME</Item>
+            <Item>SAND CEMENT BAGS</Item>
+            <Item>STANCHION / PIPE SHOE</Item>
+            <Item>ROD HANGER</Item>
+            <Item>RIGID STRUT</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="PHOTO_NUMBER" EntryMethod="Optional" />
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="EXTERNAL_COATING" Name="EXTERNAL COATING" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="FAULT_LINE" Name="FAULT LINE" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <StringAttribute Name="NAME" EntryMethod="Optional" />
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="FENCE_LINE" Name="FENCE LINE" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>BARB WIRE</Item>
+            <Item>CHAINLINK</Item>
+            <Item>CHAINLINK WITH BARB WIRE</Item>
+            <Item>ELECTRIC</Item>
+            <Item>HOG WIRE</Item>
+            <Item>METAL</Item>
+            <Item>PLASTIC</Item>
+            <Item>ROCK</Item>
+            <Item>WIRE</Item>
+            <Item>WOOD</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="POSITION" EntryMethod="Required">
+          <ListItems>
+            <Item>FENCE CORNER</Item>
+            <Item>FENCE LINE</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <DoubleAttribute Name="HEIGHT" EntryMethod="Required" DefaultValue="4" MinimumValue="0" MaximumValue="50" />
+        <StringAttribute Name="STRAND_COUNT" EntryMethod="Optional" />
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="FIRE_HYDRANT" Name="FIRE HYDRANT" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="FLANGE" Name="FLANGE" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>WELD NECK/RAISED FACE</Item>
+            <Item>WELD NECK/MALE AND FEMALE</Item>
+            <Item>WELD NECK/TONGUE AND GROOVE</Item>
+            <Item>WELD NECK/RING JOINT</Item>
+            <Item>WELD NECK/FLAT FACE</Item>
+            <Item>SLIP ON/RAISED FACE</Item>
+            <Item>SLIP ON/MALE AND FEMALE</Item>
+            <Item>SLIP ON/TONGUE AND GROOVE</Item>
+            <Item>SLIP ON/RING JOINT</Item>
+            <Item>SLIP ON/FLAT FACE</Item>
+            <Item>BLIND/RAISED FACE</Item>
+            <Item>BLIND/MALE AND FEMALE</Item>
+            <Item>BLIND/TONGUE AND GROOVE</Item>
+            <Item>BLIND/RING JOINT</Item>
+            <Item>BLIND/FLAT FACE</Item>
+            <Item>SOCKET TYPE/RAISED FACE</Item>
+            <Item>SOCKET TYPE/MALE AND FEMALE</Item>
+            <Item>SOCKET TYPE/TONGUE AND GROOVE</Item>
+            <Item>SOCKET TYPE/RING JOINT</Item>
+            <Item>SOCKET TYPE/FLAT FACE</Item>
+            <Item>LAP JOINT/RAISED FACE</Item>
+            <Item>LAP JOINT/MALE AND FEMALE</Item>
+            <Item>LAP JOINT/TONGUE AND GROOVE</Item>
+            <Item>LAP JOINT/RING JOINT</Item>
+            <Item>LAP JOINT/FLAT FACE</Item>
+            <Item>THREADED/RAISED FACE</Item>
+            <Item>THREADED/MALE AND FEMALE</Item>
+            <Item>THREADED/TONGUE AND GROOVE</Item>
+            <Item>THREADED/RING JOINT</Item>
+            <Item>THREADED/FLAT FACE</Item>
+            <Item>SLIP ON ORIFICE/RAISED FACE</Item>
+            <Item>SLIP ON ORIFICE/MALE AND FEMALE</Item>
+            <Item>SLIP ON ORIFICE/TONGUE AND GROOVE</Item>
+            <Item>SLIP ON ORIFICE/RING JOINT</Item>
+            <Item>SLIP ON ORIFICE/FLAT FACE</Item>
+            <Item>THREADED ORIFICE/RAISED FACE</Item>
+            <Item>THREADED ORIFICE/MALE AND FEMALE</Item>
+            <Item>THREADED ORIFICE/TONGUE AND GROOVE</Item>
+            <Item>THREADED ORIFICE/RING JOINT</Item>
+            <Item>THREADED ORIFICE/FLAT FACE</Item>
+            <Item>WELD NECK ORIFICE/RAISED FACE</Item>
+            <Item>WELD NECK ORIFICE/MALE AND FEMALE</Item>
+            <Item>WELD NECK ORIFICE/TONGUE AND GROOVE</Item>
+            <Item>WELD NECK ORIFICE/RING JOINT</Item>
+            <Item>WELD NECK ORIFICE/FLAT FACE</Item>
+            <Item>WELD NECK REDUCING/RAISED FACE</Item>
+            <Item>WELD NECK REDUCING/MALE AND FEMALE</Item>
+            <Item>WELD NECK REDUCING/TONGUE AND GROOVE</Item>
+            <Item>WELD NECK REDUCING/RING JOINT</Item>
+            <Item>WELD NECK REDUCING/FLAT FACE</Item>
+            <Item>SLIP ON REDUCING/RAISED FACE</Item>
+            <Item>SLIP ON REDUCING/MALE AND FEMALE</Item>
+            <Item>SLIP ON REDUCING/TONGUE AND GROOVE</Item>
+            <Item>SLIP ON REDUCING/RING JOINT</Item>
+            <Item>SLIP ON REDUCING/FLAT FACE</Item>
+            <Item>THREADED REDUCING/RAISED FACE</Item>
+            <Item>THREADED REDUCING/MALE AND FEMALE</Item>
+            <Item>THREADED REDUCING/TONGUE AND GROOVE</Item>
+            <Item>THREADED REDUCING/RING JOINT</Item>
+            <Item>THREADED REDUCING/FLAT FACE</Item>
+            <Item>NON-STD GATE VALVE/RAISED FACE</Item>
+            <Item>NON-STD GATE VALVE/MALE AND FEMALE</Item>
+            <Item>NON-STD GATE VALVE/TONGUE AND GROOVE</Item>
+            <Item>NON-STD GATE VALVE/RING JOINT</Item>
+            <Item>NON-STD GATE VALVE/FLAT FACE</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="SIZE" EntryMethod="Required">
+          <ListItems>
+            <Item>1 in</Item>
+            <Item>1 1/4in</Item>
+            <Item>1 1/2in</Item>
+            <Item>2 in</Item>
+            <Item>2 1/2in</Item>
+            <Item>3 in</Item>
+            <Item>4 in</Item>
+            <Item>4.5 in</Item>
+            <Item>5 3/8 in</Item>
+            <Item>5 in</Item>
+            <Item>6 in</Item>
+            <Item>8 in</Item>
+            <Item>10 in</Item>
+            <Item>12 in</Item>
+            <Item>14 in</Item>
+            <Item>16 in</Item>
+            <Item>18 in</Item>
+            <Item>20 in</Item>
+            <Item>22 in</Item>
+            <Item>24 in</Item>
+            <Item>26 in</Item>
+            <Item>28 in</Item>
+            <Item>30 in</Item>
+            <Item>32 in</Item>
+            <Item>34 in</Item>
+            <Item>36 in</Item>
+            <Item>42 in</Item>
+            <Item>48 in</Item>
+            <Item>54 in</Item>
+            <Item>60 in</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="LOCATION" EntryMethod="Required">
+          <ListItems>
+            <Item>TOP OF FACE</Item>
+            <Item>TOP OF WELD</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="HEAT_NUMBER" EntryMethod="Optional" />
+        <ListAttribute Name="SPECIFICATION" EntryMethod="Required">
+          <ListItems>
+            <Item>ANSI 151</Item>
+            <Item>ANSI 900</Item>
+            <Item>ANSI 600</Item>
+            <Item>ANSI 300</Item>
+            <Item>ANSI 1500</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="MANUFACTURER" EntryMethod="Optional" />
+        <ListAttribute Name="END_CONNECT" EntryMethod="Optional">
+          <ListItems>
+            <Item>FLANGED END</Item>
+            <Item>SCREW END</Item>
+            <Item>SCREW X WELD END</Item>
+            <Item>WELD END</Item>
+            <Item>WELD X FLANGED END</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="INSULATED" EntryMethod="Required">
+          <ListItems>
+            <Item>NO</Item>
+            <Item>YES</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="FOREIGN_LINE_CROSSING" Name="FOREIGN LINE CROSSING" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>PETROLEUM (Crude or refined product)</Item>
+            <Item>NAT GAS</Item>
+            <Item>ELECTRIC</Item>
+            <Item>FIBER OPTIC</Item>
+            <Item>TV</Item>
+            <Item>WATER</Item>
+            <Item>COMMUNICATIONS</Item>
+            <Item>STORM</Item>
+            <Item>SEWER</Item>
+            <Item>UNKNOWN</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="CROSSING_OR_PARALLEL" EntryMethod="Required">
+          <ListItems>
+            <Item>CROSSING</Item>
+            <Item>PARALLEL</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="ABOVE_OR_BELOW_GROUND" EntryMethod="Required">
+          <ListItems>
+            <Item>ABOVE</Item>
+            <Item>BELOW</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="MATERIAL" EntryMethod="Required">
+          <ListItems>
+            <Item>ALUMINUM</Item>
+            <Item>CABLE</Item>
+            <Item>CONCRETE</Item>
+            <Item>COPPER</Item>
+            <Item>COAXIAL</Item>
+            <Item>DUCTILE IRON</Item>
+            <Item>FIBERGLASS</Item>
+            <Item>HIGH DENSITY POLY ETHYLENE</Item>
+            <Item>STAINLESS STEEL</Item>
+            <Item>STEEL</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <DoubleAttribute Name="DIAMETER" EntryMethod="Required" DefaultValue="0" MinimumValue="0" MaximumValue="1000" NumberOfDecimals="3" />
+        <ListAttribute Name="COATING_TYPE_IF_APP" EntryMethod="Required">
+          <ListItems>
+            <Item>FUSION BONDED EPOXY</Item>
+            <Item>ABRASION RESISTANT</Item>
+            <Item>CONCRETE</Item>
+            <Item>PAINT</Item>
+            <Item>PLASTIC JACKETED</Item>
+            <Item>Not Applicable</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <DoubleAttribute Name="ANGLE_OF_CROSSING" EntryMethod="Required" DefaultValue="0" MinimumValue="0" MaximumValue="360" NumberOfDecimals="2" />
+        <DoubleAttribute Name="CLEARANCE_FT" EntryMethod="Required" DefaultValue="0" MinimumValue="0" MaximumValue="1000" NumberOfDecimals="2" />
+        <DoubleAttribute Name="DOC_FT" EntryMethod="Required" DefaultValue="0" MinimumValue="0" MaximumValue="1000" NumberOfDecimals="2" />
+        <ListAttribute Name="DEPTH_METHOD" EntryMethod="Required">
+          <ListItems>
+            <Item>BELLHOLE</Item>
+            <Item>OPEN TRENCH</Item>
+            <Item>PIPE LOCATOR</Item>
+            <Item>POTHOLE</Item>
+            <Item>PROBE</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="INTERFERENCE_BOND" EntryMethod="Optional">
+          <ListItems>
+            <Item>YES</Item>
+            <Item>NO</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="OWNER" EntryMethod="Optional" />
+        <ListAttribute Name="DIRECTION" EntryMethod="Required">
+          <ListItems>
+            <Item>EAST - WEST</Item>
+            <Item>NORTH - SOUTH</Item>
+            <Item>NORTHEAST - SOUTHWEST</Item>
+            <Item>NORTHWEST - SOUTHEAST</Item>
+          </ListItems>
+        </ListAttribute>
+        <DoubleAttribute Name="WIDTH" EntryMethod="Required" DefaultValue="0" MinimumValue="0" MaximumValue="0" />
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="GATE" Name="GATE" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>CHAINLINK WITH BARB WIRE</Item>
+            <Item>BARB WIRE</Item>
+            <Item>MECHANICAL</Item>
+            <Item>PLASTIC</Item>
+            <Item>WROUGHT IRON</Item>
+            <Item>WIRE</Item>
+            <Item>WOOD</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="HINGE_ON_THIS_SHOT" EntryMethod="Optional">
+          <ListItems>
+            <Item>NO</Item>
+            <Item>YES</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="STATUS" EntryMethod="Optional">
+          <ListItems>
+            <Item>LOCKED - HAVE ACCESS</Item>
+            <Item>LOCKED - NO ACCESS</Item>
+            <Item>OPEN - DID NOT SHUT</Item>
+            <Item>UNLOCKED - HAVE ACCESS</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="GUARD_RAIL" Name="GUARD RAIL" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>CABLE</Item>
+            <Item>CONCRETE</Item>
+            <Item>METAL</Item>
+            <Item>WOOD</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="POSITION" EntryMethod="Required">
+          <ListItems>
+            <Item>BEGIN</Item>
+            <Item>EDGE</Item>
+            <Item>END</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="GUY" Name="GUY ANCHOR" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>ANCHOR</Item>
+            <Item>OH WIRE</Item>
+            <Item>POLE</Item>
+            <Item>TOWER</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="HYDRO_TEST" Name="HYDRO TEST" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="POSITION" EntryMethod="Optional">
+          <ListItems>
+            <Item>BEGIN</Item>
+            <Item>END</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="TEST_MATERIAL" EntryMethod="Required">
+          <ListItems>
+            <Item>WATER</Item>
+            <Item>AIR</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="DURATION" EntryMethod="Required" />
+        <DoubleAttribute Name="PRESSURE" EntryMethod="Optional" DefaultValue="0" MinimumValue="0" MaximumValue="0" />
+        <StringAttribute Name="NAME" EntryMethod="Optional" />
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="INLET" Name="INLET CATCH BASIN" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>CATCH BASIN</Item>
+            <Item>CURB</Item>
+            <Item>MANHOLE CATCH</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="POSITION" EntryMethod="Required">
+          <ListItems>
+            <Item>CORNER</Item>
+            <Item>EDGE</Item>
+            <Item>FLOW LINE</Item>
+            <Item>TOP CENTER</Item>
+          </ListItems>
+        </ListAttribute>
+        <DoubleAttribute Name="INVERT_DEPTH_TO_FLOWLINE" EntryMethod="Required" DefaultValue="0" MinimumValue="-1.79E+308" MaximumValue="1.79E+308" />
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="LAND_USE" Name="LAND USE" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="POSITION" EntryMethod="Optional">
+          <ListItems>
+            <Item>BEGIN</Item>
+            <Item>CORNER</Item>
+            <Item>EDGE</Item>
+            <Item>END</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="LAND_USE" EntryMethod="Optional">
+          <ListItems>
+            <Item>CULTIVATED</Item>
+            <Item>FLOWER BED</Item>
+            <Item>GARDEN</Item>
+            <Item>INDUSTRIAL</Item>
+            <Item>HEDGE</Item>
+            <Item>LAWN</Item>
+            <Item>ORCHARD</Item>
+            <Item>PASTURE</Item>
+            <Item>RESIDENTIAL</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="CROP_TYPE" EntryMethod="Optional">
+          <ListItems>
+            <Item>BARLEY</Item>
+            <Item>CORN</Item>
+            <Item>COTTON</Item>
+            <Item>CULTIVATED FIELD</Item>
+            <Item>HAY</Item>
+            <Item>OPEN PASTURE</Item>
+            <Item>RICE</Item>
+            <Item>SOYBEAN</Item>
+            <Item>SUNFLOWER</Item>
+            <Item>TOBACCO</Item>
+            <Item>WHEAT</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="LAUNCH_RECEIVER" Name="LAUNCHER RECEIVER" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>LAUNCHER</Item>
+            <Item>RECEIVER</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="REDUCER_TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>CONCENTRIC</Item>
+            <Item>ECCENTRIC</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="TRAP_VALVE_TYPE" EntryMethod="Required" />
+        <StringAttribute Name="NOM_DIAMETER" EntryMethod="Optional" />
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="LOOSE_END" Name="LOOSE END" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <StringAttribute Name="JOINT_NUMBER" EntryMethod="Optional" />
+        <StringAttribute Name="HEAT_NUMBER" EntryMethod="Optional" />
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="MANHOLE" Name="MANHOLE" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>ELECTRIC</Item>
+            <Item>FIBEROPTIC CABLE</Item>
+            <Item>SANITARY SEWER</Item>
+            <Item>STORM SEWER</Item>
+            <Item>TELEPHONE</Item>
+            <Item>TV</Item>
+            <Item>WATER</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <DoubleAttribute Name="INVERT_DEPTH_TO_FLOW" EntryMethod="Required" DefaultValue="0" MinimumValue="-1.79E+308" MaximumValue="1.79E+308" />
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="METER" Name="METER" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>CHECK</Item>
+            <Item>CUSTODY</Item>
+            <Item>FLOW</Item>
+            <Item>FUEL TRANSFER</Item>
+            <Item>GRAVITIMETER</Item>
+            <Item>INTERCONNECT</Item>
+            <Item>PLANT INLET</Item>
+            <Item>PLANT OUTLET</Item>
+            <Item>SALES</Item>
+            <Item>TURBINE</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="MANUFACTURER" EntryMethod="Optional" />
+        <StringAttribute Name="SERIAL_NUMBER" EntryMethod="Required" />
+        <ListAttribute Name="LOCATION" EntryMethod="Required">
+          <ListItems>
+            <Item>FACE OF FLANGE</Item>
+            <Item>TOP CENTER</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="ABOVE_OR_BELOW_GROUND" EntryMethod="Required">
+          <ListItems>
+            <Item>ABOVE</Item>
+            <Item>BELOW</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="NAME" EntryMethod="Optional" />
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="MISCELLANEOUS" Name="MISCELLANEOUS" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <StringAttribute Name="DESCRIPTION" EntryMethod="Optional" />
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="MONUMENT" Name="MONUMENT" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>BENCH MARK</Item>
+            <Item>PROPERTY CORNER</Item>
+            <Item>REFENCE MARK</Item>
+            <Item>SECTION CORNER</Item>
+            <Item>TEMPORARY BENCH MARK</Item>
+            <Item>WITNESS POST</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="FOUND_OR_SET" EntryMethod="Required">
+          <ListItems>
+            <Item>FOUND</Item>
+            <Item>SET</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="SIZE" EntryMethod="Required">
+          <ListItems>
+            <Item>0.25</Item>
+            <Item>0.38</Item>
+            <Item>0.5</Item>
+            <Item>0.75</Item>
+            <Item>2</Item>
+            <Item>1.6</Item>
+            <Item>3</Item>
+            <Item>2.6</Item>
+            <Item>4</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="MATERIAL" EntryMethod="Optional">
+          <ListItems>
+            <Item>60D NAIL</Item>
+            <Item>80D NAIL</Item>
+            <Item>120D NAIL</Item>
+            <Item>AXLE</Item>
+            <Item>BEARING TREE</Item>
+            <Item>COAL</Item>
+            <Item>CONCRETE MONUMENT</Item>
+            <Item>COTTON SPIDLE</Item>
+            <Item>CRILL HOLE</Item>
+            <Item>GRANITE</Item>
+            <Item>GUN BARREL</Item>
+            <Item>IRON PIPE</Item>
+            <Item>IRON ROD</Item>
+            <Item>PK NAIL</Item>
+            <Item>RAILROAD SPIKE</Item>
+            <Item>REBAR AND CAP</Item>
+            <Item>REBAR</Item>
+            <Item>ROCK PILE</Item>
+            <Item>WOODEN</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="NAME_AND_NUMBER" EntryMethod="Optional" />
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="NATURAL_GROUND" Name="NATURAL GROUND" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="PARKING_LOT" Name="PARKING LOT" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="POSITION" EntryMethod="Required">
+          <ListItems>
+            <Item>BEGIN</Item>
+            <Item>EDGE</Item>
+            <Item>END</Item>
+            <Item>GRADE</Item>
+            <Item>STRIPE</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="SURFACE" EntryMethod="Required">
+          <ListItems>
+            <Item>ASPHALT</Item>
+            <Item>CALICHE</Item>
+            <Item>CONCRETE</Item>
+            <Item>DIRT</Item>
+            <Item>GRAVEL</Item>
+            <Item>ROCK</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="PEDESTAL" Name="PEDESTAL" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>FIBEROPTIC</Item>
+            <Item>POWER</Item>
+            <Item>TELEPHONE</Item>
+            <Item>TV</Item>
+            <Item>UNKNOWN</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="COMPANY" EntryMethod="Optional" />
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="PIG_SIGNAL" Name="PIG_SIGNAL" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="PIPE_APPURTENANCE" Name="PIPE APPURTENANCE" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>PIG SIGNAL</Item>
+            <Item>PIPE CLAMP</Item>
+            <Item>PIPE STRAP</Item>
+            <Item>PIPE WEIGHT</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="LOCATION" EntryMethod="Required">
+          <ListItems>
+            <Item>TOP CENTER</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="DESCRIPTION" EntryMethod="Optional" />
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="MARKER" Name="PIPELINE MARKER" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>AERIAL</Item>
+            <Item>AGM</Item>
+            <Item>MILEPOST</Item>
+            <Item>MARKER</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="AERIAL_NUMBER" EntryMethod="Optional" />
+        <ListAttribute Name="SIGN_TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>PLASTIC</Item>
+            <Item>WOOD</Item>
+            <Item>CARSONITE</Item>
+            <Item>METAL</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="COMPANY" EntryMethod="Required" />
+        <ListAttribute Name="PRODUCT" EntryMethod="Optional">
+          <ListItems>
+            <Item>CHEMICAL</Item>
+            <Item>CRUDE</Item>
+            <Item>DRAIN</Item>
+            <Item>FIBER OPTIC</Item>
+            <Item>NAT GAS</Item>
+            <Item>LNG</Item>
+            <Item>MIX</Item>
+            <Item>PETROLEUM</Item>
+            <Item>POWER</Item>
+            <Item>REFINED PRODUCTS</Item>
+            <Item>PROPANE</Item>
+            <Item>TELEPHONE</Item>
+            <Item>TV</Item>
+            <Item>WATER</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="PHONE_NUMBER" EntryMethod="Optional" />
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="PLATFORM" Name="PLATFORM" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="POSITION" EntryMethod="Required">
+          <ListItems>
+            <Item>CORNER</Item>
+            <Item>EDGE</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="MATERIAL" EntryMethod="Required">
+          <ListItems>
+            <Item>CONCRETE</Item>
+            <Item>GRATE</Item>
+            <Item>METAL</Item>
+            <Item>WOOD</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <DoubleAttribute Name="LENGTH" EntryMethod="Optional" DefaultValue="0" MinimumValue="-1.79E+308" MaximumValue="1.79E+308" />
+        <DoubleAttribute Name="WIDTH" EntryMethod="Optional" DefaultValue="0" MinimumValue="-1.79E+308" MaximumValue="1.79E+308" />
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="PI" Name="POINT OF INFLECTION" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <DoubleAttribute Name="ANGLE" EntryMethod="Required" DefaultValue="0" MinimumValue="-1.79E+308" MaximumValue="1.79E+308" />
+        <ListAttribute Name="DIRECTION" EntryMethod="Required">
+          <ListItems>
+            <Item>LEFT</Item>
+            <Item>RIGHT</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="PROFILE" Name="PROFILE" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="PROPOSED_CENTERLINE" Name="PROPOSED CENTERLINE" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>ALTERNATE</Item>
+            <Item>LOOP</Item>
+            <Item>NEW ROUTE</Item>
+            <Item>REPLACEMENT</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="RAILROAD" Name="RAILROAD" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="POSITION" EntryMethod="Required">
+          <ListItems>
+            <Item>ABANDONED RR CL</Item>
+            <Item>RAILROAD CL</Item>
+            <Item>SPUR</Item>
+            <Item>SWITCH</Item>
+            <Item>TOP OF RAIL</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="RR_COMPANY_NAME" EntryMethod="Optional" />
+        <ListAttribute Name="RR_CROSSING_DIRECTION" EntryMethod="Required">
+          <ListItems>
+            <Item>EAST - WEST</Item>
+            <Item>NORTH - SOUTH</Item>
+            <Item>NORTHEAST - SOUTHWEST</Item>
+            <Item>NORTHWEST - SOUTHEAST</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="RECTIFIER" Name="RECTIFIER" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Optional">
+          <ListItems>
+            <Item>AIR COOLED</Item>
+            <Item>CUSTOM</Item>
+            <Item>LIQUID COOLED</Item>
+            <Item>OIL COOLED</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="SERIAL_NUMBER" EntryMethod="Optional" />
+        <StringAttribute Name="UNIT_NUMBER" EntryMethod="Optional" />
+        <StringAttribute Name="MANUFACTURER" EntryMethod="Optional" />
+        <StringAttribute Name="INSTALLATION_DATE" EntryMethod="Optional" />
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="REDUCER" Name="REDUCER" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <StringAttribute Name="HEAT_NUMBER" EntryMethod="Required" />
+        <ListAttribute Name="TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>CONCENTRIC</Item>
+            <Item>ECCENTRIC</Item>
+          </ListItems>
+        </ListAttribute>
+        <DoubleAttribute Name="INLET_DIAMETER" EntryMethod="Required" DefaultValue="0" MinimumValue="-1.79E+308" MaximumValue="1.79E+308" />
+        <DoubleAttribute Name="INLET_WALL_THICKNESS" EntryMethod="Required" DefaultValue="0" MinimumValue="0" MaximumValue="10000" />
+        <DoubleAttribute Name="OUTLET_DIAMETER" EntryMethod="Required" DefaultValue="0" MinimumValue="-1.79E+308" MaximumValue="1.79E+308" />
+        <DoubleAttribute Name="OUTLET_WALL_THICKNESS" EntryMethod="Required" DefaultValue="0" MinimumValue="-1.79E+308" MaximumValue="1.79E+308" />
+        <ListAttribute Name="LOCATION" EntryMethod="Required">
+          <ListItems>
+            <Item>TOP CENTER</Item>
+            <Item>AT WELD</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="ID_NUMBER" EntryMethod="Required" />
+        <StringAttribute Name="MANUFACTURER" EntryMethod="Optional" />
+        <StringAttribute Name="INSTALLATION_DATE" EntryMethod="Optional" />
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="RIVER_WEIGHTS" Name="RIVER WEIGHTS" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>ANCHOR</Item>
+            <Item>CONCRETE</Item>
+            <Item>IRON</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="POSITION" EntryMethod="Optional">
+          <ListItems>
+            <Item>BEGIN</Item>
+            <Item>END</Item>
+            <Item>AT WEIGHT</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="METHOD" EntryMethod="Optional">
+          <ListItems>
+            <Item>BOLT ON</Item>
+            <Item>WET ON</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="NUMBER_OF_WEIGHTS" EntryMethod="Optional" />
+        <StringAttribute Name="SPACING_FEET" EntryMethod="Optional" />
+        <StringAttribute Name="WEIGHT_LBS" EntryMethod="Optional" />
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="ROAD" Name="ROAD" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>ACCESS ROAD</Item>
+            <Item>ROAD</Item>
+            <Item>INTERSTATE</Item>
+            <Item>HIGHWAY</Item>
+            <Item>DRIVEWAY</Item>
+            <Item>BRIDGE</Item>
+            <Item>PARKWAY</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="DIRECTION" EntryMethod="Required">
+          <ListItems>
+            <Item>EAST - WEST</Item>
+            <Item>NORTH - SOUTH</Item>
+            <Item>NORTHEAST - SOUTHWEST</Item>
+            <Item>NORTHWEST - SOUTHEAST</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="POSITION" EntryMethod="Required">
+          <ListItems>
+            <Item>EDGE</Item>
+            <Item>SHOULDER</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+            <Item>CENTERLINE</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="MATERIAL" EntryMethod="Required">
+          <ListItems>
+            <Item>ASPHALT</Item>
+            <Item>CLAY</Item>
+            <Item>CONCRETE</Item>
+            <Item>BRICK</Item>
+            <Item>DIRT</Item>
+            <Item>GRAVEL</Item>
+            <Item>OILED</Item>
+            <Item>SHELL</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="NAME" EntryMethod="Optional" />
+        <DoubleAttribute Name="WIDTH" EntryMethod="Optional" DefaultValue="0" MinimumValue="-1.79E+308" MaximumValue="1.79E+308" />
+        <StringAttribute Name="NO_OF_LANES" EntryMethod="Optional" />
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="ROCK_SHIELD" Name="ROCK SHIELD" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="POSTION" EntryMethod="Required">
+          <ListItems>
+            <Item>BEGIN</Item>
+            <Item>END</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>High Density Poly Ethylene</Item>
+            <Item>FELT</Item>
+            <Item>PVC</Item>
+            <Item>WIRE MESH</Item>
+            <Item>FIBERWEB</Item>
+            <Item>MICROFOAM</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <DoubleAttribute Name="THICKNESS" EntryMethod="Optional" DefaultValue="0" MinimumValue="-1.79E+308" MaximumValue="1.79E+308" />
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="SEPTIC_SYSTEM_EQUIP" Name="SEPTIC SYSTEM EQUIPMENT" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>AERIATION HEADS</Item>
+            <Item>AERIATION LINES</Item>
+            <Item>LEACH FIELD</Item>
+            <Item>SEPTIC LINES</Item>
+            <Item>SEPTIC TANK</Item>
+            <Item>SEWER CLEANOUT</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="POSITION" EntryMethod="Optional">
+          <ListItems>
+            <Item>BEGIN</Item>
+            <Item>EDGE</Item>
+            <Item>END</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="SIGN" Name="SIGN" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Optional">
+          <ListItems>
+            <Item>BILLBOARD</Item>
+            <Item>MOBILE SIGN</Item>
+            <Item>ROAD SIGN</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="DESCRIPTION_OF_SIGN" EntryMethod="Optional" />
+        <StringAttribute Name="NUMBER_OF_POSTS" EntryMethod="Optional" />
+        <StringAttribute Name="DIMENSIONS" EntryMethod="Optional" />
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="SKID" Name="SKID" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>BUILDING</Item>
+            <Item>METER</Item>
+            <Item>PUMP</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="POSITION" EntryMethod="Required">
+          <ListItems>
+            <Item>CORNER</Item>
+            <Item>EDGE</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="MATERIAL" EntryMethod="Required">
+          <ListItems>
+            <Item>METAL</Item>
+            <Item>WOOD</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="SLEEVE" Name="SLEEVE" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>COMPOSITE</Item>
+            <Item>LEAK CLAMP</Item>
+            <Item>REMOVE</Item>
+            <Item>WELD PATCH</Item>
+            <Item>SPLIT CLAMP</Item>
+            <Item>FC TYPE A</Item>
+            <Item>FC TYPE B</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="MATERIAL" EntryMethod="Required">
+          <ListItems>
+            <Item>COMPOSITE</Item>
+            <Item>PVC</Item>
+            <Item>STEEL</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="SPECIFICATIONS" EntryMethod="Optional">
+          <ListItems />
+        </ListAttribute>
+        <StringAttribute Name="NOMINAL_DIAMETER" EntryMethod="Required" />
+        <ListAttribute Name="FIELD_OR_FABRICATED" EntryMethod="Required">
+          <ListItems>
+            <Item>FIELD FABRICATED</Item>
+            <Item>PRE FABRICATED</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="SUPPORT" Name="SUPPORT" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>PIPE ANCHOR</Item>
+            <Item>BEAM SUPPORT</Item>
+            <Item>CABLE</Item>
+            <Item>MUDMAT</Item>
+            <Item>PIPE SUPPORT</Item>
+            <Item>PROTECTION FRAME</Item>
+            <Item>SAND CEMENT BAGS</Item>
+            <Item>SUPPORT</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="POSITION" EntryMethod="Required">
+          <ListItems>
+            <Item>BELOW</Item>
+            <Item>SIDE</Item>
+            <Item>TOP</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="MATERIAL" EntryMethod="Required">
+          <ListItems>
+            <Item>ALUMINUM</Item>
+            <Item>CONCRETE</Item>
+            <Item>STEEL</Item>
+            <Item>WOOD</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="INSULATED" EntryMethod="Optional">
+          <ListItems>
+            <Item>NO</Item>
+            <Item>YES</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="TALLY" Name="TALLY" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <StringAttribute Name="JOINT_NUMBER" EntryMethod="Optional" />
+        <StringAttribute Name="HEAT_NUMBER" EntryMethod="Optional" />
+        <DoubleAttribute Name="WALL_THICKNESS" EntryMethod="Optional" DefaultValue="0" MinimumValue="-1.79E+308" MaximumValue="1.79E+308" />
+        <StringAttribute Name="COATING_TYPE" EntryMethod="Optional" />
+        <DoubleAttribute Name="DIAMETER" EntryMethod="Optional" DefaultValue="24" MinimumValue="-1.79E+308" MaximumValue="1.79E+308" />
+        <StringAttribute Name="GRADE" EntryMethod="Optional" />
+        <StringAttribute Name="SPECIFICATION" EntryMethod="Optional" />
+        <DoubleAttribute Name="LENGTH" EntryMethod="Optional" DefaultValue="0" MinimumValue="-1.79E+308" MaximumValue="1.79E+308" />
+        <StringAttribute Name="MANUFACTURER" EntryMethod="Optional" />
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="TANK" Name="TANK" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>FIBERGLASS</Item>
+            <Item>GALVANIZED</Item>
+            <Item>METAL</Item>
+            <Item>PLASTIC</Item>
+            <Item>PVC</Item>
+            <Item>STEEL</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="PRODUCT_IN_TANK" EntryMethod="Required">
+          <ListItems>
+            <Item>GAS</Item>
+            <Item>GRAIN</Item>
+            <Item>OIL</Item>
+            <Item>PROPOANE</Item>
+            <Item>WATER</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <DoubleAttribute Name="HEIGHT" EntryMethod="Required" DefaultValue="0" MinimumValue="-1.79E+308" MaximumValue="1.79E+308" />
+        <DoubleAttribute Name="DIAMETER" EntryMethod="Required" DefaultValue="0" MinimumValue="-1.79E+308" MaximumValue="1.79E+308" />
+        <DoubleAttribute Name="LENGTH" EntryMethod="Optional" DefaultValue="0" MinimumValue="-1.79E+308" MaximumValue="1.79E+308" />
+        <DoubleAttribute Name="WIDTH" EntryMethod="Required" DefaultValue="0" MinimumValue="-1.79E+308" MaximumValue="1.79E+308" />
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="TAPERED_STRESS_JOINT" Name="TAPERED STRESS JOINT" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <StringAttribute Name="DESCRIPTION" EntryMethod="Optional" />
+        <ListAttribute Name="ACTIVE_INDICATOR" EntryMethod="Optional">
+          <ListItems>
+            <Item>YES</Item>
+            <Item>NO</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="TEE" Name="TEE" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <StringAttribute Name="HEAT_NUMBER" EntryMethod="Required" />
+        <ListAttribute Name="TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>BARRED</Item>
+            <Item>CROSS</Item>
+            <Item>EXTRUDED</Item>
+            <Item>REDUCING</Item>
+            <Item>SPLIT</Item>
+            <Item>STRAIGHT</Item>
+            <Item>WELD</Item>
+            <Item>STOPPLE</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="NOM_DIA_INLET" EntryMethod="Required">
+          <ListItems>
+            <Item>1 in</Item>
+            <Item>1 1/4in</Item>
+            <Item>1 1/2in</Item>
+            <Item>2 in</Item>
+            <Item>2 1/2in</Item>
+            <Item>3 in</Item>
+            <Item>4 in</Item>
+            <Item>4.5 in</Item>
+            <Item>5 3/8 in</Item>
+            <Item>5 in</Item>
+            <Item>6 in</Item>
+            <Item>8 in</Item>
+            <Item>10 in</Item>
+            <Item>12 in</Item>
+            <Item>14 in</Item>
+            <Item>16 in</Item>
+            <Item>18 in</Item>
+            <Item>20 in</Item>
+            <Item>22 in</Item>
+            <Item>24 in</Item>
+            <Item>26 in</Item>
+            <Item>28 in</Item>
+            <Item>30 in</Item>
+            <Item>32 in</Item>
+            <Item>34 in</Item>
+            <Item>36 in</Item>
+            <Item>42 in</Item>
+            <Item>48 in</Item>
+            <Item>54 in</Item>
+            <Item>60 in</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="NOM_DIA_OUTLET" EntryMethod="Required">
+          <ListItems>
+            <Item>1 in</Item>
+            <Item>1 1/4in</Item>
+            <Item>1 1/2in</Item>
+            <Item>2 in</Item>
+            <Item>2 1/2in</Item>
+            <Item>3 in</Item>
+            <Item>4 in</Item>
+            <Item>4.5 in</Item>
+            <Item>5 3/8 in</Item>
+            <Item>5 in</Item>
+            <Item>6 in</Item>
+            <Item>8 in</Item>
+            <Item>10 in</Item>
+            <Item>12 in</Item>
+            <Item>14 in</Item>
+            <Item>16 in</Item>
+            <Item>18 in</Item>
+            <Item>20 in</Item>
+            <Item>22 in</Item>
+            <Item>24 in</Item>
+            <Item>26 in</Item>
+            <Item>28 in</Item>
+            <Item>30 in</Item>
+            <Item>32 in</Item>
+            <Item>34 in</Item>
+            <Item>36 in</Item>
+            <Item>42 in</Item>
+            <Item>48 in</Item>
+            <Item>54 in</Item>
+            <Item>60 in</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="NOM_BRANCH_DIA" EntryMethod="Required">
+          <ListItems>
+            <Item>1 in</Item>
+            <Item>1 1/4in</Item>
+            <Item>1 1/2in</Item>
+            <Item>2 in</Item>
+            <Item>2 1/2in</Item>
+            <Item>3 in</Item>
+            <Item>4 in</Item>
+            <Item>4.5 in</Item>
+            <Item>5 3/8 in</Item>
+            <Item>5 in</Item>
+            <Item>6 in</Item>
+            <Item>8 in</Item>
+            <Item>10 in</Item>
+            <Item>12 in</Item>
+            <Item>14 in</Item>
+            <Item>16 in</Item>
+            <Item>18 in</Item>
+            <Item>20 in</Item>
+            <Item>22 in</Item>
+            <Item>24 in</Item>
+            <Item>26 in</Item>
+            <Item>28 in</Item>
+            <Item>30 in</Item>
+            <Item>32 in</Item>
+            <Item>34 in</Item>
+            <Item>36 in</Item>
+            <Item>42 in</Item>
+            <Item>48 in</Item>
+            <Item>54 in</Item>
+            <Item>60 in</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="NOM_WALL_THICKNESS" EntryMethod="Required">
+          <ListItems>
+            <Item>0.035</Item>
+            <Item>0.049</Item>
+            <Item>0.057</Item>
+            <Item>0.065</Item>
+            <Item>0.068</Item>
+            <Item>0.073</Item>
+            <Item>0.083</Item>
+            <Item>0.088</Item>
+            <Item>0.091</Item>
+            <Item>0.095</Item>
+            <Item>0.109</Item>
+            <Item>0.113</Item>
+            <Item>0.114</Item>
+            <Item>0.117</Item>
+            <Item>0.119</Item>
+            <Item>0.12</Item>
+            <Item>0.125</Item>
+            <Item>0.126</Item>
+            <Item>0.133</Item>
+            <Item>0.134</Item>
+            <Item>0.14</Item>
+            <Item>0.145</Item>
+            <Item>0.147</Item>
+            <Item>0.148</Item>
+            <Item>0.154</Item>
+            <Item>0.156</Item>
+            <Item>0.165</Item>
+            <Item>0.172</Item>
+            <Item>0.179</Item>
+            <Item>0.18</Item>
+            <Item>0.188</Item>
+            <Item>0.19</Item>
+            <Item>0.191</Item>
+            <Item>0.2</Item>
+            <Item>0.203</Item>
+            <Item>0.208</Item>
+            <Item>0.21</Item>
+            <Item>0.215</Item>
+            <Item>0.216</Item>
+            <Item>0.218</Item>
+            <Item>0.219</Item>
+            <Item>0.226</Item>
+            <Item>0.237</Item>
+            <Item>0.247</Item>
+            <Item>0.25</Item>
+            <Item>0.258</Item>
+            <Item>0.26</Item>
+            <Item>0.268</Item>
+            <Item>0.27</Item>
+            <Item>0.276</Item>
+            <Item>0.277</Item>
+            <Item>0.279</Item>
+            <Item>0.28</Item>
+            <Item>0.281</Item>
+            <Item>0.282</Item>
+            <Item>0.286</Item>
+            <Item>0.292</Item>
+            <Item>0.294</Item>
+            <Item>0.3</Item>
+            <Item>0.301</Item>
+            <Item>0.305</Item>
+            <Item>0.307</Item>
+            <Item>0.308</Item>
+            <Item>0.312</Item>
+            <Item>0.3125</Item>
+            <Item>0.318</Item>
+            <Item>0.32</Item>
+            <Item>0.322</Item>
+            <Item>0.33</Item>
+            <Item>0.332</Item>
+            <Item>0.333</Item>
+            <Item>0.337</Item>
+            <Item>0.375</Item>
+            <Item>0.339</Item>
+            <Item>0.342</Item>
+            <Item>0.343</Item>
+            <Item>0.344</Item>
+            <Item>0.349</Item>
+            <Item>0.35</Item>
+            <Item>0.352</Item>
+            <Item>0.355</Item>
+            <Item>0.358</Item>
+            <Item>0.36</Item>
+            <Item>0.365</Item>
+            <Item>0.37</Item>
+            <Item>0.375</Item>
+            <Item>0.377</Item>
+            <Item>0.382</Item>
+            <Item>0.4</Item>
+            <Item>0.405</Item>
+            <Item>0.406</Item>
+            <Item>0.409</Item>
+            <Item>0.429</Item>
+            <Item>0.432</Item>
+            <Item>0.436</Item>
+            <Item>0.437</Item>
+            <Item>0.438</Item>
+            <Item>0.47</Item>
+            <Item>0.49</Item>
+            <Item>0.495</Item>
+            <Item>0.5</Item>
+            <Item>0.512</Item>
+            <Item>0.515</Item>
+            <Item>0.531</Item>
+            <Item>0.552</Item>
+            <Item>0.562</Item>
+            <Item>0.593</Item>
+            <Item>0.6</Item>
+            <Item>0.605</Item>
+            <Item>0.625</Item>
+            <Item>0.636</Item>
+            <Item>0.639</Item>
+            <Item>0.64</Item>
+            <Item>0.656</Item>
+            <Item>0.687</Item>
+            <Item>0.688</Item>
+            <Item>0.718</Item>
+            <Item>0.719</Item>
+            <Item>0.725</Item>
+            <Item>0.75</Item>
+            <Item>0.796</Item>
+            <Item>0.812</Item>
+            <Item>0.83</Item>
+            <Item>0.843</Item>
+            <Item>0.875</Item>
+            <Item>0.937</Item>
+            <Item>0.94</Item>
+            <Item>0.968</Item>
+            <Item>0.98</Item>
+            <Item>1</Item>
+            <Item>1.031</Item>
+            <Item>1.04</Item>
+            <Item>1.093</Item>
+            <Item>1.125</Item>
+            <Item>1.156</Item>
+            <Item>1.218</Item>
+            <Item>1.25</Item>
+            <Item>1.28</Item>
+            <Item>1.312</Item>
+            <Item>1.375</Item>
+            <Item>1.406</Item>
+            <Item>1.437</Item>
+            <Item>1.49</Item>
+            <Item>1.5</Item>
+            <Item>1.531</Item>
+            <Item>1.562</Item>
+            <Item>1.593</Item>
+            <Item>1.625</Item>
+            <Item>1.66</Item>
+            <Item>1.75</Item>
+            <Item>1.781</Item>
+            <Item>1.812</Item>
+            <Item>1.875</Item>
+            <Item>1.968</Item>
+            <Item>2.062</Item>
+            <Item>2.125</Item>
+            <Item>2.343</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="SCAPER_BARS" EntryMethod="Required">
+          <ListItems>
+            <Item>NO</Item>
+            <Item>YES</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="ORIENTATION" EntryMethod="Optional" />
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+        <ListAttribute Name="SPECIFICATION" EntryMethod="Optional">
+          <ListItems>
+            <Item>NA</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="MATERIAL" EntryMethod="Required">
+          <ListItems>
+            <Item>STEEL</Item>
+            <Item>HIGH DENSITY POLY ETHYLENE</Item>
+            <Item>FIBERGLASS</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="MANUFACTURE" EntryMethod="Required" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="TEMPERATURE_PROBE" Name="TEMPERATURE PROBE" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <StringAttribute Name="NAME" EntryMethod="Optional" />
+        <DoubleAttribute Name="SERIAL_NUMBER" EntryMethod="Optional" DefaultValue="0" MinimumValue="-1.79E+308" MaximumValue="1.79E+308" />
+        <StringAttribute Name="INSTALLATION_DATE" EntryMethod="Optional" />
+        <StringAttribute Name="PMLR_NUMBER" EntryMethod="Optional" />
+        <StringAttribute Name="DATE" EntryMethod="Optional" />
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="TEST_LEAD" Name="TEST LEAD" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Optional">
+          <ListItems>
+            <Item>TEST LEAD</Item>
+            <Item>TEST POINT</Item>
+            <Item>ANODETS</Item>
+            <Item>TESTSTA</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="STATUS" EntryMethod="Optional">
+          <ListItems>
+            <Item>ACTIVE</Item>
+            <Item>INACTIVE</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="COMPANY" EntryMethod="Optional" />
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="TOE" Name="TOE" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TOE_OF" EntryMethod="Required">
+          <ListItems>
+            <Item>DITCH</Item>
+            <Item>RIVER</Item>
+            <Item>BALLAST</Item>
+            <Item>BANK</Item>
+            <Item>BERM</Item>
+            <Item>CANAL</Item>
+            <Item>CANYON</Item>
+            <Item>GRADE</Item>
+            <Item>LEVEE</Item>
+            <Item>SHOULDER</Item>
+            <Item>SLOPE</Item>
+            <Item>TERRACE</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="TOP" Name="TOP" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TOP_OF" EntryMethod="Required">
+          <ListItems>
+            <Item>DITCH</Item>
+            <Item>RIVER</Item>
+            <Item>BALLAST</Item>
+            <Item>BANK</Item>
+            <Item>BERM</Item>
+            <Item>CANAL</Item>
+            <Item>CANYON</Item>
+            <Item>GRADE</Item>
+            <Item>LEVEE</Item>
+            <Item>SHOULDER</Item>
+            <Item>SLOPE</Item>
+            <Item>TERRACE</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="TOWER" Name="TOWER" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>CABLE</Item>
+            <Item>CELL</Item>
+            <Item>ELECTRIC</Item>
+            <Item>MICROWAVE</Item>
+            <Item>MULTIPLE KINDS</Item>
+            <Item>RADIO</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="DESCRIPTION" EntryMethod="Required">
+          <ListItems>
+            <Item>2-LEG METAL</Item>
+            <Item>2-LEG WOOD</Item>
+            <Item>4-LEG METAL</Item>
+            <Item>SINGLE METAL</Item>
+            <Item>SINGLE WOOD</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="TOWER_NUMBER" EntryMethod="Optional" />
+        <StringAttribute Name="OWNER" EntryMethod="Optional" />
+        <StringAttribute Name="DIMENSIONS" EntryMethod="Optional" />
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="TREE" Name="TREE" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>CACTUS</Item>
+            <Item>CEDAR</Item>
+            <Item>CYPRESS</Item>
+            <Item>ELM</Item>
+            <Item>FRUIT</Item>
+            <Item>HACKBERRY</Item>
+            <Item>MAPLE</Item>
+            <Item>OAK</Item>
+            <Item>ORNAMENTAL</Item>
+            <Item>PALM</Item>
+            <Item>PECAN</Item>
+            <Item>PINE</Item>
+            <Item>SYCAMORE</Item>
+            <Item>WALNUT</Item>
+            <Item>YAUPON</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <DoubleAttribute Name="DIAMETER" EntryMethod="Optional" DefaultValue="0" MinimumValue="0" MaximumValue="10000" />
+        <StringAttribute Name="DRIP_LINE_DIAMETER" EntryMethod="Optional" />
+        <ListAttribute Name="DEAD_OR_ALIVE" EntryMethod="Optional">
+          <ListItems>
+            <Item>ALIVE</Item>
+            <Item>DEAD</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="TREE_OR_BRUSHLINE" Name="TREE OR BRUSH LINE" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>TREE LINE</Item>
+            <Item>BRUSH LINE</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="POSITION" EntryMethod="Optional">
+          <ListItems>
+            <Item>BEGIN</Item>
+            <Item>CENTERLINE</Item>
+            <Item>EDGE</Item>
+            <Item>END</Item>
+          </ListItems>
+        </ListAttribute>
+        <DoubleAttribute Name="WIDTH" EntryMethod="Optional" DefaultValue="0" MinimumValue="0" MaximumValue="10000" />
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="TRENCH" Name="TRENCH" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="POSITION" EntryMethod="Required">
+          <ListItems>
+            <Item>BOTTOM EDGE</Item>
+            <Item>CENTERLIN</Item>
+            <Item>TOP EDGE</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="OPEN_OR_CLOSED" EntryMethod="Required">
+          <ListItems>
+            <Item>OPEN</Item>
+            <Item>CLOSED</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="PIPE_INSTALLED" EntryMethod="Required">
+          <ListItems>
+            <Item>NO</Item>
+            <Item>YES</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="UTILITY_LOCATION" Name="UTILITY LOCATION" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>FIBEROPTIC</Item>
+            <Item>POWER</Item>
+            <Item>TELEPHONE</Item>
+            <Item>CABLE TV</Item>
+            <Item>GAS</Item>
+            <Item>SANITARY SEWER</Item>
+            <Item>STORM SEWER</Item>
+            <Item>TELEPHONE</Item>
+            <Item>TV</Item>
+            <Item>WATER</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="POSITION" EntryMethod="Optional">
+          <ListItems>
+            <Item>ABOVE GROUND</Item>
+            <Item>BELOW GROUND</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="DEPTH_METHOD" EntryMethod="Required">
+          <ListItems>
+            <Item>ELO</Item>
+            <Item>EXPOSED</Item>
+            <Item>ON SUPPORTS</Item>
+            <Item>PROBED</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="CROSSING" EntryMethod="Optional">
+          <ListItems>
+            <Item>NO</Item>
+            <Item>YES</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="MATERIAL" EntryMethod="Required">
+          <ListItems>
+            <Item>ALUMINUM</Item>
+            <Item>BRASS</Item>
+            <Item>CABLE</Item>
+            <Item>CAST IRON</Item>
+            <Item>CASING</Item>
+            <Item>COAXIAL</Item>
+            <Item>CONDUIT</Item>
+            <Item>CONCRETE</Item>
+            <Item>COPPER</Item>
+            <Item>ELECTRIC</Item>
+            <Item>FIBERGLASS</Item>
+            <Item>GALVANIZED</Item>
+            <Item>PVC</Item>
+            <Item>STEEL</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <DoubleAttribute Name="CLEARANCE" EntryMethod="Required" DefaultValue="0" MinimumValue="-1.79E+308" MaximumValue="1.79E+308" />
+        <DoubleAttribute Name="DEPTH" EntryMethod="Required" DefaultValue="0" MinimumValue="-1.79E+308" MaximumValue="1.79E+308" />
+        <DoubleAttribute Name="SIZE" EntryMethod="Optional" DefaultValue="0" MinimumValue="0" MaximumValue="9999" />
+        <StringAttribute Name="NUMBER_OF_WIRES" EntryMethod="Optional" />
+        <StringAttribute Name="COMPANY" EntryMethod="Optional" />
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="POLE" Name="UTILITY POLE" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>LIGHT</Item>
+            <Item>PHONE</Item>
+            <Item>POWER</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="TRANSFORMER" EntryMethod="Required">
+          <ListItems>
+            <Item>NO</Item>
+            <Item>YES</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="POLE_NUMBER" EntryMethod="Required" />
+        <DoubleAttribute Name="HEIGHT" EntryMethod="Required" DefaultValue="0" MinimumValue="-1.79E+308" MaximumValue="1.79E+308" />
+        <ListAttribute Name="MATERIAL" EntryMethod="Required">
+          <ListItems>
+            <Item>CONCRETE</Item>
+            <Item>METAL</Item>
+            <Item>WOOD</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="TRANSFORMER_NUMBER" EntryMethod="Optional" />
+        <StringAttribute Name="COMPANY" EntryMethod="Optional" />
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="VALVE" Name="VALVE" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>BALL</Item>
+            <Item>BUTTERFLY</Item>
+            <Item>DUAL PLATE</Item>
+            <Item>FLAPPER</Item>
+            <Item>GATE</Item>
+            <Item>GLOBE</Item>
+            <Item>LIFT TYPE</Item>
+            <Item>NEEDLE</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+            <Item>PISTON</Item>
+            <Item>PLUG</Item>
+            <Item>STOP</Item>
+            <Item>SWING</Item>
+            <Item>TILTING DISK</Item>
+            <Item>TOP HINGED</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="DIAMETER" EntryMethod="Required">
+          <ListItems>
+            <Item>1 in</Item>
+            <Item>1 1/4in</Item>
+            <Item>1 1/2in</Item>
+            <Item>2 in</Item>
+            <Item>2 1/2in</Item>
+            <Item>3 in</Item>
+            <Item>4 in</Item>
+            <Item>4.5 in</Item>
+            <Item>5 3/8 in</Item>
+            <Item>5 in</Item>
+            <Item>6 in</Item>
+            <Item>8 in</Item>
+            <Item>10 in</Item>
+            <Item>12 in</Item>
+            <Item>14 in</Item>
+            <Item>16 in</Item>
+            <Item>18 in</Item>
+            <Item>20 in</Item>
+            <Item>22 in</Item>
+            <Item>24 in</Item>
+            <Item>26 in</Item>
+            <Item>28 in</Item>
+            <Item>30 in</Item>
+            <Item>32 in</Item>
+            <Item>34 in</Item>
+            <Item>36 in</Item>
+            <Item>42 in</Item>
+            <Item>48 in</Item>
+            <Item>54 in</Item>
+            <Item>60 in</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="OPERATOR_TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>AUTOMATIC</Item>
+            <Item>ELECTRIC</Item>
+            <Item>GAS</Item>
+            <Item>HYDRAULIC</Item>
+            <Item>MANUAL</Item>
+            <Item>PNEUMATIC</Item>
+            <Item>PRESSURE</Item>
+            <Item>SPRING</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="LOCATION" EntryMethod="Required">
+          <ListItems>
+            <Item>BOX</Item>
+            <Item>BURIED</Item>
+            <Item>SURFACE</Item>
+            <Item>VAULT</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="FUNCTION" EntryMethod="Optional">
+          <ListItems>
+            <Item>REMOTE ACTUATOR BLOCK</Item>
+            <Item>MANUAL ACTUATOR BLOCK</Item>
+            <Item>MANUAL BLOCK</Item>
+            <Item>CHECK</Item>
+            <Item>FUTURE </Item>
+            <Item>PRESSURE RELIEF</Item>
+            <Item>PRESSURE CONTROL</Item>
+            <Item>BY PASS</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="JOINT_TYPE" EntryMethod="Optional">
+          <ListItems>
+            <Item>FLANGED END X FLANGED END</Item>
+            <Item>FLANGED END X SCREW END</Item>
+            <Item>FLANGED END X THREADED END</Item>
+            <Item>FLANGED END X WELDED END</Item>
+            <Item>SCREW END X SCREW END</Item>
+            <Item>SCREW END X THREADED END</Item>
+            <Item>SCREW END X WELDED END</Item>
+            <Item>THREADED END X THREADED END</Item>
+            <Item>THREADED END X WELDED END</Item>
+            <Item>WELDED END X WELED END</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="VALVE MATERIAL" EntryMethod="Optional" />
+        <StringAttribute Name="MODEL_NUMBER" EntryMethod="Optional" />
+        <StringAttribute Name="SERIAL_NUMBER" EntryMethod="Optional" />
+        <StringAttribute Name="MANUFACTURER" EntryMethod="Optional" />
+        <ListAttribute Name="MOTOR_OPERATED" EntryMethod="Optional">
+          <ListItems>
+            <Item>NO</Item>
+            <Item>YES</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="VAULT" Name="VAULT" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>ELECTRIC</Item>
+            <Item>MECHANICAL</Item>
+            <Item>PEDESTRIAN</Item>
+            <Item>TRANSPORTATION</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="POSITION" EntryMethod="Required">
+          <ListItems>
+            <Item>BOTTOM</Item>
+            <Item>CORNER</Item>
+            <Item>EDGE</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="VENT" Name="VENT PIPE" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TEST_LEAD_ATTACHED" EntryMethod="Required">
+          <ListItems>
+            <Item>NO</Item>
+            <Item>YES</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="MANUFACTURER" EntryMethod="Optional" />
+        <DoubleAttribute Name="DIAMETER" EntryMethod="Required" DefaultValue="0" MinimumValue="0" MaximumValue="10000" />
+        <StringAttribute Name="COMPANY" EntryMethod="Required" />
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="WALL" Name="WALL" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>BULKHEAD</Item>
+            <Item>RETAINING</Item>
+            <Item>SOUND</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="MATERIAL" EntryMethod="Required">
+          <ListItems>
+            <Item>BRICK</Item>
+            <Item>CINDER BLOCK</Item>
+            <Item>CONCRETE</Item>
+            <Item>ROCK</Item>
+            <Item>SHEET PILING</Item>
+            <Item>STONE</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="WATERBODY" Name="WATERBODY" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>BAYOU</Item>
+            <Item>CANAL</Item>
+            <Item>CANYON</Item>
+            <Item>CREEK</Item>
+            <Item>DITCH</Item>
+            <Item>DRAIN</Item>
+            <Item>LAKE</Item>
+            <Item>LEVEE</Item>
+            <Item>MARSH</Item>
+            <Item>OCEAN</Item>
+            <Item>PIT</Item>
+            <Item>POND</Item>
+            <Item>RIVER</Item>
+            <Item>STREAM</Item>
+            <Item>SWAMP</Item>
+            <Item>WASH</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+            <Item>GULLY</Item>
+            <Item>RESEVOIR</Item>
+            <Item>SLOUGH</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="POSITION" EntryMethod="Required">
+          <ListItems>
+            <Item>BOTTOM</Item>
+            <Item>EDGE</Item>
+            <Item>SOUNDING</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <DoubleAttribute Name="WIDTH" EntryMethod="Required" DefaultValue="0" MinimumValue="-1.79E+308" MaximumValue="1.79E+308" />
+        <DoubleAttribute Name="DEPTH" EntryMethod="Required" DefaultValue="0" MinimumValue="-1.79E+308" MaximumValue="1.79E+308" />
+        <StringAttribute Name="NAME" EntryMethod="Optional" />
+        <ListAttribute Name="FLOW_DIRECTION" EntryMethod="Required">
+          <ListItems>
+            <Item>EAST - WEST LINE CROSSING</Item>
+            <Item>NORTH - SOUTH LINE CROSSING</Item>
+            <Item>NORTHEAST - SOUTHWEST LINE CROSSING</Item>
+            <Item>NORTHWEST - SOUTHEAST LINE CROSSING</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="WELD" Name="WELD (PIPE JOIN)" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>BUTT JOINT</Item>
+            <Item>LAP JOINT</Item>
+            <Item>FILLET WELD</Item>
+            <Item>ELECTROFUSION</Item>
+            <Item>COUPLING</Item>
+            <Item>THREADED</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="XRAY_NUMBER" Description="XRAY NUMBER OF WELD" EntryMethod="Required" />
+        <StringAttribute Name="JOINT_AHEAD" Description="JOINT NUMBER AHEAD" EntryMethod="Required" />
+        <StringAttribute Name="JOINT_BACK" Description="JOINT NUMBER BEHIND" EntryMethod="Required" />
+        <StringAttribute Name="HEAT_AHEAD" Description="PIPE HEAT AHEAD" EntryMethod="Required" />
+        <StringAttribute Name="HEAT_BACK" Description="PIPE HEAT BEHIND" EntryMethod="Required" />
+        <DoubleAttribute Name="DOC" Description="DEPTH OF COVER" EntryMethod="Required" DefaultValue="0" MinimumValue="-1.79E+308" MaximumValue="1.79E+308" NumberOfDecimals="1" />
+        <StringAttribute Name="JOINT_ID" Description="SERIAL OR PIPE NUMBER AHEAD" EntryMethod="Required" />
+        <StringAttribute Name="WALLTHICKNESS" Description="PIPE WALL THICKNESS" EntryMethod="Required" />
+        <StringAttribute Name="COATING_TYPE" Description="EXAMPLE - FBE ARO PAINT BARE" EntryMethod="Required" />
+        <ListAttribute Name="MATERIAL" Description="PIPE MATERIAL" EntryMethod="Required">
+          <ListItems>
+            <Item>STEEL</Item>
+            <Item>HIGH DENSITY POLY ETHYLENE</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="DIAMETER" Description="PIPE DIAMETER" EntryMethod="Required" />
+        <StringAttribute Name="GRADE" Description="EXAMPLE - X42 X52 Y52 WPB" EntryMethod="Required" />
+        <StringAttribute Name="PIPE_SPECS" Description="EXAMPLE - API5L ASTM105" EntryMethod="Required" />
+        <StringAttribute Name="LENGTH" Description="LENGTH AHEAD" EntryMethod="Required" />
+        <StringAttribute Name="MANUFACTURER" Description="PIPE MANUFACTURER" EntryMethod="Required" />
+        <StringAttribute Name="WELDER" Description="WELDER INITIALS/STENCIL" EntryMethod="Required" DefaultValue="0" MaximumLength="500" />
+        <DateAttribute Name="INSTALLATION_DATE" EntryMethod="AutoGenerate" AnnotationFormat="d" />
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="WELL" Name="WELL" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <StringAttribute Name="NAME" EntryMethod="Optional" />
+        <ListAttribute Name="TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>INJECTOR</Item>
+            <Item>MONITOR</Item>
+            <Item>OIL</Item>
+            <Item>PRODUCER</Item>
+            <Item>WATER</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="ACTIVE_OR_INACTIVE" EntryMethod="Required">
+          <ListItems>
+            <Item>ACTIVE</Item>
+            <Item>INACTIVE</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="PAD" Name="WELL PAD" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <ListAttribute Name="TYPE" EntryMethod="Required">
+          <ListItems>
+            <Item>LAUNCHER/RECEIVER</Item>
+            <Item>METER</Item>
+            <Item>WELL</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="MATERIAL" EntryMethod="Required">
+          <ListItems>
+            <Item>CALICHE</Item>
+            <Item>CONCRETE</Item>
+            <Item>GRAVEL</Item>
+            <Item>ROCK</Item>
+            <Item>OTHER (SEE NOTES)</Item>
+          </ListItems>
+        </ListAttribute>
+        <ListAttribute Name="POSITION" EntryMethod="Optional">
+          <ListItems>
+            <Item>CORNER</Item>
+            <Item>EDGE</Item>
+          </ListItems>
+        </ListAttribute>
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+    <PointFeatureDefinition Code="WETLAND" Name="WETLAND" Category="Data Dictionary File" IncludeInSurface="true" Color="FE000000" Layer="0">
+      <Attributes>
+        <StringAttribute Name="WETLAND_ID" EntryMethod="Optional" />
+        <StringAttribute Name="NOTES" EntryMethod="Optional" />
+      </Attributes>
+    </PointFeatureDefinition>
+  </FeatureDefinitions>
+</FeatureCodingDefinitions>

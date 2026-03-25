@@ -1,0 +1,4288 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<JOBFile jobName="JPA_031126_TOG_2025" version="6.32" product="Trimble Access" productVersion="25.20" productDBVersion="2520-12" controllerSerialNumber="DAD193900363" originalProductVersion="2025.22 (25.20.403)" linkedProjectId="" TimeStamp="2026-03-11T08:15:21"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://www.trimble.com/schema/JobXML/6_3 http://www.trimble.com/schema/JobXML/6_3/JobXMLSchema-6.32.xsd">
+    <FieldBook>
+
+        <HorizontalAdjustmentRecord ID="00000003" TimeStamp="2026-03-11T08:15:21">
+            <Type>NoAdjustment</Type>
+        </HorizontalAdjustmentRecord>
+
+        <JobPropertiesRecord ID="00000004" TimeStamp="2026-03-11T08:15:21">
+            <Reference/>
+            <Description/>
+            <Operator/>
+            <JobNote/>
+            <TectonicPlate>Unknown</TectonicPlate>
+            <ApplyJobPointNameRange>false</ApplyJobPointNameRange>
+            <MinimumJobPointName/>
+            <MaximumJobPointName/>
+        </JobPropertiesRecord>
+
+        <LinkedFilesRecord ID="00000006" TimeStamp="2026-03-11T08:15:21"/>
+
+        <DatumRecord ID="00000007" TimeStamp="2026-03-11T08:15:21">
+            <Type>ThreeParameter</Type>
+            <Direction>WGS84ToLocal</Direction>
+            <EarthRadius>6378137</EarthRadius>
+            <Flattening>0.00335281067183</Flattening>
+            <TranslationX>0</TranslationX>
+            <TranslationY>0</TranslationY>
+            <TranslationZ>0</TranslationZ>
+            <ReferenceGlobalFrameID>23</ReferenceGlobalFrameID>
+            <ReferenceGlobalFrameISO>126</ReferenceGlobalFrameISO>
+            <ReferenceGlobalFrameEPSG>1116</ReferenceGlobalFrameEPSG>
+            <ReferenceGlobalFrameEpoch>2010.00</ReferenceGlobalFrameEpoch>
+            <ReferenceGlobalFrameName>NAD83(2011)</ReferenceGlobalFrameName>
+            <DisplacementModelName>HTDP V3.4.0</DisplacementModelName>
+            <LocalDatumID>234</LocalDatumID>
+            <LocalDatumEPSG>1116</LocalDatumEPSG>
+            <LocalGeographicCoordinateReferenceSystemEPSG>6318</LocalGeographicCoordinateReferenceSystemEPSG>
+            <GlobalGeographicCoordinateReferenceSystemEPSG>6318</GlobalGeographicCoordinateReferenceSystemEPSG>
+            <DatumTransformationEPSG/>
+        </DatumRecord>
+
+        <DisplacementModelsRecord ID="00000008" TimeStamp="2026-03-11T08:15:21">
+            <DisplacementModel>
+                <Name>ITRF2014</Name>
+                <Realization>ITRF2014</Realization>
+                <SystemID>172</SystemID>
+                <Type>Tectonic</Type>
+                <File>plate_rotations_from_itrf2014.xml</File>
+                <MinEpoch>0</MinEpoch>
+                <MaxEpoch>0</MaxEpoch>
+                <MinimumLatitude>-90</MinimumLatitude>
+                <MaximumLatitude>90</MaximumLatitude>
+                <MinimumLongitude>-180</MinimumLongitude>
+                <MaximumLongitude>180</MaximumLongitude>
+            </DisplacementModel>
+            <DisplacementModel>
+                <Name>HTDP V3.4.0 ALASKA</Name>
+                <Realization>NAD83(2011)</Realization>
+                <SystemID>254</SystemID>
+                <Type>Local</Type>
+                <File>htdp_v3.4.0_alaska_20211019.xml</File>
+                <MinEpoch>2010.00</MinEpoch>
+                <MaxEpoch>0</MaxEpoch>
+                <MinimumLatitude>54</MinimumLatitude>
+                <MaximumLatitude>73</MaximumLatitude>
+                <MinimumLongitude>-170</MinimumLongitude>
+                <MaximumLongitude>-130</MaximumLongitude>
+            </DisplacementModel>
+            <DisplacementModel>
+                <Name>HTDP V3.4.0 CONUS</Name>
+                <Realization>NAD83(2011)</Realization>
+                <SystemID>255</SystemID>
+                <Type>Local</Type>
+                <File>htdp_v3.4.0_conus_20211019.xml</File>
+                <MinEpoch>2010.00</MinEpoch>
+                <MaxEpoch>0</MaxEpoch>
+                <MinimumLatitude>25</MinimumLatitude>
+                <MaximumLatitude>49.75</MaximumLatitude>
+                <MinimumLongitude>-125</MinimumLongitude>
+                <MaximumLongitude>-66</MaximumLongitude>
+            </DisplacementModel>
+            <DisplacementModel>
+                <Name>ITRF2020</Name>
+                <Realization>ITRF2020</Realization>
+                <SystemID>332</SystemID>
+                <Type>Tectonic</Type>
+                <File>plate_rotations_from_itrf2014.xml</File>
+                <MinEpoch>0</MinEpoch>
+                <MaxEpoch>0</MaxEpoch>
+                <MinimumLatitude>-90</MinimumLatitude>
+                <MaximumLatitude>90</MaximumLatitude>
+                <MinimumLongitude>-180</MinimumLongitude>
+                <MaximumLongitude>180</MaximumLongitude>
+            </DisplacementModel>
+        </DisplacementModelsRecord>
+
+        <KinematicTransformationsRecord ID="00000009" TimeStamp="2026-03-11T08:15:21">
+            <KinematicTransformation>
+                <Name>ITRF2014 to NAD83(2011)</Name>
+                <SystemID>232</SystemID>
+                <SourceRealization>ITRF2014</SourceRealization>
+                <TargetRealization>NAD83(2011)</TargetRealization>
+                <ReferenceEpoch>2010.00</ReferenceEpoch>
+                <Type>FourteenParameters</Type>
+                <TranslationX>1.0053</TranslationX>
+                <TranslationY>-1.90921</TranslationY>
+                <TranslationZ>-0.54157</TranslationZ>
+                <RotationX>-26.7815</RotationX>
+                <RotationY>0.42078</RotationY>
+                <RotationZ>-10.93254</RotationZ>
+                <Scale>0.36891</Scale>
+                <DerivativeTranslationX>0.00079</DerivativeTranslationX>
+                <DerivativeTranslationY>-0.0006</DerivativeTranslationY>
+                <DerivativeTranslationZ>-0.00144</DerivativeTranslationZ>
+                <DerivativeRotationX>-0.06669</DerivativeRotationX>
+                <DerivativeRotationY>0.75749</DerivativeRotationY>
+                <DerivativeRotationZ>0.05129</DerivativeRotationZ>
+                <DerivativeScale>-0.07201</DerivativeScale>
+                <VelocityIncluded>false</VelocityIncluded>
+            </KinematicTransformation>
+            <KinematicTransformation>
+                <Name>ITRF2020 to ITRF2014</Name>
+                <SystemID>306</SystemID>
+                <SourceRealization>ITRF2020</SourceRealization>
+                <TargetRealization>ITRF2014</TargetRealization>
+                <ReferenceEpoch>2015.00</ReferenceEpoch>
+                <Type>FourteenParameters</Type>
+                <TranslationX>-0.0014</TranslationX>
+                <TranslationY>-0.0009</TranslationY>
+                <TranslationZ>0.0014</TranslationZ>
+                <RotationX>0</RotationX>
+                <RotationY>0</RotationY>
+                <RotationZ>0</RotationZ>
+                <Scale>-0.42</Scale>
+                <DerivativeTranslationX>0</DerivativeTranslationX>
+                <DerivativeTranslationY>-0.0001</DerivativeTranslationY>
+                <DerivativeTranslationZ>0.0002</DerivativeTranslationZ>
+                <DerivativeRotationX>0</DerivativeRotationX>
+                <DerivativeRotationY>0</DerivativeRotationY>
+                <DerivativeRotationZ>0</DerivativeRotationZ>
+                <DerivativeScale>0</DerivativeScale>
+                <VelocityIncluded>false</VelocityIncluded>
+            </KinematicTransformation>
+        </KinematicTransformationsRecord>
+
+        <ReferenceFrameTransformationsRecord ID="0000000a" TimeStamp="2026-03-11T08:15:21">
+            <ReferenceFrameTransformationInformation>
+                <SourceFrameId>19</SourceFrameId>
+                <SourceFrameEPSG>1165</SourceFrameEPSG>
+                <SourceFrameISO>175</SourceFrameISO>
+                <SourceFrameName>ITRF2014</SourceFrameName>
+                <SourceFrameReferenceEpoch>2010.00</SourceFrameReferenceEpoch>
+                <TargetFrameId>23</TargetFrameId>
+                <TargetFrameEPSG>1116</TargetFrameEPSG>
+                <TargetFrameISO>126</TargetFrameISO>
+                <TargetFrameName>NAD83(2011)</TargetFrameName>
+                <TargetFrameReferenceEpoch>2010.00</TargetFrameReferenceEpoch>
+                <DisplacementModels>
+                    <SystemID>172</SystemID>
+                    <SystemID>255</SystemID>
+                    <SystemID>254</SystemID>
+                </DisplacementModels>
+                <KinematicTransformations>
+                    <SystemID>232</SystemID>
+                </KinematicTransformations>
+            </ReferenceFrameTransformationInformation>
+            <ReferenceFrameTransformationInformation>
+                <SourceFrameId>23</SourceFrameId>
+                <SourceFrameEPSG>1116</SourceFrameEPSG>
+                <SourceFrameISO>126</SourceFrameISO>
+                <SourceFrameName>NAD83(2011)</SourceFrameName>
+                <SourceFrameReferenceEpoch>2010.00</SourceFrameReferenceEpoch>
+                <TargetFrameId>19</TargetFrameId>
+                <TargetFrameEPSG>1165</TargetFrameEPSG>
+                <TargetFrameISO>175</TargetFrameISO>
+                <TargetFrameName>ITRF2014</TargetFrameName>
+                <TargetFrameReferenceEpoch>2010.00</TargetFrameReferenceEpoch>
+                <DisplacementModels>
+                    <SystemID>172</SystemID>
+                    <SystemID>255</SystemID>
+                    <SystemID>254</SystemID>
+                </DisplacementModels>
+                <KinematicTransformations>
+                    <SystemID>232</SystemID>
+                </KinematicTransformations>
+            </ReferenceFrameTransformationInformation>
+            <ReferenceFrameTransformationInformation>
+                <SourceFrameId>23</SourceFrameId>
+                <SourceFrameEPSG>1116</SourceFrameEPSG>
+                <SourceFrameISO>126</SourceFrameISO>
+                <SourceFrameName>NAD83(2011)</SourceFrameName>
+                <SourceFrameReferenceEpoch>2010.00</SourceFrameReferenceEpoch>
+                <TargetFrameId>305</TargetFrameId>
+                <TargetFrameEPSG>1322</TargetFrameEPSG>
+                <TargetFrameISO>801</TargetFrameISO>
+                <TargetFrameName>ITRF2020</TargetFrameName>
+                <TargetFrameReferenceEpoch>2015.00</TargetFrameReferenceEpoch>
+                <DisplacementModels>
+                    <SystemID>172</SystemID>
+                    <SystemID>332</SystemID>
+                    <SystemID>255</SystemID>
+                    <SystemID>254</SystemID>
+                </DisplacementModels>
+                <KinematicTransformations>
+                    <SystemID>232</SystemID>
+                    <SystemID>306</SystemID>
+                </KinematicTransformations>
+            </ReferenceFrameTransformationInformation>
+            <ReferenceFrameTransformationInformation>
+                <SourceFrameId>305</SourceFrameId>
+                <SourceFrameEPSG>1322</SourceFrameEPSG>
+                <SourceFrameISO>801</SourceFrameISO>
+                <SourceFrameName>ITRF2020</SourceFrameName>
+                <SourceFrameReferenceEpoch>2015.00</SourceFrameReferenceEpoch>
+                <TargetFrameId>23</TargetFrameId>
+                <TargetFrameEPSG>1116</TargetFrameEPSG>
+                <TargetFrameISO>126</TargetFrameISO>
+                <TargetFrameName>NAD83(2011)</TargetFrameName>
+                <TargetFrameReferenceEpoch>2010.00</TargetFrameReferenceEpoch>
+                <DisplacementModels>
+                    <SystemID>172</SystemID>
+                    <SystemID>332</SystemID>
+                    <SystemID>255</SystemID>
+                    <SystemID>254</SystemID>
+                </DisplacementModels>
+                <KinematicTransformations>
+                    <SystemID>306</SystemID>
+                    <SystemID>232</SystemID>
+                </KinematicTransformations>
+            </ReferenceFrameTransformationInformation>
+        </ReferenceFrameTransformationsRecord>
+
+        <CorrectionsRecord ID="0000000b" TimeStamp="2026-03-11T08:15:21">
+            <SouthAzimuth>false</SouthAzimuth>
+            <GridOrientation>IncreasingNorthEast</GridOrientation>
+            <MagneticDeclination>0</MagneticDeclination>
+            <Distances>GridDistance</Distances>
+            <ApplySeaLevelCorrection>true</ApplySeaLevelCorrection>
+            <NeighbourhoodAdjustment>
+                <Applied>false</Applied>
+                <WeightExponent>0.5</WeightExponent>
+            </NeighbourhoodAdjustment>
+            <ReferenceAzimuth/>
+        </CorrectionsRecord>
+
+        <UnitsRecord ID="0000000c" TimeStamp="2026-03-11T08:15:21">
+            <DistanceUnits>USSurveyFeet</DistanceUnits>
+            <HeightUnits>USSurveyFeet</HeightUnits>
+            <AngleUnits>DMSDegrees</AngleUnits>
+            <AzimuthFormat>Azimuth</AzimuthFormat>
+            <LatitudeLongitudeUnits>DMSDegrees</LatitudeLongitudeUnits>
+            <CoordinateOrder>North-East-Elevation</CoordinateOrder>
+            <TemperatureUnits>Celsius</TemperatureUnits>
+            <PressureUnits>MilliBar</PressureUnits>
+            <GradeUnits>Percentage</GradeUnits>
+            <AreaUnits>SquareMetres</AreaUnits>
+            <VolumeUnits>CubicMetres</VolumeUnits>
+            <StationingFormat>10+00.0</StationingFormat>
+            <StationIndexIncrement/>
+            <PrecisionUnits>DRMS</PrecisionUnits>
+            <DistanceDisplayDPs>3</DistanceDisplayDPs>
+            <CoordinateDisplayDPs>3</CoordinateDisplayDPs>
+            <AreaDisplayDPs>3</AreaDisplayDPs>
+            <VolumeDisplayDPs>3</VolumeDisplayDPs>
+            <AngleDisplayDPs>0</AngleDisplayDPs>
+            <LaserVADisplay>Inclination</LaserVADisplay>
+            <TimeFormat>Local</TimeFormat>
+            <MassUnits>Kilograms</MassUnits>
+            <MassDisplayDPs>3</MassDisplayDPs>
+        </UnitsRecord>
+
+        <EllipsoidRecord ID="0000000e" TimeStamp="2026-03-11T08:15:21">
+            <EarthRadius>6378137</EarthRadius>
+            <Flattening>0.00335281068118</Flattening>
+            <LocalEllipsoidEPSG>7019</LocalEllipsoidEPSG>
+            <LocalEllipsoidID>23</LocalEllipsoidID>
+        </EllipsoidRecord>
+
+        <VerticalAdjustmentRecord ID="0000000f" TimeStamp="2026-03-11T08:15:21">
+            <Type>GeoidModel</Type>
+            <GeoidName>GEOID18 (Conus) Fixed</GeoidName>
+            <GeoidID/>
+            <VerticalCoordinateReferenceSystemEPSG/>
+            <VerticalDatumEPSG/>
+        </VerticalAdjustmentRecord>
+
+        <ProjectionRecord ID="00000010" TimeStamp="2026-03-11T08:15:21">
+            <Projection>
+                <Type>Lambert2Parallel</Type>
+                <ShiftGridFileName/>
+                <CentralLatitude>39.333333333333</CentralLatitude>
+                <CentralLongitude>-105.5</CentralLongitude>
+                <FalseNorthing>304800.6096</FalseNorthing>
+                <FalseEasting>914401.8289</FalseEasting>
+                <Parallel1>40.783333333333</Parallel1>
+                <Parallel2>39.716666666667</Parallel2>
+            </Projection>
+            <LocalSite>
+                <Type>Grid</Type>
+                <ProjectLocationLatitude/>
+                <ProjectLocationLongitude/>
+                <ProjectLocationHeight>5280</ProjectLocationHeight>
+            </LocalSite>
+        </ProjectionRecord>
+
+        <CoordinateSystemRecord ID="00000011" TimeStamp="2026-03-11T08:15:21">
+            <SystemName>United States/NAD83</SystemName>
+            <ZoneName>Colorado North 0501</ZoneName>
+            <DatumName>NAD83(2011)</DatumName>
+            <ZoneID>721</ZoneID>
+            <ProjectedCoordinateReferenceSystemEPSG>6429</ProjectedCoordinateReferenceSystemEPSG>
+            <CompoundCoordinateReferenceSystemEPSG/>
+        </CoordinateSystemRecord>
+
+        <FeatureCodingRecord ID="00000013" TimeStamp="2026-03-11T08:15:21">
+            <LibraryName>TOPOGRAPHIC_2023</LibraryName>
+            <SourceFilename>TOPOGRAPHIC_2023.fxl</SourceFilename>
+            <AttributeCheckSum>0</AttributeCheckSum>
+            <AttributesStored>false</AttributesStored>
+        </FeatureCodingRecord>
+
+        <ActiveMapFilesRecord ID="00000017" TimeStamp="2026-03-11T08:15:21">
+            <File Selectable="true">C:\ProgramData\Trimble\Trimble Data\System Files\ZONE 5.dxf</File>
+            <File Selectable="true">C:\Users\FPI\Downloads\ZONE 1.dxf</File>
+        </ActiveMapFilesRecord>
+
+        <FeatureCodingRecord ID="00000018" TimeStamp="2026-03-11T08:16:59">
+            <LibraryName>TallGrass_Survey_Codes_TRIMBLE_v20210408_MOD</LibraryName>
+            <SourceFilename>TallGrass_Survey_Codes_TRIMBLE_v20210408_MOD.fxl</SourceFilename>
+            <AttributeCheckSum>0</AttributeCheckSum>
+            <AttributesStored>true</AttributesStored>
+        </FeatureCodingRecord>
+
+        <TimeZoneRecord ID="00000019" TimeStamp="2026-03-11T08:17:15">
+            <ZoneName>Mountain Daylight Time</ZoneName>
+            <HoursToUTC>6</HoursToUTC>
+        </TimeZoneRecord>
+
+        <RoverSurveyOptionsRecord ID="0000001b" TimeStamp="2026-03-11T08:51:11">
+            <ElevationMask>10</ElevationMask>
+            <PDOPMask>6</PDOPMask>
+        </RoverSurveyOptionsRecord>
+
+        <RoverSurveyOptionsRecord ID="00000029" TimeStamp="2026-03-11T08:51:13">
+            <ElevationMask>10</ElevationMask>
+            <PDOPMask>6</PDOPMask>
+        </RoverSurveyOptionsRecord>
+
+        <SurveyEventRecord ID="0000002a" TimeStamp="2026-03-11T08:51:13">
+            <Event>StartRoverSurvey</Event>
+        </SurveyEventRecord>
+
+        <IMUCenteringAlignmentRecord ID="0000002b" TimeStamp="2026-03-11T08:51:15">
+            <SerialNumber>6407714321</SerialNumber>
+            <TiltEvent>StartSurvey</TiltEvent>
+            <CalibrationTimeRemaining/>
+            <CalibrationTimeoutPeriod/>
+            <SensorStatus>NotCalibrated</SensorStatus>
+            <CalibrationTime>
+                <GPSWeek>0</GPSWeek>
+                <Seconds>0</Seconds>
+            </CalibrationTime>
+            <YawAdjustment>0</YawAdjustment>
+            <PitchAdjustment>0</PitchAdjustment>
+            <RollAdjustment>0</RollAdjustment>
+            <PitchDistance>0</PitchDistance>
+            <RollDistance>0</RollDistance>
+        </IMUCenteringAlignmentRecord>
+
+        <InitialisationRecord ID="0000002c" TimeStamp="2026-03-11T09:09:43">
+            <InitialisationEvent>RTXConverged</InitialisationEvent>
+            <Time>
+                <GPSWeek>2409</GPSWeek>
+                <Seconds>313801</Seconds>
+            </Time>
+            <InitialisationType>OnTheFly</InitialisationType>
+            <SurveyType>RealTime</SurveyType>
+            <InitialisationCounter/>
+            <PointName/>
+        </InitialisationRecord>
+
+        <ActiveMapFilesRecord ID="0000002d" TimeStamp="2026-03-11T09:09:46">
+            <File Selectable="true">C:\ProgramData\Trimble\Trimble Data\System Files\ZONE 5.dxf</File>
+            <File Selectable="true">C:\Users\FPI\Downloads\ZONE 1.dxf</File>
+            <File Selectable="true">C:\ProgramData\Trimble\Trimble Data\System Files\COLORADO_NORTH_021926.csv</File>
+        </ActiveMapFilesRecord>
+
+        <GPSEquipmentRecord ID="0000002e" TimeStamp="2026-03-11T09:10:09">
+            <ReceiverType>R12i</ReceiverType>
+            <ReceiverSerialNumber>6407714321</ReceiverSerialNumber>
+            <ReceiverFirmwareVersion>6.25</ReceiverFirmwareVersion>
+            <AntennaType>R12i Internal</AntennaType>
+            <AntennaSerialNumber/>
+            <AntennaNumber>610</AntennaNumber>
+            <AntennaMeasurementMethod>Bottom of quick release</AntennaMeasurementMethod>
+            <AntennaMethod>1</AntennaMethod>
+            <AntennaTapeAdjustment>0</AntennaTapeAdjustment>
+            <AntennaHorizontalOffset>0</AntennaHorizontalOffset>
+            <AntennaVerticalOffset>0.17932</AntennaVerticalOffset>
+            <AntennaMeasurementKey>Method1</AntennaMeasurementKey>
+        </GPSEquipmentRecord>
+
+        <AntennaRecord ID="0000002f" TimeStamp="2026-03-11T09:10:09">
+            <MeasuredHeight>2</MeasuredHeight>
+            <MeasurementType>Raw</MeasurementType>
+            <GPSEquipmentID>0000002e</GPSEquipmentID>
+            <ReducedHeight>2.17932</ReducedHeight>
+        </AntennaRecord>
+
+        <PointRecord ID="00000030" TimeStamp="2026-03-11T09:10:09">
+            <Name>JP10158</Name>
+            <Code>CKS</Code>
+            <Method>GpsStaticObservation</Method>
+            <SurveyMethod>RTX</SurveyMethod>
+            <Classification>Normal</Classification>
+            <Deleted>false</Deleted>
+
+            <RTXECEF>
+                <X>-1102839.1436715</X>
+                <Y>-4712620.6321918</Y>
+                <Z>4141874.0062363</Z>
+                <T>2026.18</T>
+                <Realisation>ITRF2020</Realisation>
+            </RTXECEF>
+            <AntennaID>0000002f</AntennaID>
+            <DeviceAxisOrientation>
+                <Type>InertialTiltComp</Type>
+                <Attitude>
+                    <Pitch>-0.50083259001956</Pitch>
+                    <Roll>-0.40431963059372</Roll>
+                    <Yaw>-30.086992731685</Yaw>
+                </Attitude>
+                <AttitudeStandardDeviation>
+                    <Pitch>0.061673578038</Pitch>
+                    <Roll>0.06125231697035</Roll>
+                    <Yaw>0.92609529317595</Yaw>
+                </AttitudeStandardDeviation>
+                <IMUAlignmentState>Fine</IMUAlignmentState>
+            </DeviceAxisOrientation>
+
+            <ComputedGrid>
+                <North>464244.31167456</North>
+                <East>1111060.7091382</East>
+                <Elevation>1204.5201719912</Elevation>
+            </ComputedGrid>
+            <Precision>
+                <Horizontal>0.02017079197995</Horizontal>
+                <Vertical>0.05485144257545</Vertical>
+                <RawHorizontal>0.02017079197995</RawHorizontal>
+                <RawVertical>0.05485144257545</RawVertical>
+            </Precision>
+            <QualityControl1>
+                <MinimumNumberOfSatellites>29</MinimumNumberOfSatellites>
+                <MinGPSSVs>9</MinGPSSVs>
+                <MinGLONASSSVs>5</MinGLONASSSVs>
+                <MinGalileoSVs>8</MinGalileoSVs>
+                <MinQZSSSVs>0</MinQZSSSVs>
+                <MinBeiDouSVs>7</MinBeiDouSVs>
+                <NumberOfSatellites>29</NumberOfSatellites>
+                <NumGPSSVs>9</NumGPSSVs>
+                <NumGLONASSSVs>5</NumGLONASSSVs>
+                <NumGalileoSVs>8</NumGalileoSVs>
+                <NumQZSSSVs>0</NumQZSSSVs>
+                <NumBeiDouSVs>7</NumBeiDouSVs>
+                <NumNavICSVs>0</NumNavICSVs>
+                <RelativeDOPs>false</RelativeDOPs>
+                <PDOP>0.98699307441711</PDOP>
+                <GDOP>1.5708270452246</GDOP>
+                <HDOP>0.51307654380798</HDOP>
+                <VDOP>0.84316742420197</VDOP>
+                <PDOP_AtStore>0.9868620634079</PDOP_AtStore>
+                <GDOP_AtStore>1.5706637669317</GDOP_AtStore>
+                <HDOP_AtStore>0.51307654380798</HDOP_AtStore>
+                <VDOP_AtStore>0.84300011396408</VDOP_AtStore>
+                <NumberOfPositionsUsed>5</NumberOfPositionsUsed>
+                <HorizontalStandardDeviation/>
+                <VerticalStandardDeviation/>
+                <StartTime>
+                    <GPSWeek>2409</GPSWeek>
+                    <Seconds>313823</Seconds>
+                </StartTime>
+                <EndTime>
+                    <GPSWeek>2409</GPSWeek>
+                    <Seconds>313827</Seconds>
+                </EndTime>
+                <MonitorStatus>NotMonitored</MonitorStatus>
+                <RTCMAge>11.800000190735</RTCMAge>
+                <Warnings>
+                    <ExcessTiltWarning>NotCalibrated</ExcessTiltWarning>
+                    <ExcessTiltAtStorage>NotCalibrated</ExcessTiltAtStorage>
+                    <ExcessMovementWarning>No</ExcessMovementWarning>
+                    <ExcessMovementAtStorage>No</ExcessMovementAtStorage>
+                    <PoorPrecisionsWarning>No</PoorPrecisionsWarning>
+                    <PoorPrecisionsAtStorage>No</PoorPrecisionsAtStorage>
+                    <MagneticDisturbanceWarning>NotSupported</MagneticDisturbanceWarning>
+                    <MagneticDisturbanceAtStorage>NotSupported</MagneticDisturbanceAtStorage>
+                    <BadEnvironmentWarning>No</BadEnvironmentWarning>
+                    <BadEnvironmentAtStorage>No</BadEnvironmentAtStorage>
+                    <AINSAlignmentWarning>No</AINSAlignmentWarning>
+                    <AINSAlignmentAtStorage>No</AINSAlignmentAtStorage>
+                </Warnings>
+                <SVList>
+                    <SV Number="1" System="GPS"/>
+                    <SV Number="2" System="GPS"/>
+                    <SV Number="7" System="GPS"/>
+                    <SV Number="8" System="GPS"/>
+                    <SV Number="13" System="GPS"/>
+                    <SV Number="14" System="GPS"/>
+                    <SV Number="17" System="GPS"/>
+                    <SV Number="22" System="GPS"/>
+                    <SV Number="30" System="GPS"/>
+                    <SV Number="4" System="GLONASS"/>
+                    <SV Number="5" System="GLONASS"/>
+                    <SV Number="14" System="GLONASS"/>
+                    <SV Number="15" System="GLONASS"/>
+                    <SV Number="24" System="GLONASS"/>
+                    <SV Number="2" System="GALILEO"/>
+                    <SV Number="7" System="GALILEO"/>
+                    <SV Number="8" System="GALILEO"/>
+                    <SV Number="27" System="GALILEO"/>
+                    <SV Number="29" System="GALILEO"/>
+                    <SV Number="30" System="GALILEO"/>
+                    <SV Number="34" System="GALILEO"/>
+                    <SV Number="36" System="GALILEO"/>
+                    <SV Number="19" System="BEIDOU"/>
+                    <SV Number="20" System="BEIDOU"/>
+                    <SV Number="23" System="BEIDOU"/>
+                    <SV Number="27" System="BEIDOU"/>
+                    <SV Number="28" System="BEIDOU"/>
+                    <SV Number="37" System="BEIDOU"/>
+                    <SV Number="43" System="BEIDOU"/>
+                </SVList>
+            </QualityControl1>
+            <QualityControl2>
+                <NumberOfSatellites>29</NumberOfSatellites>
+                <ErrorScale/>
+                <VCVxx>0.00041387946112</VCVxx>
+                <VCVxy>0.000572072051</VCVxy>
+                <VCVxz>-0.00045017298544</VCVxz>
+                <VCVyy>0.00174443982542</VCVyy>
+                <VCVyz>-0.00131288159173</VCVyz>
+                <VCVzz>0.00125722226221</VCVzz>
+                <UnitVariance>1</UnitVariance>
+            </QualityControl2>
+        </PointRecord>
+
+        <InitialisationRecord ID="00000039" TimeStamp="2026-03-11T09:10:43">
+            <InitialisationEvent>RTXNotConverged</InitialisationEvent>
+            <Time>
+                <GPSWeek>2409</GPSWeek>
+                <Seconds>313860</Seconds>
+            </Time>
+            <InitialisationType>OnTheFly</InitialisationType>
+            <SurveyType>RealTime</SurveyType>
+            <InitialisationCounter/>
+            <PointName/>
+        </InitialisationRecord>
+
+        <RoverSurveyOptionsRecord ID="0000003b" TimeStamp="2026-03-11T09:19:25">
+            <ElevationMask>10</ElevationMask>
+            <PDOPMask>6</PDOPMask>
+        </RoverSurveyOptionsRecord>
+
+        <RoverSurveyOptionsRecord ID="00000049" TimeStamp="2026-03-11T09:19:27">
+            <ElevationMask>10</ElevationMask>
+            <PDOPMask>6</PDOPMask>
+        </RoverSurveyOptionsRecord>
+
+        <SurveyEventRecord ID="0000004a" TimeStamp="2026-03-11T09:19:27">
+            <Event>StartRoverSurvey</Event>
+        </SurveyEventRecord>
+
+        <IMUCenteringAlignmentRecord ID="0000004b" TimeStamp="2026-03-11T09:19:29">
+            <SerialNumber>6407714321</SerialNumber>
+            <TiltEvent>StartSurvey</TiltEvent>
+            <CalibrationTimeRemaining/>
+            <CalibrationTimeoutPeriod/>
+            <SensorStatus>NotCalibrated</SensorStatus>
+            <CalibrationTime>
+                <GPSWeek>0</GPSWeek>
+                <Seconds>0</Seconds>
+            </CalibrationTime>
+            <YawAdjustment>0</YawAdjustment>
+            <PitchAdjustment>0</PitchAdjustment>
+            <RollAdjustment>0</RollAdjustment>
+            <PitchDistance>0</PitchDistance>
+            <RollDistance>0</RollDistance>
+        </IMUCenteringAlignmentRecord>
+
+        <InitialisationRecord ID="0000004c" TimeStamp="2026-03-11T09:19:56">
+            <InitialisationEvent>RTXConverged</InitialisationEvent>
+            <Time>
+                <GPSWeek>2409</GPSWeek>
+                <Seconds>314413</Seconds>
+            </Time>
+            <InitialisationType>OnTheFly</InitialisationType>
+            <SurveyType>RealTime</SurveyType>
+            <InitialisationCounter/>
+            <PointName/>
+        </InitialisationRecord>
+
+        <GPSEquipmentRecord ID="0000004d" TimeStamp="2026-03-11T09:20:08">
+            <ReceiverType>R12i</ReceiverType>
+            <ReceiverSerialNumber>6407714321</ReceiverSerialNumber>
+            <ReceiverFirmwareVersion>6.25</ReceiverFirmwareVersion>
+            <AntennaType>R12i Internal</AntennaType>
+            <AntennaSerialNumber/>
+            <AntennaNumber>610</AntennaNumber>
+            <AntennaMeasurementMethod>Bottom of quick release</AntennaMeasurementMethod>
+            <AntennaMethod>1</AntennaMethod>
+            <AntennaTapeAdjustment>0</AntennaTapeAdjustment>
+            <AntennaHorizontalOffset>0</AntennaHorizontalOffset>
+            <AntennaVerticalOffset>0.17932</AntennaVerticalOffset>
+            <AntennaMeasurementKey>Method1</AntennaMeasurementKey>
+        </GPSEquipmentRecord>
+
+        <AntennaRecord ID="0000004e" TimeStamp="2026-03-11T09:20:08">
+            <MeasuredHeight>2</MeasuredHeight>
+            <MeasurementType>Raw</MeasurementType>
+            <GPSEquipmentID>0000004d</GPSEquipmentID>
+            <ReducedHeight>2.17932</ReducedHeight>
+        </AntennaRecord>
+
+        <PointRecord ID="0000004f" TimeStamp="2026-03-11T09:20:08">
+            <Name>JP10159</Name>
+            <Code>WELD</Code>
+            <Method>GpsStaticObservation</Method>
+            <SurveyMethod>RTX</SurveyMethod>
+            <Classification>Normal</Classification>
+            <Deleted>false</Deleted>
+            <Features>
+                <Feature Name="WELD">
+                    <Attribute>
+                        <Name>TYPE</Name>
+                        <Value>MAIN LINE</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>0</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>ASSET_TYPE</Name>
+                        <Value>PIPE</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>7</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>WELDER_ID</Name>
+                        <Value>TB TT</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>XRAY_NUMBER</Name>
+                        <Value>W-32-E</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>JOINT_AHEAD</Name>
+                        <Value>PIPE</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>JOINT_BACK</Name>
+                        <Value>ARO PIPE</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>HEAT_AHEAD</Name>
+                        <Value>0</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>HEAT_BACK</Name>
+                        <Value>0</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>DOC</Name>
+                        <Value>5</Value>
+                        <Type>Numeric</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>WALLTHICKNESS</Name>
+                        <Value>.322</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>MATERIAL</Name>
+                        <Value>STEEL</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>0</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>COATING_TYPE</Name>
+                        <Value>FBE</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>0</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>DIAMETER</Name>
+                        <Value>8</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>GRADE</Name>
+                        <Value/>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>PIPE_SPEC</Name>
+                        <Value/>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>MANUFACTURER</Name>
+                        <Value>UNK</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>NOTES</Name>
+                        <Value/>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>ASB_STATION</Name>
+                        <Value/>
+                        <Type>Numeric</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>Image</Name>
+                        <Value>JPA_031126_TOG_2025 Files\JP10159_WELD_20260311.jpg</Value>
+                        <Type>Photo</Type>
+                    </Attribute>
+                </Feature>
+            </Features>
+
+            <RTXECEF>
+                <X>-1100430.6054062</X>
+                <Y>-4713195.5201085</Y>
+                <Z>4141872.6638351</Z>
+                <T>2026.18</T>
+                <Realisation>ITRF2020</Realisation>
+            </RTXECEF>
+            <AntennaID>0000004e</AntennaID>
+            <DeviceAxisOrientation>
+                <Type>InertialTiltComp</Type>
+                <Attitude>
+                    <Pitch>3.0382397996726</Pitch>
+                    <Roll>-0.50565707473596</Roll>
+                    <Yaw>-351.77465223859</Yaw>
+                </Attitude>
+                <AttitudeStandardDeviation>
+                    <Pitch>0.18347145880186</Pitch>
+                    <Roll>0.1931182059373</Roll>
+                    <Yaw>1.5688888723421</Yaw>
+                </AttitudeStandardDeviation>
+                <IMUAlignmentState>Fine</IMUAlignmentState>
+            </DeviceAxisOrientation>
+
+            <ComputedGrid>
+                <North>464301.2975121</North>
+                <East>1113535.7603978</East>
+                <Elevation>1212.4652795098</Elevation>
+            </ComputedGrid>
+            <Precision>
+                <Horizontal>0.01843372071465</Horizontal>
+                <Vertical>0.03736472502351</Vertical>
+                <RawHorizontal>0.01843372071465</RawHorizontal>
+                <RawVertical>0.03736472502351</RawVertical>
+            </Precision>
+            <QualityControl1>
+                <MinimumNumberOfSatellites>29</MinimumNumberOfSatellites>
+                <MinGPSSVs>11</MinGPSSVs>
+                <MinGLONASSSVs>5</MinGLONASSSVs>
+                <MinGalileoSVs>8</MinGalileoSVs>
+                <MinQZSSSVs>0</MinQZSSSVs>
+                <MinBeiDouSVs>5</MinBeiDouSVs>
+                <NumberOfSatellites>29</NumberOfSatellites>
+                <NumGPSSVs>11</NumGPSSVs>
+                <NumGLONASSSVs>5</NumGLONASSSVs>
+                <NumGalileoSVs>8</NumGalileoSVs>
+                <NumQZSSSVs>0</NumQZSSSVs>
+                <NumBeiDouSVs>5</NumBeiDouSVs>
+                <NumNavICSVs>0</NumNavICSVs>
+                <RelativeDOPs>false</RelativeDOPs>
+                <PDOP>0.93092411756516</PDOP>
+                <GDOP>1.5166421534782</GDOP>
+                <HDOP>0.50572580099106</HDOP>
+                <VDOP>0.78159296512604</VDOP>
+                <PDOP_AtStore>0.93089240789413</PDOP_AtStore>
+                <GDOP_AtStore>1.5166006680326</GDOP_AtStore>
+                <HDOP_AtStore>0.50572580099106</HDOP_AtStore>
+                <VDOP_AtStore>0.78153824806213</VDOP_AtStore>
+                <NumberOfPositionsUsed>4</NumberOfPositionsUsed>
+                <HorizontalStandardDeviation/>
+                <VerticalStandardDeviation/>
+                <StartTime>
+                    <GPSWeek>2409</GPSWeek>
+                    <Seconds>314423</Seconds>
+                </StartTime>
+                <EndTime>
+                    <GPSWeek>2409</GPSWeek>
+                    <Seconds>314426</Seconds>
+                </EndTime>
+                <MonitorStatus>NotMonitored</MonitorStatus>
+                <RTCMAge>10.800000190735</RTCMAge>
+                <Warnings>
+                    <ExcessTiltWarning>NotCalibrated</ExcessTiltWarning>
+                    <ExcessTiltAtStorage>NotCalibrated</ExcessTiltAtStorage>
+                    <ExcessMovementWarning>No</ExcessMovementWarning>
+                    <ExcessMovementAtStorage>No</ExcessMovementAtStorage>
+                    <PoorPrecisionsWarning>No</PoorPrecisionsWarning>
+                    <PoorPrecisionsAtStorage>No</PoorPrecisionsAtStorage>
+                    <MagneticDisturbanceWarning>NotSupported</MagneticDisturbanceWarning>
+                    <MagneticDisturbanceAtStorage>NotSupported</MagneticDisturbanceAtStorage>
+                    <BadEnvironmentWarning>No</BadEnvironmentWarning>
+                    <BadEnvironmentAtStorage>No</BadEnvironmentAtStorage>
+                    <AINSAlignmentWarning>No</AINSAlignmentWarning>
+                    <AINSAlignmentAtStorage>No</AINSAlignmentAtStorage>
+                </Warnings>
+                <SVList>
+                    <SV Number="1" System="GPS"/>
+                    <SV Number="2" System="GPS"/>
+                    <SV Number="7" System="GPS"/>
+                    <SV Number="8" System="GPS"/>
+                    <SV Number="13" System="GPS"/>
+                    <SV Number="14" System="GPS"/>
+                    <SV Number="15" System="GPS"/>
+                    <SV Number="17" System="GPS"/>
+                    <SV Number="19" System="GPS"/>
+                    <SV Number="22" System="GPS"/>
+                    <SV Number="30" System="GPS"/>
+                    <SV Number="4" System="GLONASS"/>
+                    <SV Number="5" System="GLONASS"/>
+                    <SV Number="14" System="GLONASS"/>
+                    <SV Number="15" System="GLONASS"/>
+                    <SV Number="24" System="GLONASS"/>
+                    <SV Number="2" System="GALILEO"/>
+                    <SV Number="7" System="GALILEO"/>
+                    <SV Number="8" System="GALILEO"/>
+                    <SV Number="27" System="GALILEO"/>
+                    <SV Number="29" System="GALILEO"/>
+                    <SV Number="30" System="GALILEO"/>
+                    <SV Number="34" System="GALILEO"/>
+                    <SV Number="36" System="GALILEO"/>
+                    <SV Number="19" System="BEIDOU"/>
+                    <SV Number="20" System="BEIDOU"/>
+                    <SV Number="27" System="BEIDOU"/>
+                    <SV Number="28" System="BEIDOU"/>
+                    <SV Number="37" System="BEIDOU"/>
+                </SVList>
+            </QualityControl1>
+            <QualityControl2>
+                <NumberOfSatellites>29</NumberOfSatellites>
+                <ErrorScale/>
+                <VCVxx>0.00020082843548</VCVxx>
+                <VCVxy>0.00017891114112</VCVxy>
+                <VCVxz>-0.0001460940839</VCVxz>
+                <VCVyy>0.00088086823234</VCVyy>
+                <VCVyz>-0.00057487771846</VCVyz>
+                <VCVzz>0.00065422808984</VCVzz>
+                <UnitVariance>1</UnitVariance>
+            </QualityControl2>
+        </PointRecord>
+
+        <PointRecord ID="00000058" TimeStamp="2026-03-11T09:22:01">
+            <Name>JP10160</Name>
+            <Code>WELD</Code>
+            <Method>GpsStaticObservation</Method>
+            <SurveyMethod>RTX</SurveyMethod>
+            <Classification>Normal</Classification>
+            <Deleted>false</Deleted>
+            <Features>
+                <Feature Name="WELD">
+                    <Attribute>
+                        <Name>TYPE</Name>
+                        <Value>MAIN LINE</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>0</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>ASSET_TYPE</Name>
+                        <Value>PIPE</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>7</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>WELDER_ID</Name>
+                        <Value>TT</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>XRAY_NUMBER</Name>
+                        <Value>W-32-D</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>JOINT_AHEAD</Name>
+                        <Value>FITTING</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>JOINT_BACK</Name>
+                        <Value>FBE PIPE</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>HEAT_AHEAD</Name>
+                        <Value>0</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>HEAT_BACK</Name>
+                        <Value>A408724</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>DOC</Name>
+                        <Value>5</Value>
+                        <Type>Numeric</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>WALLTHICKNESS</Name>
+                        <Value>.322</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>MATERIAL</Name>
+                        <Value>STEEL</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>0</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>COATING_TYPE</Name>
+                        <Value>FBE</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>0</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>DIAMETER</Name>
+                        <Value>8</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>GRADE</Name>
+                        <Value/>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>PIPE_SPEC</Name>
+                        <Value/>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>MANUFACTURER</Name>
+                        <Value>UNK</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>NOTES</Name>
+                        <Value/>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>ASB_STATION</Name>
+                        <Value/>
+                        <Type>Numeric</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>Image</Name>
+                        <Value>JPA_031126_TOG_2025 Files\JP10160_WELD_20260311.jpg</Value>
+                        <Type>Photo</Type>
+                    </Attribute>
+                </Feature>
+            </Features>
+
+            <RTXECEF>
+                <X>-1100429.5390935</X>
+                <Y>-4713191.2516813</Y>
+                <Z>4141878.2778707</Z>
+                <T>2026.18</T>
+                <Realisation>ITRF2020</Realisation>
+            </RTXECEF>
+            <AntennaID>0000004e</AntennaID>
+            <DeviceAxisOrientation>
+                <Type>InertialTiltComp</Type>
+                <Attitude>
+                    <Pitch>5.1904628214924</Pitch>
+                    <Roll>3.0552857368226</Roll>
+                    <Yaw>-87.26903509683</Yaw>
+                </Attitude>
+                <AttitudeStandardDeviation>
+                    <Pitch>0.07579043079147</Pitch>
+                    <Roll>0.08596144287515</Roll>
+                    <Yaw>0.89481700369566</Yaw>
+                </AttitudeStandardDeviation>
+                <IMUAlignmentState>Fine</IMUAlignmentState>
+            </DeviceAxisOrientation>
+
+            <ComputedGrid>
+                <North>464308.4333264</North>
+                <East>1113535.8271431</East>
+                <Elevation>1212.8056377925</Elevation>
+            </ComputedGrid>
+            <Precision>
+                <Horizontal>0.01457446504004</Horizontal>
+                <Vertical>0.03314746171236</Vertical>
+                <RawHorizontal>0.01457446504004</RawHorizontal>
+                <RawVertical>0.03314746171236</RawVertical>
+            </Precision>
+            <QualityControl1>
+                <MinimumNumberOfSatellites>29</MinimumNumberOfSatellites>
+                <MinGPSSVs>11</MinGPSSVs>
+                <MinGLONASSSVs>5</MinGLONASSSVs>
+                <MinGalileoSVs>8</MinGalileoSVs>
+                <MinQZSSSVs>0</MinQZSSSVs>
+                <MinBeiDouSVs>5</MinBeiDouSVs>
+                <NumberOfSatellites>29</NumberOfSatellites>
+                <NumGPSSVs>11</NumGPSSVs>
+                <NumGLONASSSVs>5</NumGLONASSSVs>
+                <NumGalileoSVs>8</NumGalileoSVs>
+                <NumQZSSSVs>0</NumQZSSSVs>
+                <NumBeiDouSVs>5</NumBeiDouSVs>
+                <NumNavICSVs>0</NumNavICSVs>
+                <RelativeDOPs>false</RelativeDOPs>
+                <PDOP>0.92952901124954</PDOP>
+                <GDOP>1.514731063391</GDOP>
+                <HDOP>0.50671899318695</HDOP>
+                <VDOP>0.77929770946503</VDOP>
+                <PDOP_AtStore>0.92945563793182</PDOP_AtStore>
+                <GDOP_AtStore>1.514626927226</GDOP_AtStore>
+                <HDOP_AtStore>0.50671899318695</HDOP_AtStore>
+                <VDOP_AtStore>0.77918142080307</VDOP_AtStore>
+                <NumberOfPositionsUsed>6</NumberOfPositionsUsed>
+                <HorizontalStandardDeviation/>
+                <VerticalStandardDeviation/>
+                <StartTime>
+                    <GPSWeek>2409</GPSWeek>
+                    <Seconds>314534</Seconds>
+                </StartTime>
+                <EndTime>
+                    <GPSWeek>2409</GPSWeek>
+                    <Seconds>314539</Seconds>
+                </EndTime>
+                <MonitorStatus>NotMonitored</MonitorStatus>
+                <RTCMAge>8.8000001907349</RTCMAge>
+                <Warnings>
+                    <ExcessTiltWarning>NotCalibrated</ExcessTiltWarning>
+                    <ExcessTiltAtStorage>NotCalibrated</ExcessTiltAtStorage>
+                    <ExcessMovementWarning>No</ExcessMovementWarning>
+                    <ExcessMovementAtStorage>No</ExcessMovementAtStorage>
+                    <PoorPrecisionsWarning>No</PoorPrecisionsWarning>
+                    <PoorPrecisionsAtStorage>No</PoorPrecisionsAtStorage>
+                    <MagneticDisturbanceWarning>NotSupported</MagneticDisturbanceWarning>
+                    <MagneticDisturbanceAtStorage>NotSupported</MagneticDisturbanceAtStorage>
+                    <BadEnvironmentWarning>No</BadEnvironmentWarning>
+                    <BadEnvironmentAtStorage>No</BadEnvironmentAtStorage>
+                    <AINSAlignmentWarning>No</AINSAlignmentWarning>
+                    <AINSAlignmentAtStorage>No</AINSAlignmentAtStorage>
+                </Warnings>
+                <SVList>
+                    <SV Number="1" System="GPS"/>
+                    <SV Number="2" System="GPS"/>
+                    <SV Number="7" System="GPS"/>
+                    <SV Number="8" System="GPS"/>
+                    <SV Number="13" System="GPS"/>
+                    <SV Number="14" System="GPS"/>
+                    <SV Number="15" System="GPS"/>
+                    <SV Number="17" System="GPS"/>
+                    <SV Number="19" System="GPS"/>
+                    <SV Number="22" System="GPS"/>
+                    <SV Number="30" System="GPS"/>
+                    <SV Number="4" System="GLONASS"/>
+                    <SV Number="5" System="GLONASS"/>
+                    <SV Number="14" System="GLONASS"/>
+                    <SV Number="15" System="GLONASS"/>
+                    <SV Number="24" System="GLONASS"/>
+                    <SV Number="2" System="GALILEO"/>
+                    <SV Number="7" System="GALILEO"/>
+                    <SV Number="8" System="GALILEO"/>
+                    <SV Number="27" System="GALILEO"/>
+                    <SV Number="29" System="GALILEO"/>
+                    <SV Number="30" System="GALILEO"/>
+                    <SV Number="34" System="GALILEO"/>
+                    <SV Number="36" System="GALILEO"/>
+                    <SV Number="19" System="BEIDOU"/>
+                    <SV Number="20" System="BEIDOU"/>
+                    <SV Number="27" System="BEIDOU"/>
+                    <SV Number="28" System="BEIDOU"/>
+                    <SV Number="37" System="BEIDOU"/>
+                </SVList>
+            </QualityControl1>
+            <QualityControl2>
+                <NumberOfSatellites>29</NumberOfSatellites>
+                <ErrorScale/>
+                <VCVxx>0.00011544679001</VCVxx>
+                <VCVxy>0.00015097924916</VCVxy>
+                <VCVxz>-0.00012381548004</VCVxz>
+                <VCVyy>0.00068499322515</VCVyy>
+                <VCVyz>-0.00045549479546</VCVyz>
+                <VCVzz>0.00051072938368</VCVzz>
+                <UnitVariance>1</UnitVariance>
+            </QualityControl2>
+        </PointRecord>
+
+        <PointRecord ID="00000061" TimeStamp="2026-03-11T09:22:56">
+            <Name>JP10161</Name>
+            <Code>BEND</Code>
+            <Method>GpsStaticObservation</Method>
+            <SurveyMethod>RTX</SurveyMethod>
+            <Classification>Normal</Classification>
+            <Deleted>false</Deleted>
+            <Features>
+                <Feature Name="BEND">
+                    <Attribute>
+                        <Name>BEGIN_END</Name>
+                        <Value>APEX</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>0</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>TYPE</Name>
+                        <Value>SAG</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>1</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>TECHNIQUE</Name>
+                        <Value>OTHER (SEE NOTES)</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>4</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>HEAT_NUMBER</Name>
+                        <Value>HU7823</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>JOINT_NUMBER</Name>
+                        <Value>FITTING</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>BEND_RADIUS</Name>
+                        <Value>45</Value>
+                        <Type>Numeric</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>VERTICAL_ANGLE</Name>
+                        <Value>45</Value>
+                        <Type>Numeric</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>HORIZONTAL_ANGLE</Name>
+                        <Value>0</Value>
+                        <Type>Numeric</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>NOTES</Name>
+                        <Value/>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>ASB_STATION</Name>
+                        <Value/>
+                        <Type>Numeric</Type>
+                    </Attribute>
+                </Feature>
+            </Features>
+
+            <RTXECEF>
+                <X>-1100429.4954204</X>
+                <Y>-4713191.22473</Y>
+                <Z>4141878.4167978</Z>
+                <T>2026.18</T>
+                <Realisation>ITRF2020</Realisation>
+            </RTXECEF>
+            <AntennaID>0000004e</AntennaID>
+            <DeviceAxisOrientation>
+                <Type>InertialTiltComp</Type>
+                <Attitude>
+                    <Pitch>5.5844052946231</Pitch>
+                    <Roll>3.3454857985072</Roll>
+                    <Yaw>-70.616240285758</Yaw>
+                </Attitude>
+                <AttitudeStandardDeviation>
+                    <Pitch>0.07990198063308</Pitch>
+                    <Roll>0.08647915028488</Roll>
+                    <Yaw>1.2595406604301</Yaw>
+                </AttitudeStandardDeviation>
+                <IMUAlignmentState>Fine</IMUAlignmentState>
+            </DeviceAxisOrientation>
+
+            <ComputedGrid>
+                <North>464308.6269885</North>
+                <East>1113535.8247786</East>
+                <Elevation>1212.8709266584</Elevation>
+            </ComputedGrid>
+            <Precision>
+                <Horizontal>0.01514035902411</Horizontal>
+                <Vertical>0.03880521655083</Vertical>
+                <RawHorizontal>0.01514035902411</RawHorizontal>
+                <RawVertical>0.03880521655083</RawVertical>
+            </Precision>
+            <QualityControl1>
+                <MinimumNumberOfSatellites>28</MinimumNumberOfSatellites>
+                <MinGPSSVs>11</MinGPSSVs>
+                <MinGLONASSSVs>5</MinGLONASSSVs>
+                <MinGalileoSVs>8</MinGalileoSVs>
+                <MinQZSSSVs>0</MinQZSSSVs>
+                <MinBeiDouSVs>4</MinBeiDouSVs>
+                <NumberOfSatellites>28</NumberOfSatellites>
+                <NumGPSSVs>11</NumGPSSVs>
+                <NumGLONASSSVs>5</NumGLONASSSVs>
+                <NumGalileoSVs>8</NumGalileoSVs>
+                <NumQZSSSVs>0</NumQZSSSVs>
+                <NumBeiDouSVs>4</NumBeiDouSVs>
+                <NumNavICSVs>0</NumNavICSVs>
+                <RelativeDOPs>false</RelativeDOPs>
+                <PDOP>0.97424823045731</PDOP>
+                <GDOP>1.6102870227056</GDOP>
+                <HDOP>0.5187754034996</HDOP>
+                <VDOP>0.82465142011642</VDOP>
+                <PDOP_AtStore>0.97423583269119</PDOP_AtStore>
+                <GDOP_AtStore>1.6102752506574</GDOP_AtStore>
+                <HDOP_AtStore>0.5187754034996</HDOP_AtStore>
+                <VDOP_AtStore>0.82462567090988</VDOP_AtStore>
+                <NumberOfPositionsUsed>3</NumberOfPositionsUsed>
+                <HorizontalStandardDeviation/>
+                <VerticalStandardDeviation/>
+                <StartTime>
+                    <GPSWeek>2409</GPSWeek>
+                    <Seconds>314592</Seconds>
+                </StartTime>
+                <EndTime>
+                    <GPSWeek>2409</GPSWeek>
+                    <Seconds>314594</Seconds>
+                </EndTime>
+                <MonitorStatus>NotMonitored</MonitorStatus>
+                <RTCMAge>8.8000001907349</RTCMAge>
+                <Warnings>
+                    <ExcessTiltWarning>NotCalibrated</ExcessTiltWarning>
+                    <ExcessTiltAtStorage>NotCalibrated</ExcessTiltAtStorage>
+                    <ExcessMovementWarning>No</ExcessMovementWarning>
+                    <ExcessMovementAtStorage>No</ExcessMovementAtStorage>
+                    <PoorPrecisionsWarning>No</PoorPrecisionsWarning>
+                    <PoorPrecisionsAtStorage>No</PoorPrecisionsAtStorage>
+                    <MagneticDisturbanceWarning>NotSupported</MagneticDisturbanceWarning>
+                    <MagneticDisturbanceAtStorage>NotSupported</MagneticDisturbanceAtStorage>
+                    <BadEnvironmentWarning>No</BadEnvironmentWarning>
+                    <BadEnvironmentAtStorage>No</BadEnvironmentAtStorage>
+                    <AINSAlignmentWarning>No</AINSAlignmentWarning>
+                    <AINSAlignmentAtStorage>No</AINSAlignmentAtStorage>
+                </Warnings>
+                <SVList>
+                    <SV Number="1" System="GPS"/>
+                    <SV Number="2" System="GPS"/>
+                    <SV Number="7" System="GPS"/>
+                    <SV Number="8" System="GPS"/>
+                    <SV Number="13" System="GPS"/>
+                    <SV Number="14" System="GPS"/>
+                    <SV Number="15" System="GPS"/>
+                    <SV Number="17" System="GPS"/>
+                    <SV Number="19" System="GPS"/>
+                    <SV Number="22" System="GPS"/>
+                    <SV Number="30" System="GPS"/>
+                    <SV Number="4" System="GLONASS"/>
+                    <SV Number="5" System="GLONASS"/>
+                    <SV Number="14" System="GLONASS"/>
+                    <SV Number="15" System="GLONASS"/>
+                    <SV Number="24" System="GLONASS"/>
+                    <SV Number="2" System="GALILEO"/>
+                    <SV Number="7" System="GALILEO"/>
+                    <SV Number="8" System="GALILEO"/>
+                    <SV Number="27" System="GALILEO"/>
+                    <SV Number="29" System="GALILEO"/>
+                    <SV Number="30" System="GALILEO"/>
+                    <SV Number="34" System="GALILEO"/>
+                    <SV Number="36" System="GALILEO"/>
+                    <SV Number="19" System="BEIDOU"/>
+                    <SV Number="27" System="BEIDOU"/>
+                    <SV Number="28" System="BEIDOU"/>
+                    <SV Number="37" System="BEIDOU"/>
+                </SVList>
+            </QualityControl1>
+            <QualityControl2>
+                <NumberOfSatellites>28</NumberOfSatellites>
+                <ErrorScale/>
+                <VCVxx>0.00015776568034</VCVxx>
+                <VCVxy>0.00022830948001</VCVxy>
+                <VCVxz>-0.00018917799753</VCVxz>
+                <VCVyy>0.00094395276392</VCVyy>
+                <VCVyz>-0.00064061110606</VCVyz>
+                <VCVzz>0.00063335674349</VCVzz>
+                <UnitVariance>1</UnitVariance>
+            </QualityControl2>
+            <Notes>
+                <Note>Modified 9:30:21 AM 3/11/2026</Note>
+                <Note>Old values BEND</Note>
+            </Notes>
+        </PointRecord>
+
+        <PointRecord ID="0000006a" TimeStamp="2026-03-11T09:23:32">
+            <Name>JP10162</Name>
+            <Code>WELD</Code>
+            <Method>GpsStaticObservation</Method>
+            <SurveyMethod>RTX</SurveyMethod>
+            <Classification>Normal</Classification>
+            <Deleted>false</Deleted>
+            <Features>
+                <Feature Name="WELD">
+                    <Attribute>
+                        <Name>TYPE</Name>
+                        <Value>MAIN LINE</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>0</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>ASSET_TYPE</Name>
+                        <Value>PIPE</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>7</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>WELDER_ID</Name>
+                        <Value>TT</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>XRAY_NUMBER</Name>
+                        <Value>W-32-C</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>JOINT_AHEAD</Name>
+                        <Value>PIPE</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>JOINT_BACK</Name>
+                        <Value>FITTING</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>HEAT_AHEAD</Name>
+                        <Value>A408724</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>HEAT_BACK</Name>
+                        <Value>UNK</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>DOC</Name>
+                        <Value>5</Value>
+                        <Type>Numeric</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>WALLTHICKNESS</Name>
+                        <Value>.322</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>MATERIAL</Name>
+                        <Value>STEEL</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>0</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>COATING_TYPE</Name>
+                        <Value>FBE</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>0</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>DIAMETER</Name>
+                        <Value>8</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>GRADE</Name>
+                        <Value/>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>PIPE_SPEC</Name>
+                        <Value/>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>MANUFACTURER</Name>
+                        <Value>UNK</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>NOTES</Name>
+                        <Value/>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>ASB_STATION</Name>
+                        <Value/>
+                        <Type>Numeric</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>Image</Name>
+                        <Value>JPA_031126_TOG_2025 Files\JP10162_WELD_20260311.jpg</Value>
+                        <Type>Photo</Type>
+                    </Attribute>
+                </Feature>
+            </Features>
+
+            <RTXECEF>
+                <X>-1100429.4025053</X>
+                <Y>-4713191.2942239</Y>
+                <Z>4141878.5037964</Z>
+                <T>2026.18</T>
+                <Realisation>ITRF2020</Realisation>
+            </RTXECEF>
+            <AntennaID>0000004e</AntennaID>
+            <DeviceAxisOrientation>
+                <Type>InertialTiltComp</Type>
+                <Attitude>
+                    <Pitch>4.5756178664313</Pitch>
+                    <Roll>6.6536629049797</Roll>
+                    <Yaw>-65.333085654734</Yaw>
+                </Attitude>
+                <AttitudeStandardDeviation>
+                    <Pitch>0.07755159806515</Pitch>
+                    <Roll>0.08357072481363</Roll>
+                    <Yaw>1.4030971008401</Yaw>
+                </AttitudeStandardDeviation>
+                <IMUAlignmentState>Fine</IMUAlignmentState>
+            </DeviceAxisOrientation>
+
+            <ComputedGrid>
+                <North>464308.77374906</North>
+                <East>1113535.8211965</East>
+                <Elevation>1212.9705134592</Elevation>
+            </ComputedGrid>
+            <Precision>
+                <Horizontal>0.01594440689021</Horizontal>
+                <Vertical>0.03858657926321</Vertical>
+                <RawHorizontal>0.01594440689021</RawHorizontal>
+                <RawVertical>0.03858657926321</RawVertical>
+            </Precision>
+            <QualityControl1>
+                <MinimumNumberOfSatellites>28</MinimumNumberOfSatellites>
+                <MinGPSSVs>11</MinGPSSVs>
+                <MinGLONASSSVs>5</MinGLONASSSVs>
+                <MinGalileoSVs>8</MinGalileoSVs>
+                <MinQZSSSVs>0</MinQZSSSVs>
+                <MinBeiDouSVs>4</MinBeiDouSVs>
+                <NumberOfSatellites>28</NumberOfSatellites>
+                <NumGPSSVs>11</NumGPSSVs>
+                <NumGLONASSSVs>5</NumGLONASSSVs>
+                <NumGalileoSVs>8</NumGalileoSVs>
+                <NumQZSSSVs>0</NumQZSSSVs>
+                <NumBeiDouSVs>4</NumBeiDouSVs>
+                <NumNavICSVs>0</NumNavICSVs>
+                <RelativeDOPs>false</RelativeDOPs>
+                <PDOP>0.97400313615799</PDOP>
+                <GDOP>1.6100333841667</GDOP>
+                <HDOP>0.5190834403038</HDOP>
+                <VDOP>0.82416790723801</VDOP>
+                <PDOP_AtStore>0.97398734092712</PDOP_AtStore>
+                <GDOP_AtStore>1.610015760417</GDOP_AtStore>
+                <HDOP_AtStore>0.5190834403038</HDOP_AtStore>
+                <VDOP_AtStore>0.82413816452026</VDOP_AtStore>
+                <NumberOfPositionsUsed>3</NumberOfPositionsUsed>
+                <HorizontalStandardDeviation/>
+                <VerticalStandardDeviation/>
+                <StartTime>
+                    <GPSWeek>2409</GPSWeek>
+                    <Seconds>314627</Seconds>
+                </StartTime>
+                <EndTime>
+                    <GPSWeek>2409</GPSWeek>
+                    <Seconds>314629</Seconds>
+                </EndTime>
+                <MonitorStatus>NotMonitored</MonitorStatus>
+                <RTCMAge>8.8000001907349</RTCMAge>
+                <Warnings>
+                    <ExcessTiltWarning>NotCalibrated</ExcessTiltWarning>
+                    <ExcessTiltAtStorage>NotCalibrated</ExcessTiltAtStorage>
+                    <ExcessMovementWarning>No</ExcessMovementWarning>
+                    <ExcessMovementAtStorage>No</ExcessMovementAtStorage>
+                    <PoorPrecisionsWarning>No</PoorPrecisionsWarning>
+                    <PoorPrecisionsAtStorage>No</PoorPrecisionsAtStorage>
+                    <MagneticDisturbanceWarning>NotSupported</MagneticDisturbanceWarning>
+                    <MagneticDisturbanceAtStorage>NotSupported</MagneticDisturbanceAtStorage>
+                    <BadEnvironmentWarning>No</BadEnvironmentWarning>
+                    <BadEnvironmentAtStorage>No</BadEnvironmentAtStorage>
+                    <AINSAlignmentWarning>No</AINSAlignmentWarning>
+                    <AINSAlignmentAtStorage>No</AINSAlignmentAtStorage>
+                </Warnings>
+                <SVList>
+                    <SV Number="1" System="GPS"/>
+                    <SV Number="2" System="GPS"/>
+                    <SV Number="7" System="GPS"/>
+                    <SV Number="8" System="GPS"/>
+                    <SV Number="13" System="GPS"/>
+                    <SV Number="14" System="GPS"/>
+                    <SV Number="15" System="GPS"/>
+                    <SV Number="17" System="GPS"/>
+                    <SV Number="19" System="GPS"/>
+                    <SV Number="22" System="GPS"/>
+                    <SV Number="30" System="GPS"/>
+                    <SV Number="4" System="GLONASS"/>
+                    <SV Number="5" System="GLONASS"/>
+                    <SV Number="14" System="GLONASS"/>
+                    <SV Number="15" System="GLONASS"/>
+                    <SV Number="24" System="GLONASS"/>
+                    <SV Number="2" System="GALILEO"/>
+                    <SV Number="7" System="GALILEO"/>
+                    <SV Number="8" System="GALILEO"/>
+                    <SV Number="27" System="GALILEO"/>
+                    <SV Number="29" System="GALILEO"/>
+                    <SV Number="30" System="GALILEO"/>
+                    <SV Number="34" System="GALILEO"/>
+                    <SV Number="36" System="GALILEO"/>
+                    <SV Number="19" System="BEIDOU"/>
+                    <SV Number="27" System="BEIDOU"/>
+                    <SV Number="28" System="BEIDOU"/>
+                    <SV Number="37" System="BEIDOU"/>
+                </SVList>
+            </QualityControl1>
+            <QualityControl2>
+                <NumberOfSatellites>28</NumberOfSatellites>
+                <ErrorScale/>
+                <VCVxx>0.0001927176927</VCVxx>
+                <VCVxy>0.00022092665313</VCVxy>
+                <VCVxz>-0.00019380157755</VCVxz>
+                <VCVyy>0.00091836426873</VCVyy>
+                <VCVyz>-0.00063786562532</VCVyz>
+                <VCVzz>0.00063206627965</VCVzz>
+                <UnitVariance>1</UnitVariance>
+            </QualityControl2>
+        </PointRecord>
+
+        <PointRecord ID="00000073" TimeStamp="2026-03-11T09:24:31">
+            <Name>JP10163</Name>
+            <Code>WELD</Code>
+            <Method>GpsStaticObservation</Method>
+            <SurveyMethod>RTX</SurveyMethod>
+            <Classification>Normal</Classification>
+            <Deleted>false</Deleted>
+            <Features>
+                <Feature Name="WELD">
+                    <Attribute>
+                        <Name>TYPE</Name>
+                        <Value>MAIN LINE</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>0</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>ASSET_TYPE</Name>
+                        <Value>PIPE</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>7</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>WELDER_ID</Name>
+                        <Value>TB</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>XRAY_NUMBER</Name>
+                        <Value>W-32-B</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>JOINT_AHEAD</Name>
+                        <Value>FITTING</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>JOINT_BACK</Name>
+                        <Value>PIPE</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>HEAT_AHEAD</Name>
+                        <Value>UNK</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>HEAT_BACK</Name>
+                        <Value>A408724</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>DOC</Name>
+                        <Value>5</Value>
+                        <Type>Numeric</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>WALLTHICKNESS</Name>
+                        <Value>.322</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>MATERIAL</Name>
+                        <Value>STEEL</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>0</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>COATING_TYPE</Name>
+                        <Value>FBE</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>0</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>DIAMETER</Name>
+                        <Value>8</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>GRADE</Name>
+                        <Value/>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>PIPE_SPEC</Name>
+                        <Value/>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>MANUFACTURER</Name>
+                        <Value>UNK</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>NOTES</Name>
+                        <Value/>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>ASB_STATION</Name>
+                        <Value/>
+                        <Type>Numeric</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>Image</Name>
+                        <Value>JPA_031126_TOG_2025 Files\JP10163_WELD_20260311.jpg</Value>
+                        <Type>Photo</Type>
+                    </Attribute>
+                </Feature>
+            </Features>
+
+            <RTXECEF>
+                <X>-1100429.5645014</X>
+                <Y>-4713191.2788604</Y>
+                <Z>4141879.8378036</Z>
+                <T>2026.18</T>
+                <Realisation>ITRF2020</Realisation>
+            </RTXECEF>
+            <AntennaID>0000004e</AntennaID>
+            <DeviceAxisOrientation>
+                <Type>InertialTiltComp</Type>
+                <Attitude>
+                    <Pitch>5.2153301723331</Pitch>
+                    <Roll>4.7015456884189</Roll>
+                    <Yaw>-102.24498521193</Yaw>
+                </Attitude>
+                <AttitudeStandardDeviation>
+                    <Pitch>0.06474109441933</Pitch>
+                    <Roll>0.07164522949758</Roll>
+                    <Yaw>1.1519174199863</Yaw>
+                </AttitudeStandardDeviation>
+                <IMUAlignmentState>Fine</IMUAlignmentState>
+            </DeviceAxisOrientation>
+
+            <ComputedGrid>
+                <North>464309.60131018</North>
+                <East>1113535.8172243</East>
+                <Elevation>1213.852541227</Elevation>
+            </ComputedGrid>
+            <Precision>
+                <Horizontal>0.01495521882681</Horizontal>
+                <Vertical>0.03631418570876</Vertical>
+                <RawHorizontal>0.01495521882681</RawHorizontal>
+                <RawVertical>0.03631418570876</RawVertical>
+            </Precision>
+            <QualityControl1>
+                <MinimumNumberOfSatellites>28</MinimumNumberOfSatellites>
+                <MinGPSSVs>11</MinGPSSVs>
+                <MinGLONASSSVs>5</MinGLONASSSVs>
+                <MinGalileoSVs>8</MinGalileoSVs>
+                <MinQZSSSVs>0</MinQZSSSVs>
+                <MinBeiDouSVs>4</MinBeiDouSVs>
+                <NumberOfSatellites>28</NumberOfSatellites>
+                <NumGPSSVs>11</NumGPSSVs>
+                <NumGLONASSSVs>5</NumGLONASSSVs>
+                <NumGalileoSVs>8</NumGalileoSVs>
+                <NumQZSSSVs>0</NumQZSSSVs>
+                <NumBeiDouSVs>4</NumBeiDouSVs>
+                <NumNavICSVs>0</NumNavICSVs>
+                <RelativeDOPs>false</RelativeDOPs>
+                <PDOP>0.97346967458725</PDOP>
+                <GDOP>1.6093930661073</GDOP>
+                <HDOP>0.51961207389832</HDOP>
+                <VDOP>0.82321512699127</VDOP>
+                <PDOP_AtStore>0.97342705726624</PDOP_AtStore>
+                <GDOP_AtStore>1.6093388094791</GDOP_AtStore>
+                <HDOP_AtStore>0.51961207389832</HDOP_AtStore>
+                <VDOP_AtStore>0.82314252853394</VDOP_AtStore>
+                <NumberOfPositionsUsed>5</NumberOfPositionsUsed>
+                <HorizontalStandardDeviation/>
+                <VerticalStandardDeviation/>
+                <StartTime>
+                    <GPSWeek>2409</GPSWeek>
+                    <Seconds>314685</Seconds>
+                </StartTime>
+                <EndTime>
+                    <GPSWeek>2409</GPSWeek>
+                    <Seconds>314689</Seconds>
+                </EndTime>
+                <MonitorStatus>NotMonitored</MonitorStatus>
+                <RTCMAge>8.8000001907349</RTCMAge>
+                <Warnings>
+                    <ExcessTiltWarning>NotCalibrated</ExcessTiltWarning>
+                    <ExcessTiltAtStorage>NotCalibrated</ExcessTiltAtStorage>
+                    <ExcessMovementWarning>No</ExcessMovementWarning>
+                    <ExcessMovementAtStorage>No</ExcessMovementAtStorage>
+                    <PoorPrecisionsWarning>No</PoorPrecisionsWarning>
+                    <PoorPrecisionsAtStorage>No</PoorPrecisionsAtStorage>
+                    <MagneticDisturbanceWarning>NotSupported</MagneticDisturbanceWarning>
+                    <MagneticDisturbanceAtStorage>NotSupported</MagneticDisturbanceAtStorage>
+                    <BadEnvironmentWarning>No</BadEnvironmentWarning>
+                    <BadEnvironmentAtStorage>No</BadEnvironmentAtStorage>
+                    <AINSAlignmentWarning>No</AINSAlignmentWarning>
+                    <AINSAlignmentAtStorage>No</AINSAlignmentAtStorage>
+                </Warnings>
+                <SVList>
+                    <SV Number="1" System="GPS"/>
+                    <SV Number="2" System="GPS"/>
+                    <SV Number="7" System="GPS"/>
+                    <SV Number="8" System="GPS"/>
+                    <SV Number="13" System="GPS"/>
+                    <SV Number="14" System="GPS"/>
+                    <SV Number="15" System="GPS"/>
+                    <SV Number="17" System="GPS"/>
+                    <SV Number="19" System="GPS"/>
+                    <SV Number="22" System="GPS"/>
+                    <SV Number="30" System="GPS"/>
+                    <SV Number="4" System="GLONASS"/>
+                    <SV Number="5" System="GLONASS"/>
+                    <SV Number="14" System="GLONASS"/>
+                    <SV Number="15" System="GLONASS"/>
+                    <SV Number="24" System="GLONASS"/>
+                    <SV Number="2" System="GALILEO"/>
+                    <SV Number="7" System="GALILEO"/>
+                    <SV Number="8" System="GALILEO"/>
+                    <SV Number="27" System="GALILEO"/>
+                    <SV Number="29" System="GALILEO"/>
+                    <SV Number="30" System="GALILEO"/>
+                    <SV Number="34" System="GALILEO"/>
+                    <SV Number="36" System="GALILEO"/>
+                    <SV Number="19" System="BEIDOU"/>
+                    <SV Number="27" System="BEIDOU"/>
+                    <SV Number="28" System="BEIDOU"/>
+                    <SV Number="37" System="BEIDOU"/>
+                </SVList>
+            </QualityControl1>
+            <QualityControl2>
+                <NumberOfSatellites>28</NumberOfSatellites>
+                <ErrorScale/>
+                <VCVxx>0.00014073566126</VCVxx>
+                <VCVxy>0.00020295626018</VCVxy>
+                <VCVxz>-0.00016570134903</VCVxz>
+                <VCVyy>0.00084566237638</VCVyy>
+                <VCVyz>-0.00054879044183</VCVyz>
+                <VCVzz>0.00055598071776</VCVzz>
+                <UnitVariance>1</UnitVariance>
+            </QualityControl2>
+        </PointRecord>
+
+        <PointRecord ID="0000007c" TimeStamp="2026-03-11T09:25:29">
+            <Name>JP10164</Name>
+            <Code>BEND</Code>
+            <Method>GpsStaticObservation</Method>
+            <SurveyMethod>RTX</SurveyMethod>
+            <Classification>Normal</Classification>
+            <Deleted>false</Deleted>
+            <Features>
+                <Feature Name="BEND">
+                    <Attribute>
+                        <Name>BEGIN_END</Name>
+                        <Value>APEX</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>0</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>TYPE</Name>
+                        <Value>SBR</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>3</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>TECHNIQUE</Name>
+                        <Value>OTHER (SEE NOTES)</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>4</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>HEAT_NUMBER</Name>
+                        <Value>A2805H</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>JOINT_NUMBER</Name>
+                        <Value>FITTING</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>BEND_RADIUS</Name>
+                        <Value>90</Value>
+                        <Type>Numeric</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>VERTICAL_ANGLE</Name>
+                        <Value>45</Value>
+                        <Type>Numeric</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>HORIZONTAL_ANGLE</Name>
+                        <Value>90</Value>
+                        <Type>Numeric</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>NOTES</Name>
+                        <Value>SBR/OVB</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>ASB_STATION</Name>
+                        <Value/>
+                        <Type>Numeric</Type>
+                    </Attribute>
+                </Feature>
+            </Features>
+
+            <RTXECEF>
+                <X>-1100429.3009076</X>
+                <Y>-4713191.2404925</Y>
+                <Z>4141880.4706287</Z>
+                <T>2026.18</T>
+                <Realisation>ITRF2020</Realisation>
+            </RTXECEF>
+            <AntennaID>0000004e</AntennaID>
+            <DeviceAxisOrientation>
+                <Type>InertialTiltComp</Type>
+                <Attitude>
+                    <Pitch>0.53288108962113</Pitch>
+                    <Roll>4.0628372781764</Roll>
+                    <Yaw>-186.24828298275</Yaw>
+                </Attitude>
+                <AttitudeStandardDeviation>
+                    <Pitch>0.06862884349639</Pitch>
+                    <Roll>0.05807449225059</Roll>
+                    <Yaw>0.86768697189477</Yaw>
+                </AttitudeStandardDeviation>
+                <IMUAlignmentState>Fine</IMUAlignmentState>
+            </DeviceAxisOrientation>
+
+            <ComputedGrid>
+                <North>464309.97892908</North>
+                <East>1113535.9756364</East>
+                <Elevation>1214.1811258969</Elevation>
+            </ComputedGrid>
+            <Precision>
+                <Horizontal>0.01450303214185</Horizontal>
+                <Vertical>0.03691801428795</Vertical>
+                <RawHorizontal>0.01450303214185</RawHorizontal>
+                <RawVertical>0.03691801428795</RawVertical>
+            </Precision>
+            <QualityControl1>
+                <MinimumNumberOfSatellites>28</MinimumNumberOfSatellites>
+                <MinGPSSVs>11</MinGPSSVs>
+                <MinGLONASSSVs>5</MinGLONASSSVs>
+                <MinGalileoSVs>8</MinGalileoSVs>
+                <MinQZSSSVs>0</MinQZSSSVs>
+                <MinBeiDouSVs>4</MinBeiDouSVs>
+                <NumberOfSatellites>28</NumberOfSatellites>
+                <NumGPSSVs>11</NumGPSSVs>
+                <NumGLONASSSVs>5</NumGLONASSSVs>
+                <NumGalileoSVs>8</NumGalileoSVs>
+                <NumQZSSSVs>0</NumQZSSSVs>
+                <NumBeiDouSVs>4</NumBeiDouSVs>
+                <NumNavICSVs>0</NumNavICSVs>
+                <RelativeDOPs>false</RelativeDOPs>
+                <PDOP>0.97276562452316</PDOP>
+                <GDOP>1.6084620041659</GDOP>
+                <HDOP>0.52012318372726</HDOP>
+                <VDOP>0.82205367088318</VDOP>
+                <PDOP_AtStore>0.97272551059723</PDOP_AtStore>
+                <GDOP_AtStore>1.6084071742487</GDOP_AtStore>
+                <HDOP_AtStore>0.52012318372726</HDOP_AtStore>
+                <VDOP_AtStore>0.82198947668076</VDOP_AtStore>
+                <NumberOfPositionsUsed>4</NumberOfPositionsUsed>
+                <HorizontalStandardDeviation/>
+                <VerticalStandardDeviation/>
+                <StartTime>
+                    <GPSWeek>2409</GPSWeek>
+                    <Seconds>314744</Seconds>
+                </StartTime>
+                <EndTime>
+                    <GPSWeek>2409</GPSWeek>
+                    <Seconds>314747</Seconds>
+                </EndTime>
+                <MonitorStatus>NotMonitored</MonitorStatus>
+                <RTCMAge>6.8000001907349</RTCMAge>
+                <Warnings>
+                    <ExcessTiltWarning>NotCalibrated</ExcessTiltWarning>
+                    <ExcessTiltAtStorage>NotCalibrated</ExcessTiltAtStorage>
+                    <ExcessMovementWarning>No</ExcessMovementWarning>
+                    <ExcessMovementAtStorage>No</ExcessMovementAtStorage>
+                    <PoorPrecisionsWarning>No</PoorPrecisionsWarning>
+                    <PoorPrecisionsAtStorage>No</PoorPrecisionsAtStorage>
+                    <MagneticDisturbanceWarning>NotSupported</MagneticDisturbanceWarning>
+                    <MagneticDisturbanceAtStorage>NotSupported</MagneticDisturbanceAtStorage>
+                    <BadEnvironmentWarning>No</BadEnvironmentWarning>
+                    <BadEnvironmentAtStorage>No</BadEnvironmentAtStorage>
+                    <AINSAlignmentWarning>No</AINSAlignmentWarning>
+                    <AINSAlignmentAtStorage>No</AINSAlignmentAtStorage>
+                </Warnings>
+                <SVList>
+                    <SV Number="1" System="GPS"/>
+                    <SV Number="2" System="GPS"/>
+                    <SV Number="7" System="GPS"/>
+                    <SV Number="8" System="GPS"/>
+                    <SV Number="13" System="GPS"/>
+                    <SV Number="14" System="GPS"/>
+                    <SV Number="15" System="GPS"/>
+                    <SV Number="17" System="GPS"/>
+                    <SV Number="19" System="GPS"/>
+                    <SV Number="22" System="GPS"/>
+                    <SV Number="30" System="GPS"/>
+                    <SV Number="4" System="GLONASS"/>
+                    <SV Number="5" System="GLONASS"/>
+                    <SV Number="14" System="GLONASS"/>
+                    <SV Number="15" System="GLONASS"/>
+                    <SV Number="24" System="GLONASS"/>
+                    <SV Number="2" System="GALILEO"/>
+                    <SV Number="7" System="GALILEO"/>
+                    <SV Number="8" System="GALILEO"/>
+                    <SV Number="27" System="GALILEO"/>
+                    <SV Number="29" System="GALILEO"/>
+                    <SV Number="30" System="GALILEO"/>
+                    <SV Number="34" System="GALILEO"/>
+                    <SV Number="36" System="GALILEO"/>
+                    <SV Number="19" System="BEIDOU"/>
+                    <SV Number="27" System="BEIDOU"/>
+                    <SV Number="28" System="BEIDOU"/>
+                    <SV Number="37" System="BEIDOU"/>
+                </SVList>
+            </QualityControl1>
+            <QualityControl2>
+                <NumberOfSatellites>28</NumberOfSatellites>
+                <ErrorScale/>
+                <VCVxx>0.00014824047685</VCVxx>
+                <VCVxy>0.00023742942722</VCVxy>
+                <VCVxz>-0.00016813298862</VCVxz>
+                <VCVyy>0.00085515453247</VCVyy>
+                <VCVyz>-0.00057329144329</VCVyz>
+                <VCVzz>0.00056988274446</VCVzz>
+                <UnitVariance>1</UnitVariance>
+            </QualityControl2>
+            <Notes>
+                <Note>Modified 9:30:44 AM 3/11/2026</Note>
+                <Note>Old values BEND</Note>
+            </Notes>
+        </PointRecord>
+
+        <PointRecord ID="00000085" TimeStamp="2026-03-11T09:26:13">
+            <Name>JP10165</Name>
+            <Code>WELD</Code>
+            <Method>GpsStaticObservation</Method>
+            <SurveyMethod>RTX</SurveyMethod>
+            <Classification>Normal</Classification>
+            <Deleted>false</Deleted>
+            <Features>
+                <Feature Name="WELD">
+                    <Attribute>
+                        <Name>TYPE</Name>
+                        <Value>MAIN LINE</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>0</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>ASSET_TYPE</Name>
+                        <Value>PIPE</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>7</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>WELDER_ID</Name>
+                        <Value>TB</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>XRAY_NUMBER</Name>
+                        <Value>W-32-A</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>JOINT_AHEAD</Name>
+                        <Value>PIPE</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>JOINT_BACK</Name>
+                        <Value>FITTING</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>HEAT_AHEAD</Name>
+                        <Value>A408724</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>HEAT_BACK</Name>
+                        <Value>UNK</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>DOC</Name>
+                        <Value>5</Value>
+                        <Type>Numeric</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>WALLTHICKNESS</Name>
+                        <Value>.322</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>MATERIAL</Name>
+                        <Value>STEEL</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>0</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>COATING_TYPE</Name>
+                        <Value>FBE</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>0</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>DIAMETER</Name>
+                        <Value>8</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>GRADE</Name>
+                        <Value/>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>PIPE_SPEC</Name>
+                        <Value/>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>MANUFACTURER</Name>
+                        <Value>UNK</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>NOTES</Name>
+                        <Value/>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>ASB_STATION</Name>
+                        <Value/>
+                        <Type>Numeric</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>Image</Name>
+                        <Value>JPA_031126_TOG_2025 Files\JP10165_WELD_20260311.jpg</Value>
+                        <Type>Photo</Type>
+                    </Attribute>
+                </Feature>
+            </Features>
+
+            <RTXECEF>
+                <X>-1100428.6938529</X>
+                <Y>-4713191.331037</Y>
+                <Z>4141880.7217448</Z>
+                <T>2026.18</T>
+                <Realisation>ITRF2020</Realisation>
+            </RTXECEF>
+            <AntennaID>0000004e</AntennaID>
+            <DeviceAxisOrientation>
+                <Type>InertialTiltComp</Type>
+                <Attitude>
+                    <Pitch>2.3069082215275</Pitch>
+                    <Roll>2.6286413905575</Roll>
+                    <Yaw>-219.7784870212</Yaw>
+                </Attitude>
+                <AttitudeStandardDeviation>
+                    <Pitch>0.06280697025234</Pitch>
+                    <Roll>0.05437262339974</Roll>
+                    <Yaw>0.8430597289041</Yaw>
+                </AttitudeStandardDeviation>
+                <IMUAlignmentState>Fine</IMUAlignmentState>
+            </DeviceAxisOrientation>
+
+            <ComputedGrid>
+                <North>464310.12004326</North>
+                <East>1113536.4531596</East>
+                <Elevation>1214.3057598612</Elevation>
+            </ComputedGrid>
+            <Precision>
+                <Horizontal>0.01472070434637</Horizontal>
+                <Vertical>0.03756055980921</Vertical>
+                <RawHorizontal>0.01472070434637</RawHorizontal>
+                <RawVertical>0.03756055980921</RawVertical>
+            </Precision>
+            <QualityControl1>
+                <MinimumNumberOfSatellites>27</MinimumNumberOfSatellites>
+                <MinGPSSVs>11</MinGPSSVs>
+                <MinGLONASSSVs>5</MinGLONASSSVs>
+                <MinGalileoSVs>7</MinGalileoSVs>
+                <MinQZSSSVs>0</MinQZSSSVs>
+                <MinBeiDouSVs>4</MinBeiDouSVs>
+                <NumberOfSatellites>28</NumberOfSatellites>
+                <NumGPSSVs>11</NumGPSSVs>
+                <NumGLONASSSVs>5</NumGLONASSSVs>
+                <NumGalileoSVs>8</NumGalileoSVs>
+                <NumQZSSSVs>0</NumQZSSSVs>
+                <NumBeiDouSVs>4</NumBeiDouSVs>
+                <NumNavICSVs>0</NumNavICSVs>
+                <RelativeDOPs>false</RelativeDOPs>
+                <PDOP>0.97213566303253</PDOP>
+                <GDOP>1.60758554269</GDOP>
+                <HDOP>0.52051073312759</HDOP>
+                <VDOP>0.8210626244545</VDOP>
+                <PDOP_AtStore>0.97208946943283</PDOP_AtStore>
+                <GDOP_AtStore>1.6075202010677</GDOP_AtStore>
+                <HDOP_AtStore>0.52051073312759</HDOP_AtStore>
+                <VDOP_AtStore>0.82099115848541</VDOP_AtStore>
+                <NumberOfPositionsUsed>4</NumberOfPositionsUsed>
+                <HorizontalStandardDeviation/>
+                <VerticalStandardDeviation/>
+                <StartTime>
+                    <GPSWeek>2409</GPSWeek>
+                    <Seconds>314788</Seconds>
+                </StartTime>
+                <EndTime>
+                    <GPSWeek>2409</GPSWeek>
+                    <Seconds>314791</Seconds>
+                </EndTime>
+                <MonitorStatus>NotMonitored</MonitorStatus>
+                <RTCMAge>5.8000001907349</RTCMAge>
+                <Warnings>
+                    <ExcessTiltWarning>NotCalibrated</ExcessTiltWarning>
+                    <ExcessTiltAtStorage>NotCalibrated</ExcessTiltAtStorage>
+                    <ExcessMovementWarning>No</ExcessMovementWarning>
+                    <ExcessMovementAtStorage>No</ExcessMovementAtStorage>
+                    <PoorPrecisionsWarning>No</PoorPrecisionsWarning>
+                    <PoorPrecisionsAtStorage>No</PoorPrecisionsAtStorage>
+                    <MagneticDisturbanceWarning>NotSupported</MagneticDisturbanceWarning>
+                    <MagneticDisturbanceAtStorage>NotSupported</MagneticDisturbanceAtStorage>
+                    <BadEnvironmentWarning>No</BadEnvironmentWarning>
+                    <BadEnvironmentAtStorage>No</BadEnvironmentAtStorage>
+                    <AINSAlignmentWarning>No</AINSAlignmentWarning>
+                    <AINSAlignmentAtStorage>No</AINSAlignmentAtStorage>
+                </Warnings>
+                <SVList>
+                    <SV Number="1" System="GPS"/>
+                    <SV Number="2" System="GPS"/>
+                    <SV Number="7" System="GPS"/>
+                    <SV Number="8" System="GPS"/>
+                    <SV Number="13" System="GPS"/>
+                    <SV Number="14" System="GPS"/>
+                    <SV Number="15" System="GPS"/>
+                    <SV Number="17" System="GPS"/>
+                    <SV Number="19" System="GPS"/>
+                    <SV Number="22" System="GPS"/>
+                    <SV Number="30" System="GPS"/>
+                    <SV Number="4" System="GLONASS"/>
+                    <SV Number="5" System="GLONASS"/>
+                    <SV Number="14" System="GLONASS"/>
+                    <SV Number="15" System="GLONASS"/>
+                    <SV Number="24" System="GLONASS"/>
+                    <SV Number="2" System="GALILEO"/>
+                    <SV Number="7" System="GALILEO"/>
+                    <SV Number="8" System="GALILEO"/>
+                    <SV Number="27" System="GALILEO"/>
+                    <SV Number="29" System="GALILEO"/>
+                    <SV Number="30" System="GALILEO"/>
+                    <SV Number="34" System="GALILEO"/>
+                    <SV Number="36" System="GALILEO"/>
+                    <SV Number="19" System="BEIDOU"/>
+                    <SV Number="27" System="BEIDOU"/>
+                    <SV Number="28" System="BEIDOU"/>
+                    <SV Number="37" System="BEIDOU"/>
+                </SVList>
+            </QualityControl1>
+            <QualityControl2>
+                <NumberOfSatellites>28</NumberOfSatellites>
+                <ErrorScale/>
+                <VCVxx>0.00016462770873</VCVxx>
+                <VCVxy>0.00024562078761</VCVxy>
+                <VCVxz>-0.00018235637981</VCVxz>
+                <VCVyy>0.00086801080033</VCVyy>
+                <VCVyz>-0.0005986794713</VCVyz>
+                <VCVzz>0.00059485639213</VCVzz>
+                <UnitVariance>1</UnitVariance>
+            </QualityControl2>
+        </PointRecord>
+
+        <PointRecord ID="0000008e" TimeStamp="2026-03-11T09:27:07">
+            <Name>JP10166</Name>
+            <Code>WELD</Code>
+            <Method>GpsStaticObservation</Method>
+            <SurveyMethod>RTX</SurveyMethod>
+            <Classification>Normal</Classification>
+            <Deleted>false</Deleted>
+            <Features>
+                <Feature Name="WELD">
+                    <Attribute>
+                        <Name>TYPE</Name>
+                        <Value>MAIN LINE</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>0</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>ASSET_TYPE</Name>
+                        <Value>PIPE</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>7</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>WELDER_ID</Name>
+                        <Value>TT TB</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>XRAY_NUMBER</Name>
+                        <Value>W-32</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>JOINT_AHEAD</Name>
+                        <Value>PIPE</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>JOINT_BACK</Name>
+                        <Value>PIPE</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>HEAT_AHEAD</Name>
+                        <Value>A408724</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>HEAT_BACK</Name>
+                        <Value>A408724</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>DOC</Name>
+                        <Value>5</Value>
+                        <Type>Numeric</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>WALLTHICKNESS</Name>
+                        <Value>.322</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>MATERIAL</Name>
+                        <Value>STEEL</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>0</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>COATING_TYPE</Name>
+                        <Value>FBE</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>0</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>DIAMETER</Name>
+                        <Value>8</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>GRADE</Name>
+                        <Value/>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>PIPE_SPEC</Name>
+                        <Value/>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>MANUFACTURER</Name>
+                        <Value>UNK</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>NOTES</Name>
+                        <Value/>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>ASB_STATION</Name>
+                        <Value/>
+                        <Type>Numeric</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>Image</Name>
+                        <Value>JPA_031126_TOG_2025 Files\JP10166_WELD_20260311.jpg</Value>
+                        <Type>Photo</Type>
+                    </Attribute>
+                </Feature>
+            </Features>
+
+            <RTXECEF>
+                <X>-1100427.4625185</X>
+                <Y>-4713191.564172</Y>
+                <Z>4141880.7673857</Z>
+                <T>2026.18</T>
+                <Realisation>ITRF2020</Realisation>
+            </RTXECEF>
+            <AntennaID>0000004e</AntennaID>
+            <DeviceAxisOrientation>
+                <Type>InertialTiltComp</Type>
+                <Attitude>
+                    <Pitch>5.700154804589</Pitch>
+                    <Roll>0.13538777624665</Roll>
+                    <Yaw>-186.40847231513</Yaw>
+                </Attitude>
+                <AttitudeStandardDeviation>
+                    <Pitch>0.05792732682145</Pitch>
+                    <Roll>0.04905252416073</Roll>
+                    <Yaw>0.89077457836197</Yaw>
+                </AttitudeStandardDeviation>
+                <IMUAlignmentState>Fine</IMUAlignmentState>
+            </DeviceAxisOrientation>
+
+            <ComputedGrid>
+                <North>464310.13702475</North>
+                <East>1113537.6652069</East>
+                <Elevation>1214.3021959059</Elevation>
+            </ComputedGrid>
+            <Precision>
+                <Horizontal>0.01446847552254</Horizontal>
+                <Vertical>0.03736706823111</Vertical>
+                <RawHorizontal>0.01446847552254</RawHorizontal>
+                <RawVertical>0.03736706823111</RawVertical>
+            </Precision>
+            <QualityControl1>
+                <MinimumNumberOfSatellites>27</MinimumNumberOfSatellites>
+                <MinGPSSVs>10</MinGPSSVs>
+                <MinGLONASSSVs>5</MinGLONASSSVs>
+                <MinGalileoSVs>8</MinGalileoSVs>
+                <MinQZSSSVs>0</MinQZSSSVs>
+                <MinBeiDouSVs>4</MinBeiDouSVs>
+                <NumberOfSatellites>28</NumberOfSatellites>
+                <NumGPSSVs>11</NumGPSSVs>
+                <NumGLONASSSVs>5</NumGLONASSSVs>
+                <NumGalileoSVs>8</NumGalileoSVs>
+                <NumQZSSSVs>0</NumQZSSSVs>
+                <NumBeiDouSVs>4</NumBeiDouSVs>
+                <NumNavICSVs>0</NumNavICSVs>
+                <RelativeDOPs>false</RelativeDOPs>
+                <PDOP>0.97125935554504</PDOP>
+                <GDOP>1.6063254235522</GDOP>
+                <HDOP>0.52098566293716</HDOP>
+                <VDOP>0.81972885131836</VDOP>
+                <PDOP_AtStore>0.97118806838989</PDOP_AtStore>
+                <GDOP_AtStore>1.6062213624904</GDOP_AtStore>
+                <HDOP_AtStore>0.52098566293716</HDOP_AtStore>
+                <VDOP_AtStore>0.81962203979492</VDOP_AtStore>
+                <NumberOfPositionsUsed>5</NumberOfPositionsUsed>
+                <HorizontalStandardDeviation/>
+                <VerticalStandardDeviation/>
+                <StartTime>
+                    <GPSWeek>2409</GPSWeek>
+                    <Seconds>314841</Seconds>
+                </StartTime>
+                <EndTime>
+                    <GPSWeek>2409</GPSWeek>
+                    <Seconds>314845</Seconds>
+                </EndTime>
+                <MonitorStatus>NotMonitored</MonitorStatus>
+                <RTCMAge>9.8000001907349</RTCMAge>
+                <Warnings>
+                    <ExcessTiltWarning>NotCalibrated</ExcessTiltWarning>
+                    <ExcessTiltAtStorage>NotCalibrated</ExcessTiltAtStorage>
+                    <ExcessMovementWarning>No</ExcessMovementWarning>
+                    <ExcessMovementAtStorage>No</ExcessMovementAtStorage>
+                    <PoorPrecisionsWarning>No</PoorPrecisionsWarning>
+                    <PoorPrecisionsAtStorage>No</PoorPrecisionsAtStorage>
+                    <MagneticDisturbanceWarning>NotSupported</MagneticDisturbanceWarning>
+                    <MagneticDisturbanceAtStorage>NotSupported</MagneticDisturbanceAtStorage>
+                    <BadEnvironmentWarning>No</BadEnvironmentWarning>
+                    <BadEnvironmentAtStorage>No</BadEnvironmentAtStorage>
+                    <AINSAlignmentWarning>No</AINSAlignmentWarning>
+                    <AINSAlignmentAtStorage>No</AINSAlignmentAtStorage>
+                </Warnings>
+                <SVList>
+                    <SV Number="1" System="GPS"/>
+                    <SV Number="2" System="GPS"/>
+                    <SV Number="7" System="GPS"/>
+                    <SV Number="8" System="GPS"/>
+                    <SV Number="13" System="GPS"/>
+                    <SV Number="14" System="GPS"/>
+                    <SV Number="15" System="GPS"/>
+                    <SV Number="17" System="GPS"/>
+                    <SV Number="19" System="GPS"/>
+                    <SV Number="22" System="GPS"/>
+                    <SV Number="30" System="GPS"/>
+                    <SV Number="4" System="GLONASS"/>
+                    <SV Number="5" System="GLONASS"/>
+                    <SV Number="14" System="GLONASS"/>
+                    <SV Number="15" System="GLONASS"/>
+                    <SV Number="24" System="GLONASS"/>
+                    <SV Number="2" System="GALILEO"/>
+                    <SV Number="7" System="GALILEO"/>
+                    <SV Number="8" System="GALILEO"/>
+                    <SV Number="27" System="GALILEO"/>
+                    <SV Number="29" System="GALILEO"/>
+                    <SV Number="30" System="GALILEO"/>
+                    <SV Number="34" System="GALILEO"/>
+                    <SV Number="36" System="GALILEO"/>
+                    <SV Number="19" System="BEIDOU"/>
+                    <SV Number="27" System="BEIDOU"/>
+                    <SV Number="28" System="BEIDOU"/>
+                    <SV Number="37" System="BEIDOU"/>
+                </SVList>
+            </QualityControl1>
+            <QualityControl2>
+                <NumberOfSatellites>28</NumberOfSatellites>
+                <ErrorScale/>
+                <VCVxx>0.00015036344121</VCVxx>
+                <VCVxy>0.00022267572058</VCVxy>
+                <VCVxz>-0.00016108957061</VCVxz>
+                <VCVyy>0.00087887170957</VCVyy>
+                <VCVyz>-0.00059711618815</VCVyz>
+                <VCVzz>0.00057639938314</VCVzz>
+                <UnitVariance>1</UnitVariance>
+            </QualityControl2>
+        </PointRecord>
+
+        <PointRecord ID="00000097" TimeStamp="2026-03-11T09:29:20">
+            <Name>JP10167</Name>
+            <Code>NATURAL_GROUND</Code>
+            <Method>GpsStaticObservation</Method>
+            <SurveyMethod>RTX</SurveyMethod>
+            <Classification>Normal</Classification>
+            <Deleted>false</Deleted>
+            <Features>
+                <Feature Name="NATURAL_GROUND">
+                    <Attribute>
+                        <Name>NOTES</Name>
+                        <Value/>
+                        <Type>Text</Type>
+                    </Attribute>
+                </Feature>
+            </Features>
+
+            <RTXECEF>
+                <X>-1100424.2699066</X>
+                <Y>-4713196.1312211</Y>
+                <Z>4141877.6976667</Z>
+                <T>2026.18</T>
+                <Realisation>ITRF2020</Realisation>
+            </RTXECEF>
+            <AntennaID>0000004e</AntennaID>
+            <DeviceAxisOrientation>
+                <Type>InertialTiltComp</Type>
+                <Attitude>
+                    <Pitch>-0.91088984156423</Pitch>
+                    <Roll>-0.36454775506184</Roll>
+                    <Yaw>-275.45841677047</Yaw>
+                </Attitude>
+                <AttitudeStandardDeviation>
+                    <Pitch>0.05182655908125</Pitch>
+                    <Roll>0.06092019363892</Roll>
+                    <Yaw>0.63362170723121</Yaw>
+                </AttitudeStandardDeviation>
+                <IMUAlignmentState>Fine</IMUAlignmentState>
+            </DeviceAxisOrientation>
+
+            <ComputedGrid>
+                <North>464305.72266564</North>
+                <East>1113541.985524</East>
+                <Elevation>1215.1077054355</Elevation>
+            </ComputedGrid>
+            <Precision>
+                <Horizontal>0.01305245680408</Horizontal>
+                <Vertical>0.03310693055391</Vertical>
+                <RawHorizontal>0.01305245680408</RawHorizontal>
+                <RawVertical>0.03310693055391</RawVertical>
+            </Precision>
+            <QualityControl1>
+                <MinimumNumberOfSatellites>29</MinimumNumberOfSatellites>
+                <MinGPSSVs>11</MinGPSSVs>
+                <MinGLONASSSVs>6</MinGLONASSSVs>
+                <MinGalileoSVs>8</MinGalileoSVs>
+                <MinQZSSSVs>0</MinQZSSSVs>
+                <MinBeiDouSVs>4</MinBeiDouSVs>
+                <NumberOfSatellites>29</NumberOfSatellites>
+                <NumGPSSVs>11</NumGPSSVs>
+                <NumGLONASSSVs>6</NumGLONASSSVs>
+                <NumGalileoSVs>8</NumGalileoSVs>
+                <NumQZSSSVs>0</NumQZSSSVs>
+                <NumBeiDouSVs>4</NumBeiDouSVs>
+                <NumNavICSVs>0</NumNavICSVs>
+                <RelativeDOPs>false</RelativeDOPs>
+                <PDOP>0.9279517531395</PDOP>
+                <GDOP>1.5287351083477</GDOP>
+                <HDOP>0.49557313323021</HDOP>
+                <VDOP>0.78454542160034</VDOP>
+                <PDOP_AtStore>0.92793333530426</PDOP_AtStore>
+                <GDOP_AtStore>1.5287146445687</GDOP_AtStore>
+                <HDOP_AtStore>0.49557313323021</HDOP_AtStore>
+                <VDOP_AtStore>0.78451734781265</VDOP_AtStore>
+                <NumberOfPositionsUsed>3</NumberOfPositionsUsed>
+                <HorizontalStandardDeviation/>
+                <VerticalStandardDeviation/>
+                <StartTime>
+                    <GPSWeek>2409</GPSWeek>
+                    <Seconds>314976</Seconds>
+                </StartTime>
+                <EndTime>
+                    <GPSWeek>2409</GPSWeek>
+                    <Seconds>314978</Seconds>
+                </EndTime>
+                <MonitorStatus>NotMonitored</MonitorStatus>
+                <RTCMAge>7.8000001907349</RTCMAge>
+                <Warnings>
+                    <ExcessTiltWarning>NotCalibrated</ExcessTiltWarning>
+                    <ExcessTiltAtStorage>NotCalibrated</ExcessTiltAtStorage>
+                    <ExcessMovementWarning>No</ExcessMovementWarning>
+                    <ExcessMovementAtStorage>No</ExcessMovementAtStorage>
+                    <PoorPrecisionsWarning>No</PoorPrecisionsWarning>
+                    <PoorPrecisionsAtStorage>No</PoorPrecisionsAtStorage>
+                    <MagneticDisturbanceWarning>NotSupported</MagneticDisturbanceWarning>
+                    <MagneticDisturbanceAtStorage>NotSupported</MagneticDisturbanceAtStorage>
+                    <BadEnvironmentWarning>No</BadEnvironmentWarning>
+                    <BadEnvironmentAtStorage>No</BadEnvironmentAtStorage>
+                    <AINSAlignmentWarning>No</AINSAlignmentWarning>
+                    <AINSAlignmentAtStorage>No</AINSAlignmentAtStorage>
+                </Warnings>
+                <SVList>
+                    <SV Number="1" System="GPS"/>
+                    <SV Number="2" System="GPS"/>
+                    <SV Number="7" System="GPS"/>
+                    <SV Number="8" System="GPS"/>
+                    <SV Number="13" System="GPS"/>
+                    <SV Number="14" System="GPS"/>
+                    <SV Number="15" System="GPS"/>
+                    <SV Number="17" System="GPS"/>
+                    <SV Number="19" System="GPS"/>
+                    <SV Number="22" System="GPS"/>
+                    <SV Number="30" System="GPS"/>
+                    <SV Number="4" System="GLONASS"/>
+                    <SV Number="5" System="GLONASS"/>
+                    <SV Number="14" System="GLONASS"/>
+                    <SV Number="15" System="GLONASS"/>
+                    <SV Number="17" System="GLONASS"/>
+                    <SV Number="24" System="GLONASS"/>
+                    <SV Number="2" System="GALILEO"/>
+                    <SV Number="7" System="GALILEO"/>
+                    <SV Number="8" System="GALILEO"/>
+                    <SV Number="27" System="GALILEO"/>
+                    <SV Number="29" System="GALILEO"/>
+                    <SV Number="30" System="GALILEO"/>
+                    <SV Number="34" System="GALILEO"/>
+                    <SV Number="36" System="GALILEO"/>
+                    <SV Number="19" System="BEIDOU"/>
+                    <SV Number="27" System="BEIDOU"/>
+                    <SV Number="28" System="BEIDOU"/>
+                    <SV Number="37" System="BEIDOU"/>
+                </SVList>
+            </QualityControl1>
+            <QualityControl2>
+                <NumberOfSatellites>29</NumberOfSatellites>
+                <ErrorScale/>
+                <VCVxx>0.00010772883979</VCVxx>
+                <VCVxy>0.00016125706316</VCVxy>
+                <VCVxz>-0.00012053953833</VCVxz>
+                <VCVyy>0.00068294437369</VCVyy>
+                <VCVyz>-0.00046762207057</VCVyz>
+                <VCVzz>0.00047576220823</VCVzz>
+                <UnitVariance>1</UnitVariance>
+            </QualityControl2>
+        </PointRecord>
+
+        <PointRecord ID="000000a0" TimeStamp="2026-03-11T09:29:33">
+            <Name>JP10168</Name>
+            <Code>NATURAL_GROUND</Code>
+            <Method>GpsStaticObservation</Method>
+            <SurveyMethod>RTX</SurveyMethod>
+            <Classification>Normal</Classification>
+            <Deleted>false</Deleted>
+            <Features>
+                <Feature Name="NATURAL_GROUND">
+                    <Attribute>
+                        <Name>NOTES</Name>
+                        <Value/>
+                        <Type>Text</Type>
+                    </Attribute>
+                </Feature>
+            </Features>
+
+            <RTXECEF>
+                <X>-1100426.2918719</X>
+                <Y>-4713199.2044317</Y>
+                <Z>4141873.0285655</Z>
+                <T>2026.18</T>
+                <Realisation>ITRF2020</Realisation>
+            </RTXECEF>
+            <AntennaID>0000004e</AntennaID>
+            <DeviceAxisOrientation>
+                <Type>InertialTiltComp</Type>
+                <Attitude>
+                    <Pitch>-0.29377408696632</Pitch>
+                    <Roll>0.7656169794611</Roll>
+                    <Yaw>-269.70228886193</Yaw>
+                </Attitude>
+                <AttitudeStandardDeviation>
+                    <Pitch>0.06346585608541</Pitch>
+                    <Roll>0.07218214749943</Roll>
+                    <Yaw>0.62601839203581</Yaw>
+                </AttitudeStandardDeviation>
+                <IMUAlignmentState>Fine</IMUAlignmentState>
+            </DeviceAxisOrientation>
+
+            <ComputedGrid>
+                <North>464299.86107338</North>
+                <East>1113540.8464722</East>
+                <Elevation>1214.6756823949</Elevation>
+            </ComputedGrid>
+            <Precision>
+                <Horizontal>0.01410732109962</Horizontal>
+                <Vertical>0.03346651419997</Vertical>
+                <RawHorizontal>0.01410732109962</RawHorizontal>
+                <RawVertical>0.03346651419997</RawVertical>
+            </Precision>
+            <QualityControl1>
+                <MinimumNumberOfSatellites>29</MinimumNumberOfSatellites>
+                <MinGPSSVs>11</MinGPSSVs>
+                <MinGLONASSSVs>6</MinGLONASSSVs>
+                <MinGalileoSVs>8</MinGalileoSVs>
+                <MinQZSSSVs>0</MinQZSSSVs>
+                <MinBeiDouSVs>4</MinBeiDouSVs>
+                <NumberOfSatellites>29</NumberOfSatellites>
+                <NumGPSSVs>11</NumGPSSVs>
+                <NumGLONASSSVs>6</NumGLONASSSVs>
+                <NumGalileoSVs>8</NumGalileoSVs>
+                <NumQZSSSVs>0</NumQZSSSVs>
+                <NumBeiDouSVs>4</NumBeiDouSVs>
+                <NumNavICSVs>0</NumNavICSVs>
+                <RelativeDOPs>false</RelativeDOPs>
+                <PDOP>0.92782914638519</PDOP>
+                <GDOP>1.5285974029091</GDOP>
+                <HDOP>0.49563753604889</HDOP>
+                <VDOP>0.78435975313187</VDOP>
+                <PDOP_AtStore>0.927809715271</PDOP_AtStore>
+                <GDOP_AtStore>1.5285751874802</GDOP_AtStore>
+                <HDOP_AtStore>0.49563753604889</HDOP_AtStore>
+                <VDOP_AtStore>0.78433048725128</VDOP_AtStore>
+                <NumberOfPositionsUsed>3</NumberOfPositionsUsed>
+                <HorizontalStandardDeviation/>
+                <VerticalStandardDeviation/>
+                <StartTime>
+                    <GPSWeek>2409</GPSWeek>
+                    <Seconds>314989</Seconds>
+                </StartTime>
+                <EndTime>
+                    <GPSWeek>2409</GPSWeek>
+                    <Seconds>314991</Seconds>
+                </EndTime>
+                <MonitorStatus>NotMonitored</MonitorStatus>
+                <RTCMAge>10.800000190735</RTCMAge>
+                <Warnings>
+                    <ExcessTiltWarning>NotCalibrated</ExcessTiltWarning>
+                    <ExcessTiltAtStorage>NotCalibrated</ExcessTiltAtStorage>
+                    <ExcessMovementWarning>No</ExcessMovementWarning>
+                    <ExcessMovementAtStorage>No</ExcessMovementAtStorage>
+                    <PoorPrecisionsWarning>No</PoorPrecisionsWarning>
+                    <PoorPrecisionsAtStorage>No</PoorPrecisionsAtStorage>
+                    <MagneticDisturbanceWarning>NotSupported</MagneticDisturbanceWarning>
+                    <MagneticDisturbanceAtStorage>NotSupported</MagneticDisturbanceAtStorage>
+                    <BadEnvironmentWarning>No</BadEnvironmentWarning>
+                    <BadEnvironmentAtStorage>No</BadEnvironmentAtStorage>
+                    <AINSAlignmentWarning>No</AINSAlignmentWarning>
+                    <AINSAlignmentAtStorage>No</AINSAlignmentAtStorage>
+                </Warnings>
+                <SVList>
+                    <SV Number="1" System="GPS"/>
+                    <SV Number="2" System="GPS"/>
+                    <SV Number="7" System="GPS"/>
+                    <SV Number="8" System="GPS"/>
+                    <SV Number="13" System="GPS"/>
+                    <SV Number="14" System="GPS"/>
+                    <SV Number="15" System="GPS"/>
+                    <SV Number="17" System="GPS"/>
+                    <SV Number="19" System="GPS"/>
+                    <SV Number="22" System="GPS"/>
+                    <SV Number="30" System="GPS"/>
+                    <SV Number="4" System="GLONASS"/>
+                    <SV Number="5" System="GLONASS"/>
+                    <SV Number="14" System="GLONASS"/>
+                    <SV Number="15" System="GLONASS"/>
+                    <SV Number="17" System="GLONASS"/>
+                    <SV Number="24" System="GLONASS"/>
+                    <SV Number="2" System="GALILEO"/>
+                    <SV Number="7" System="GALILEO"/>
+                    <SV Number="8" System="GALILEO"/>
+                    <SV Number="27" System="GALILEO"/>
+                    <SV Number="29" System="GALILEO"/>
+                    <SV Number="30" System="GALILEO"/>
+                    <SV Number="34" System="GALILEO"/>
+                    <SV Number="36" System="GALILEO"/>
+                    <SV Number="19" System="BEIDOU"/>
+                    <SV Number="27" System="BEIDOU"/>
+                    <SV Number="28" System="BEIDOU"/>
+                    <SV Number="37" System="BEIDOU"/>
+                </SVList>
+            </QualityControl1>
+            <QualityControl2>
+                <NumberOfSatellites>29</NumberOfSatellites>
+                <ErrorScale/>
+                <VCVxx>0.00011498517415</VCVxx>
+                <VCVxy>0.00016372847313</VCVxy>
+                <VCVxz>-0.0001167034352</VCVxz>
+                <VCVyy>0.00070024799788</VCVyy>
+                <VCVyz>-0.00047032051953</VCVyz>
+                <VCVzz>0.00050379091408</VCVzz>
+                <UnitVariance>1</UnitVariance>
+            </QualityControl2>
+        </PointRecord>
+
+        <InitialisationRecord ID="000000af" TimeStamp="2026-03-11T09:33:27">
+            <InitialisationEvent>RTXNotConverged</InitialisationEvent>
+            <Time>
+                <GPSWeek>2409</GPSWeek>
+                <Seconds>315224</Seconds>
+            </Time>
+            <InitialisationType>OnTheFly</InitialisationType>
+            <SurveyType>RealTime</SurveyType>
+            <InitialisationCounter/>
+            <PointName/>
+        </InitialisationRecord>
+
+        <InitialisationRecord ID="000000b0" TimeStamp="2026-03-11T09:37:53">
+            <InitialisationEvent>RTXConverged</InitialisationEvent>
+            <Time>
+                <GPSWeek>2409</GPSWeek>
+                <Seconds>315490</Seconds>
+            </Time>
+            <InitialisationType>OnTheFly</InitialisationType>
+            <SurveyType>RealTime</SurveyType>
+            <InitialisationCounter/>
+            <PointName/>
+        </InitialisationRecord>
+
+        <InitialisationRecord ID="000000b1" TimeStamp="2026-03-11T09:38:20">
+            <InitialisationEvent>RTXNotConverged</InitialisationEvent>
+            <Time>
+                <GPSWeek>2409</GPSWeek>
+                <Seconds>315518</Seconds>
+            </Time>
+            <InitialisationType>OnTheFly</InitialisationType>
+            <SurveyType>RealTime</SurveyType>
+            <InitialisationCounter/>
+            <PointName/>
+        </InitialisationRecord>
+
+        <InitialisationRecord ID="000000b2" TimeStamp="2026-03-11T09:45:49">
+            <InitialisationEvent>RTXConverged</InitialisationEvent>
+            <Time>
+                <GPSWeek>2409</GPSWeek>
+                <Seconds>315966</Seconds>
+            </Time>
+            <InitialisationType>OnTheFly</InitialisationType>
+            <SurveyType>RealTime</SurveyType>
+            <InitialisationCounter/>
+            <PointName/>
+        </InitialisationRecord>
+
+        <PointRecord ID="000000b3" TimeStamp="2026-03-11T09:46:01">
+            <Name>JP10169</Name>
+            <Code>CKS</Code>
+            <Method>GpsStaticObservation</Method>
+            <SurveyMethod>RTX</SurveyMethod>
+            <Classification>Normal</Classification>
+            <Deleted>false</Deleted>
+
+            <RTXECEF>
+                <X>-1102839.1358205</X>
+                <Y>-4712620.6580324</Y>
+                <Z>4141873.9862341</Z>
+                <T>2026.18</T>
+                <Realisation>ITRF2020</Realisation>
+            </RTXECEF>
+            <AntennaID>0000004e</AntennaID>
+            <DeviceAxisOrientation>
+                <Type>InertialTiltComp</Type>
+                <Attitude>
+                    <Pitch>0.18411772688456</Pitch>
+                    <Roll>0.54820652548636</Roll>
+                    <Yaw>-53.264684743071</Yaw>
+                </Attitude>
+                <AttitudeStandardDeviation>
+                    <Pitch>0.04009259605532</Pitch>
+                    <Roll>0.04918090031425</Roll>
+                    <Yaw>0.5814165963818</Yaw>
+                </AttitudeStandardDeviation>
+                <IMUAlignmentState>Fine</IMUAlignmentState>
+            </DeviceAxisOrientation>
+
+            <ComputedGrid>
+                <North>464244.32642545</North>
+                <East>1111060.7116672</East>
+                <Elevation>1204.5247965739</Elevation>
+            </ComputedGrid>
+            <Precision>
+                <Horizontal>0.01612505671574</Horizontal>
+                <Vertical>0.05344991758466</Vertical>
+                <RawHorizontal>0.01612505671574</RawHorizontal>
+                <RawVertical>0.05344991758466</RawVertical>
+            </Precision>
+            <QualityControl1>
+                <MinimumNumberOfSatellites>30</MinimumNumberOfSatellites>
+                <MinGPSSVs>10</MinGPSSVs>
+                <MinGLONASSSVs>6</MinGLONASSSVs>
+                <MinGalileoSVs>8</MinGalileoSVs>
+                <MinQZSSSVs>0</MinQZSSSVs>
+                <MinBeiDouSVs>6</MinBeiDouSVs>
+                <NumberOfSatellites>30</NumberOfSatellites>
+                <NumGPSSVs>10</NumGPSSVs>
+                <NumGLONASSSVs>6</NumGLONASSSVs>
+                <NumGalileoSVs>8</NumGalileoSVs>
+                <NumQZSSSVs>0</NumQZSSSVs>
+                <NumBeiDouSVs>6</NumBeiDouSVs>
+                <NumNavICSVs>0</NumNavICSVs>
+                <RelativeDOPs>false</RelativeDOPs>
+                <PDOP>0.93596285581589</PDOP>
+                <GDOP>1.5069570380423</GDOP>
+                <HDOP>0.49780574440956</HDOP>
+                <VDOP>0.79260075092316</VDOP>
+                <PDOP_AtStore>0.93596285581589</PDOP_AtStore>
+                <GDOP_AtStore>1.5069570380423</GDOP_AtStore>
+                <HDOP_AtStore>0.49780574440956</HDOP_AtStore>
+                <VDOP_AtStore>0.79260075092316</VDOP_AtStore>
+                <NumberOfPositionsUsed>4</NumberOfPositionsUsed>
+                <HorizontalStandardDeviation/>
+                <VerticalStandardDeviation/>
+                <StartTime>
+                    <GPSWeek>2409</GPSWeek>
+                    <Seconds>315976</Seconds>
+                </StartTime>
+                <EndTime>
+                    <GPSWeek>2409</GPSWeek>
+                    <Seconds>315979</Seconds>
+                </EndTime>
+                <MonitorStatus>NotMonitored</MonitorStatus>
+                <RTCMAge>8.8000001907349</RTCMAge>
+                <Warnings>
+                    <ExcessTiltWarning>NotCalibrated</ExcessTiltWarning>
+                    <ExcessTiltAtStorage>NotCalibrated</ExcessTiltAtStorage>
+                    <ExcessMovementWarning>No</ExcessMovementWarning>
+                    <ExcessMovementAtStorage>No</ExcessMovementAtStorage>
+                    <PoorPrecisionsWarning>No</PoorPrecisionsWarning>
+                    <PoorPrecisionsAtStorage>No</PoorPrecisionsAtStorage>
+                    <MagneticDisturbanceWarning>NotSupported</MagneticDisturbanceWarning>
+                    <MagneticDisturbanceAtStorage>NotSupported</MagneticDisturbanceAtStorage>
+                    <BadEnvironmentWarning>No</BadEnvironmentWarning>
+                    <BadEnvironmentAtStorage>No</BadEnvironmentAtStorage>
+                    <AINSAlignmentWarning>No</AINSAlignmentWarning>
+                    <AINSAlignmentAtStorage>No</AINSAlignmentAtStorage>
+                </Warnings>
+                <SVList>
+                    <SV Number="1" System="GPS"/>
+                    <SV Number="2" System="GPS"/>
+                    <SV Number="7" System="GPS"/>
+                    <SV Number="13" System="GPS"/>
+                    <SV Number="14" System="GPS"/>
+                    <SV Number="15" System="GPS"/>
+                    <SV Number="17" System="GPS"/>
+                    <SV Number="19" System="GPS"/>
+                    <SV Number="22" System="GPS"/>
+                    <SV Number="30" System="GPS"/>
+                    <SV Number="4" System="GLONASS"/>
+                    <SV Number="5" System="GLONASS"/>
+                    <SV Number="14" System="GLONASS"/>
+                    <SV Number="15" System="GLONASS"/>
+                    <SV Number="17" System="GLONASS"/>
+                    <SV Number="24" System="GLONASS"/>
+                    <SV Number="2" System="GALILEO"/>
+                    <SV Number="7" System="GALILEO"/>
+                    <SV Number="15" System="GALILEO"/>
+                    <SV Number="27" System="GALILEO"/>
+                    <SV Number="29" System="GALILEO"/>
+                    <SV Number="30" System="GALILEO"/>
+                    <SV Number="34" System="GALILEO"/>
+                    <SV Number="36" System="GALILEO"/>
+                    <SV Number="19" System="BEIDOU"/>
+                    <SV Number="27" System="BEIDOU"/>
+                    <SV Number="28" System="BEIDOU"/>
+                    <SV Number="30" System="BEIDOU"/>
+                    <SV Number="36" System="BEIDOU"/>
+                    <SV Number="37" System="BEIDOU"/>
+                </SVList>
+            </QualityControl1>
+            <QualityControl2>
+                <NumberOfSatellites>30</NumberOfSatellites>
+                <ErrorScale/>
+                <VCVxx>0.00019379571313</VCVxx>
+                <VCVxy>0.00040483454359</VCVxy>
+                <VCVxz>-0.00032064202242</VCVxz>
+                <VCVyy>0.00171055737883</VCVyy>
+                <VCVyz>-0.00127556279767</VCVyz>
+                <VCVzz>0.00121255801059</VCVzz>
+                <UnitVariance>1</UnitVariance>
+            </QualityControl2>
+        </PointRecord>
+
+        <InitialisationRecord ID="000000bc" TimeStamp="2026-03-11T09:46:38">
+            <InitialisationEvent>RTXNotConverged</InitialisationEvent>
+            <Time>
+                <GPSWeek>2409</GPSWeek>
+                <Seconds>316015</Seconds>
+            </Time>
+            <InitialisationType>OnTheFly</InitialisationType>
+            <SurveyType>RealTime</SurveyType>
+            <InitialisationCounter/>
+            <PointName/>
+        </InitialisationRecord>
+
+        <SurveyEventRecord ID="000000bd" TimeStamp="2026-03-11T09:46:41">
+            <Event>EndSurvey</Event>
+        </SurveyEventRecord>
+
+        <NoteRecord ID="000000bf" TimeStamp="2026-03-11T20:10:19">
+            <Notes>
+                <Note>Exported file: C:\EXPORT\JPA_031126_TOG_2025.csv</Note>
+            </Notes>
+        </NoteRecord>
+
+        <ExportedFilesListRecord ID="000000c0" TimeStamp="2026-03-11T20:10:19">
+            <File>JPA_031126_TOG_2025.csv</File>
+        </ExportedFilesListRecord>
+    </FieldBook>
+
+    <Reductions>
+
+        <Point>
+            <ID>00000030</ID>
+            <Name>JP10158</Name>
+            <Code>CKS</Code>
+            <SurveyMethod>RTX</SurveyMethod>
+            <Classification>Normal</Classification>
+
+            <WGS84>
+                <Latitude>40.746062769819</Latitude>
+                <Longitude>-103.17121703374</Longitude>
+                <Height>1184.7887466867</Height>
+            </WGS84>
+
+            <Grid>
+                <North>464244.31167456</North>
+                <East>1111060.7091382</East>
+                <Elevation>1204.5201719912</Elevation>
+            </Grid>
+        </Point>
+
+        <Point>
+            <ID>0000004f</ID>
+            <Name>JP10159</Name>
+            <Code>WELD</Code>
+            <SurveyMethod>RTX</SurveyMethod>
+            <Classification>Normal</Classification>
+            <Features>
+                <Feature Name="WELD">
+                    <Attribute>
+                        <Name>TYPE</Name>
+                        <Value>MAIN LINE</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>0</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>ASSET_TYPE</Name>
+                        <Value>PIPE</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>7</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>WELDER_ID</Name>
+                        <Value>TB TT</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>XRAY_NUMBER</Name>
+                        <Value>W-32-E</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>JOINT_AHEAD</Name>
+                        <Value>PIPE</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>JOINT_BACK</Name>
+                        <Value>ARO PIPE</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>HEAT_AHEAD</Name>
+                        <Value>0</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>HEAT_BACK</Name>
+                        <Value>0</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>DOC</Name>
+                        <Value>5</Value>
+                        <Type>Numeric</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>WALLTHICKNESS</Name>
+                        <Value>.322</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>MATERIAL</Name>
+                        <Value>STEEL</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>0</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>COATING_TYPE</Name>
+                        <Value>FBE</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>0</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>DIAMETER</Name>
+                        <Value>8</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>GRADE</Name>
+                        <Value/>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>PIPE_SPEC</Name>
+                        <Value/>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>MANUFACTURER</Name>
+                        <Value>UNK</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>NOTES</Name>
+                        <Value/>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>ASB_STATION</Name>
+                        <Value/>
+                        <Type>Numeric</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>Image</Name>
+                        <Value>JPA_031126_TOG_2025 Files\JP10159_WELD_20260311.jpg</Value>
+                        <Type>Photo</Type>
+                    </Attribute>
+                </Feature>
+            </Features>
+
+            <WGS84>
+                <Latitude>40.745986807837</Latitude>
+                <Longitude>-103.14190391371</Longitude>
+                <Height>1192.6919905022</Height>
+            </WGS84>
+
+            <Grid>
+                <North>464301.2975121</North>
+                <East>1113535.7603978</East>
+                <Elevation>1212.4652795098</Elevation>
+            </Grid>
+        </Point>
+
+        <Point>
+            <ID>00000058</ID>
+            <Name>JP10160</Name>
+            <Code>WELD</Code>
+            <SurveyMethod>RTX</SurveyMethod>
+            <Classification>Normal</Classification>
+            <Features>
+                <Feature Name="WELD">
+                    <Attribute>
+                        <Name>TYPE</Name>
+                        <Value>MAIN LINE</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>0</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>ASSET_TYPE</Name>
+                        <Value>PIPE</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>7</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>WELDER_ID</Name>
+                        <Value>TT</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>XRAY_NUMBER</Name>
+                        <Value>W-32-D</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>JOINT_AHEAD</Name>
+                        <Value>FITTING</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>JOINT_BACK</Name>
+                        <Value>FBE PIPE</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>HEAT_AHEAD</Name>
+                        <Value>0</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>HEAT_BACK</Name>
+                        <Value>A408724</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>DOC</Name>
+                        <Value>5</Value>
+                        <Type>Numeric</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>WALLTHICKNESS</Name>
+                        <Value>.322</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>MATERIAL</Name>
+                        <Value>STEEL</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>0</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>COATING_TYPE</Name>
+                        <Value>FBE</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>0</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>DIAMETER</Name>
+                        <Value>8</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>GRADE</Name>
+                        <Value/>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>PIPE_SPEC</Name>
+                        <Value/>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>MANUFACTURER</Name>
+                        <Value>UNK</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>NOTES</Name>
+                        <Value/>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>ASB_STATION</Name>
+                        <Value/>
+                        <Type>Numeric</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>Image</Name>
+                        <Value>JPA_031126_TOG_2025 Files\JP10160_WELD_20260311.jpg</Value>
+                        <Type>Photo</Type>
+                    </Attribute>
+                </Feature>
+            </Features>
+
+            <WGS84>
+                <Latitude>40.746051027759</Latitude>
+                <Longitude>-103.14190087713</Longitude>
+                <Height>1193.0323970541</Height>
+            </WGS84>
+
+            <Grid>
+                <North>464308.4333264</North>
+                <East>1113535.8271431</East>
+                <Elevation>1212.8056377925</Elevation>
+            </Grid>
+        </Point>
+
+        <Point>
+            <ID>00000061</ID>
+            <Name>JP10161</Name>
+            <Code>BEND</Code>
+            <SurveyMethod>RTX</SurveyMethod>
+            <Classification>Normal</Classification>
+            <Features>
+                <Feature Name="BEND">
+                    <Attribute>
+                        <Name>BEGIN_END</Name>
+                        <Value>APEX</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>0</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>TYPE</Name>
+                        <Value>SAG</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>1</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>TECHNIQUE</Name>
+                        <Value>OTHER (SEE NOTES)</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>4</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>HEAT_NUMBER</Name>
+                        <Value>HU7823</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>JOINT_NUMBER</Name>
+                        <Value>FITTING</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>BEND_RADIUS</Name>
+                        <Value>45</Value>
+                        <Type>Numeric</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>VERTICAL_ANGLE</Name>
+                        <Value>45</Value>
+                        <Type>Numeric</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>HORIZONTAL_ANGLE</Name>
+                        <Value>0</Value>
+                        <Type>Numeric</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>NOTES</Name>
+                        <Value/>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>ASB_STATION</Name>
+                        <Value/>
+                        <Type>Numeric</Type>
+                    </Attribute>
+                </Feature>
+            </Features>
+
+            <WGS84>
+                <Latitude>40.746052771652</Latitude>
+                <Longitude>-103.14190084415</Longitude>
+                <Height>1193.0976873068</Height>
+            </WGS84>
+
+            <Grid>
+                <North>464308.6269885</North>
+                <East>1113535.8247786</East>
+                <Elevation>1212.8709266584</Elevation>
+            </Grid>
+        </Point>
+
+        <Point>
+            <ID>0000006a</ID>
+            <Name>JP10162</Name>
+            <Code>WELD</Code>
+            <SurveyMethod>RTX</SurveyMethod>
+            <Classification>Normal</Classification>
+            <Features>
+                <Feature Name="WELD">
+                    <Attribute>
+                        <Name>TYPE</Name>
+                        <Value>MAIN LINE</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>0</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>ASSET_TYPE</Name>
+                        <Value>PIPE</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>7</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>WELDER_ID</Name>
+                        <Value>TT</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>XRAY_NUMBER</Name>
+                        <Value>W-32-C</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>JOINT_AHEAD</Name>
+                        <Value>PIPE</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>JOINT_BACK</Name>
+                        <Value>FITTING</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>HEAT_AHEAD</Name>
+                        <Value>A408724</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>HEAT_BACK</Name>
+                        <Value>UNK</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>DOC</Name>
+                        <Value>5</Value>
+                        <Type>Numeric</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>WALLTHICKNESS</Name>
+                        <Value>.322</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>MATERIAL</Name>
+                        <Value>STEEL</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>0</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>COATING_TYPE</Name>
+                        <Value>FBE</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>0</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>DIAMETER</Name>
+                        <Value>8</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>GRADE</Name>
+                        <Value/>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>PIPE_SPEC</Name>
+                        <Value/>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>MANUFACTURER</Name>
+                        <Value>UNK</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>NOTES</Name>
+                        <Value/>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>ASB_STATION</Name>
+                        <Value/>
+                        <Type>Numeric</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>Image</Name>
+                        <Value>JPA_031126_TOG_2025 Files\JP10162_WELD_20260311.jpg</Value>
+                        <Type>Photo</Type>
+                    </Attribute>
+                </Feature>
+            </Features>
+
+            <WGS84>
+                <Latitude>40.746054093634</Latitude>
+                <Longitude>-103.14190084034</Longitude>
+                <Height>1193.1972751915</Height>
+            </WGS84>
+
+            <Grid>
+                <North>464308.77374906</North>
+                <East>1113535.8211965</East>
+                <Elevation>1212.9705134592</Elevation>
+            </Grid>
+        </Point>
+
+        <Point>
+            <ID>00000073</ID>
+            <Name>JP10163</Name>
+            <Code>WELD</Code>
+            <SurveyMethod>RTX</SurveyMethod>
+            <Classification>Normal</Classification>
+            <Features>
+                <Feature Name="WELD">
+                    <Attribute>
+                        <Name>TYPE</Name>
+                        <Value>MAIN LINE</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>0</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>ASSET_TYPE</Name>
+                        <Value>PIPE</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>7</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>WELDER_ID</Name>
+                        <Value>TB</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>XRAY_NUMBER</Name>
+                        <Value>W-32-B</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>JOINT_AHEAD</Name>
+                        <Value>FITTING</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>JOINT_BACK</Name>
+                        <Value>PIPE</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>HEAT_AHEAD</Name>
+                        <Value>UNK</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>HEAT_BACK</Name>
+                        <Value>A408724</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>DOC</Name>
+                        <Value>5</Value>
+                        <Type>Numeric</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>WALLTHICKNESS</Name>
+                        <Value>.322</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>MATERIAL</Name>
+                        <Value>STEEL</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>0</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>COATING_TYPE</Name>
+                        <Value>FBE</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>0</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>DIAMETER</Name>
+                        <Value>8</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>GRADE</Name>
+                        <Value/>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>PIPE_SPEC</Name>
+                        <Value/>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>MANUFACTURER</Name>
+                        <Value>UNK</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>NOTES</Name>
+                        <Value/>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>ASB_STATION</Name>
+                        <Value/>
+                        <Type>Numeric</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>Image</Name>
+                        <Value>JPA_031126_TOG_2025 Files\JP10163_WELD_20260311.jpg</Value>
+                        <Type>Photo</Type>
+                    </Attribute>
+                </Feature>
+            </Features>
+
+            <WGS84>
+                <Latitude>40.74606154421</Latitude>
+                <Longitude>-103.14190062682</Longitude>
+                <Height>1194.0793087715</Height>
+            </WGS84>
+
+            <Grid>
+                <North>464309.60131018</North>
+                <East>1113535.8172243</East>
+                <Elevation>1213.852541227</Elevation>
+            </Grid>
+        </Point>
+
+        <Point>
+            <ID>0000007c</ID>
+            <Name>JP10164</Name>
+            <Code>BEND</Code>
+            <SurveyMethod>RTX</SurveyMethod>
+            <Classification>Normal</Classification>
+            <Features>
+                <Feature Name="BEND">
+                    <Attribute>
+                        <Name>BEGIN_END</Name>
+                        <Value>APEX</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>0</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>TYPE</Name>
+                        <Value>SBR</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>3</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>TECHNIQUE</Name>
+                        <Value>OTHER (SEE NOTES)</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>4</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>HEAT_NUMBER</Name>
+                        <Value>A2805H</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>JOINT_NUMBER</Name>
+                        <Value>FITTING</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>BEND_RADIUS</Name>
+                        <Value>90</Value>
+                        <Type>Numeric</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>VERTICAL_ANGLE</Name>
+                        <Value>45</Value>
+                        <Type>Numeric</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>HORIZONTAL_ANGLE</Name>
+                        <Value>90</Value>
+                        <Type>Numeric</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>NOTES</Name>
+                        <Value>SBR/OVB</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>ASB_STATION</Name>
+                        <Value/>
+                        <Type>Numeric</Type>
+                    </Attribute>
+                </Feature>
+            </Features>
+
+            <WGS84>
+                <Latitude>40.746064905568</Latitude>
+                <Longitude>-103.14189863293</Longitude>
+                <Height>1194.4078931315</Height>
+            </WGS84>
+
+            <Grid>
+                <North>464309.97892908</North>
+                <East>1113535.9756364</East>
+                <Elevation>1214.1811258969</Elevation>
+            </Grid>
+        </Point>
+
+        <Point>
+            <ID>00000085</ID>
+            <Name>JP10165</Name>
+            <Code>WELD</Code>
+            <SurveyMethod>RTX</SurveyMethod>
+            <Classification>Normal</Classification>
+            <Features>
+                <Feature Name="WELD">
+                    <Attribute>
+                        <Name>TYPE</Name>
+                        <Value>MAIN LINE</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>0</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>ASSET_TYPE</Name>
+                        <Value>PIPE</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>7</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>WELDER_ID</Name>
+                        <Value>TB</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>XRAY_NUMBER</Name>
+                        <Value>W-32-A</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>JOINT_AHEAD</Name>
+                        <Value>PIPE</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>JOINT_BACK</Name>
+                        <Value>FITTING</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>HEAT_AHEAD</Name>
+                        <Value>A408724</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>HEAT_BACK</Name>
+                        <Value>UNK</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>DOC</Name>
+                        <Value>5</Value>
+                        <Type>Numeric</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>WALLTHICKNESS</Name>
+                        <Value>.322</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>MATERIAL</Name>
+                        <Value>STEEL</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>0</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>COATING_TYPE</Name>
+                        <Value>FBE</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>0</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>DIAMETER</Name>
+                        <Value>8</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>GRADE</Name>
+                        <Value/>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>PIPE_SPEC</Name>
+                        <Value/>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>MANUFACTURER</Name>
+                        <Value>UNK</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>NOTES</Name>
+                        <Value/>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>ASB_STATION</Name>
+                        <Value/>
+                        <Type>Numeric</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>Image</Name>
+                        <Value>JPA_031126_TOG_2025 Files\JP10165_WELD_20260311.jpg</Value>
+                        <Type>Photo</Type>
+                    </Attribute>
+                </Feature>
+            </Features>
+
+            <WGS84>
+                <Latitude>40.746066061525</Latitude>
+                <Longitude>-103.14189293645</Longitude>
+                <Height>1194.5325192465</Height>
+            </WGS84>
+
+            <Grid>
+                <North>464310.12004326</North>
+                <East>1113536.4531596</East>
+                <Elevation>1214.3057598612</Elevation>
+            </Grid>
+        </Point>
+
+        <Point>
+            <ID>0000008e</ID>
+            <Name>JP10166</Name>
+            <Code>WELD</Code>
+            <SurveyMethod>RTX</SurveyMethod>
+            <Classification>Normal</Classification>
+            <Features>
+                <Feature Name="WELD">
+                    <Attribute>
+                        <Name>TYPE</Name>
+                        <Value>MAIN LINE</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>0</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>ASSET_TYPE</Name>
+                        <Value>PIPE</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>7</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>WELDER_ID</Name>
+                        <Value>TT TB</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>XRAY_NUMBER</Name>
+                        <Value>W-32</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>JOINT_AHEAD</Name>
+                        <Value>PIPE</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>JOINT_BACK</Name>
+                        <Value>PIPE</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>HEAT_AHEAD</Name>
+                        <Value>A408724</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>HEAT_BACK</Name>
+                        <Value>A408724</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>DOC</Name>
+                        <Value>5</Value>
+                        <Type>Numeric</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>WALLTHICKNESS</Name>
+                        <Value>.322</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>MATERIAL</Name>
+                        <Value>STEEL</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>0</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>COATING_TYPE</Name>
+                        <Value>FBE</Value>
+                        <Type>Menu</Type>
+                        <ItemIndex>0</ItemIndex>
+                    </Attribute>
+                    <Attribute>
+                        <Name>DIAMETER</Name>
+                        <Value>8</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>GRADE</Name>
+                        <Value/>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>PIPE_SPEC</Name>
+                        <Value/>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>MANUFACTURER</Name>
+                        <Value>UNK</Value>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>NOTES</Name>
+                        <Value/>
+                        <Type>Text</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>ASB_STATION</Name>
+                        <Value/>
+                        <Type>Numeric</Type>
+                    </Attribute>
+                    <Attribute>
+                        <Name>Image</Name>
+                        <Value>JPA_031126_TOG_2025 Files\JP10166_WELD_20260311.jpg</Value>
+                        <Type>Photo</Type>
+                    </Attribute>
+                </Feature>
+            </Features>
+
+            <WGS84>
+                <Latitude>40.746065924175</Latitude>
+                <Longitude>-103.14187858508</Longitude>
+                <Height>1194.5289330008</Height>
+            </WGS84>
+
+            <Grid>
+                <North>464310.13702475</North>
+                <East>1113537.6652069</East>
+                <Elevation>1214.3021959059</Elevation>
+            </Grid>
+        </Point>
+
+        <Point>
+            <ID>00000097</ID>
+            <Name>JP10167</Name>
+            <Code>NATURAL_GROUND</Code>
+            <SurveyMethod>RTX</SurveyMethod>
+            <Classification>Normal</Classification>
+            <Features>
+                <Feature Name="NATURAL_GROUND">
+                    <Attribute>
+                        <Name>NOTES</Name>
+                        <Value/>
+                        <Type>Text</Type>
+                    </Attribute>
+                </Feature>
+            </Features>
+
+            <WGS84>
+                <Latitude>40.746025152065</Latitude>
+                <Longitude>-103.1418288388</Longitude>
+                <Height>1195.3343320396</Height>
+            </WGS84>
+
+            <Grid>
+                <North>464305.72266564</North>
+                <East>1113541.985524</East>
+                <Elevation>1215.1077054355</Elevation>
+            </Grid>
+        </Point>
+
+        <Point>
+            <ID>000000a0</ID>
+            <Name>JP10168</Name>
+            <Code>NATURAL_GROUND</Code>
+            <SurveyMethod>RTX</SurveyMethod>
+            <Classification>Normal</Classification>
+            <Features>
+                <Feature Name="NATURAL_GROUND">
+                    <Attribute>
+                        <Name>NOTES</Name>
+                        <Value/>
+                        <Type>Text</Type>
+                    </Attribute>
+                </Feature>
+            </Features>
+
+            <WGS84>
+                <Latitude>40.745972659327</Latitude>
+                <Longitude>-103.14184416627</Longitude>
+                <Height>1194.9022894055</Height>
+            </WGS84>
+
+            <Grid>
+                <North>464299.86107338</North>
+                <East>1113540.8464722</East>
+                <Elevation>1214.6756823949</Elevation>
+            </Grid>
+        </Point>
+
+        <Point>
+            <ID>000000b3</ID>
+            <Name>JP10169</Name>
+            <Code>CKS</Code>
+            <SurveyMethod>RTX</SurveyMethod>
+            <Classification>Normal</Classification>
+
+            <WGS84>
+                <Latitude>40.746062902008</Latitude>
+                <Longitude>-103.17121699922</Longitude>
+                <Height>1184.7933713375</Height>
+            </WGS84>
+
+            <Grid>
+                <North>464244.32642545</North>
+                <East>1111060.7116672</East>
+                <Elevation>1204.5247965739</Elevation>
+            </Grid>
+        </Point>
+    </Reductions>
+
+    <Environment>
+
+        <DisplaySettings>
+            <DistanceUnits>USSurveyFeet</DistanceUnits>
+            <HeightUnits>USSurveyFeet</HeightUnits>
+            <AngleUnits>DMSDegrees</AngleUnits>
+            <AzimuthFormat>Azimuth</AzimuthFormat>
+            <LatitudeLongitudeUnits>DMSDegrees</LatitudeLongitudeUnits>
+            <CoordinateOrder>North-East-Elevation</CoordinateOrder>
+            <TemperatureUnits>Celsius</TemperatureUnits>
+            <PressureUnits>MilliBar</PressureUnits>
+            <GradeUnits>Percentage</GradeUnits>
+            <AreaUnits>SquareMetres</AreaUnits>
+            <VolumeUnits>CubicMetres</VolumeUnits>
+            <StationingFormat>10+00.0</StationingFormat>
+            <StationIndexIncrement/>
+            <PrecisionUnits>DRMS</PrecisionUnits>
+            <DistanceDisplayDPs>3</DistanceDisplayDPs>
+            <CoordinateDisplayDPs>3</CoordinateDisplayDPs>
+            <AreaDisplayDPs>3</AreaDisplayDPs>
+            <VolumeDisplayDPs>3</VolumeDisplayDPs>
+            <AngleDisplayDPs>0</AngleDisplayDPs>
+            <LaserVADisplay>Inclination</LaserVADisplay>
+            <TimeFormat>Local</TimeFormat>
+            <MassUnits>Kilograms</MassUnits>
+            <MassDisplayDPs>3</MassDisplayDPs>
+        </DisplaySettings>
+
+        <CoordinateSystem>
+            <SystemName>United States/NAD83</SystemName>
+            <ZoneName>Colorado North 0501</ZoneName>
+            <DatumName>NAD83(2011)</DatumName>
+            <ZoneID>721</ZoneID>
+            <ProjectedCoordinateReferenceSystemEPSG>6429</ProjectedCoordinateReferenceSystemEPSG>
+            <CompoundCoordinateReferenceSystemEPSG/>
+            <Ellipsoid>
+                <EarthRadius>6378137</EarthRadius>
+                <Flattening>0.00335281068118</Flattening>
+                <LocalEllipsoidEPSG>7019</LocalEllipsoidEPSG>
+                <LocalEllipsoidID>23</LocalEllipsoidID>
+            </Ellipsoid>
+            <Projection>
+                <Type>Lambert2Parallel</Type>
+                <ShiftGridFileName/>
+                <CentralLatitude>39.333333333333</CentralLatitude>
+                <CentralLongitude>-105.5</CentralLongitude>
+                <FalseNorthing>304800.6096</FalseNorthing>
+                <FalseEasting>914401.8289</FalseEasting>
+                <Parallel1>40.783333333333</Parallel1>
+                <Parallel2>39.716666666667</Parallel2>
+                <SouthAzimuth>false</SouthAzimuth>
+                <GridOrientation>IncreasingNorthEast</GridOrientation>
+                <ApplySeaLevelCorrection>true</ApplySeaLevelCorrection>
+                <MagneticDeclination>0</MagneticDeclination>
+                <Distances>GridDistance</Distances>
+                <ReferenceAzimuth/>
+            </Projection>
+            <LocalSite>
+                <Type>Grid</Type>
+                <ProjectLocationLatitude/>
+                <ProjectLocationLongitude/>
+                <ProjectLocationHeight>5280</ProjectLocationHeight>
+            </LocalSite>
+            <Datum>
+                <Type>ThreeParameter</Type>
+                <Direction>WGS84ToLocal</Direction>
+                <EarthRadius>6378137</EarthRadius>
+                <Flattening>0.00335281067183</Flattening>
+                <TranslationX>0</TranslationX>
+                <TranslationY>0</TranslationY>
+                <TranslationZ>0</TranslationZ>
+                <ReferenceGlobalFrameID>23</ReferenceGlobalFrameID>
+                <ReferenceGlobalFrameISO>126</ReferenceGlobalFrameISO>
+                <ReferenceGlobalFrameEPSG>1116</ReferenceGlobalFrameEPSG>
+                <ReferenceGlobalFrameEpoch>2010.00</ReferenceGlobalFrameEpoch>
+                <ReferenceGlobalFrameName>NAD83(2011)</ReferenceGlobalFrameName>
+                <DisplacementModelName>HTDP V3.4.0</DisplacementModelName>
+                <LocalDatumID>234</LocalDatumID>
+                <LocalDatumEPSG>1116</LocalDatumEPSG>
+                <LocalGeographicCoordinateReferenceSystemEPSG>6318</LocalGeographicCoordinateReferenceSystemEPSG>
+                <GlobalGeographicCoordinateReferenceSystemEPSG>6318</GlobalGeographicCoordinateReferenceSystemEPSG>
+                <DatumTransformationEPSG/>
+            </Datum>
+            <DisplacementModels>
+                <DisplacementModel>
+                    <Name>ITRF2014</Name>
+                    <Realization>ITRF2014</Realization>
+                    <SystemID>172</SystemID>
+                    <Type>Tectonic</Type>
+                    <File>plate_rotations_from_itrf2014.xml</File>
+                    <MinEpoch>0</MinEpoch>
+                    <MaxEpoch>0</MaxEpoch>
+                    <MinimumLatitude>-90</MinimumLatitude>
+                    <MaximumLatitude>90</MaximumLatitude>
+                    <MinimumLongitude>-180</MinimumLongitude>
+                    <MaximumLongitude>180</MaximumLongitude>
+                </DisplacementModel>
+                <DisplacementModel>
+                    <Name>HTDP V3.4.0 ALASKA</Name>
+                    <Realization>NAD83(2011)</Realization>
+                    <SystemID>254</SystemID>
+                    <Type>Local</Type>
+                    <File>htdp_v3.4.0_alaska_20211019.xml</File>
+                    <MinEpoch>2010.00</MinEpoch>
+                    <MaxEpoch>0</MaxEpoch>
+                    <MinimumLatitude>54</MinimumLatitude>
+                    <MaximumLatitude>73</MaximumLatitude>
+                    <MinimumLongitude>-170</MinimumLongitude>
+                    <MaximumLongitude>-130</MaximumLongitude>
+                </DisplacementModel>
+                <DisplacementModel>
+                    <Name>HTDP V3.4.0 CONUS</Name>
+                    <Realization>NAD83(2011)</Realization>
+                    <SystemID>255</SystemID>
+                    <Type>Local</Type>
+                    <File>htdp_v3.4.0_conus_20211019.xml</File>
+                    <MinEpoch>2010.00</MinEpoch>
+                    <MaxEpoch>0</MaxEpoch>
+                    <MinimumLatitude>25</MinimumLatitude>
+                    <MaximumLatitude>49.75</MaximumLatitude>
+                    <MinimumLongitude>-125</MinimumLongitude>
+                    <MaximumLongitude>-66</MaximumLongitude>
+                </DisplacementModel>
+                <DisplacementModel>
+                    <Name>ITRF2020</Name>
+                    <Realization>ITRF2020</Realization>
+                    <SystemID>332</SystemID>
+                    <Type>Tectonic</Type>
+                    <File>plate_rotations_from_itrf2014.xml</File>
+                    <MinEpoch>0</MinEpoch>
+                    <MaxEpoch>0</MaxEpoch>
+                    <MinimumLatitude>-90</MinimumLatitude>
+                    <MaximumLatitude>90</MaximumLatitude>
+                    <MinimumLongitude>-180</MinimumLongitude>
+                    <MaximumLongitude>180</MaximumLongitude>
+                </DisplacementModel>
+            </DisplacementModels>
+            <KinematicTransformations>
+                <KinematicTransformation>
+                    <Name>ITRF2014 to NAD83(2011)</Name>
+                    <SystemID>232</SystemID>
+                    <SourceRealization>ITRF2014</SourceRealization>
+                    <TargetRealization>NAD83(2011)</TargetRealization>
+                    <ReferenceEpoch>2010.00</ReferenceEpoch>
+                    <Type>FourteenParameters</Type>
+                    <TranslationX>1.0053</TranslationX>
+                    <TranslationY>-1.90921</TranslationY>
+                    <TranslationZ>-0.54157</TranslationZ>
+                    <RotationX>-26.7815</RotationX>
+                    <RotationY>0.42078</RotationY>
+                    <RotationZ>-10.93254</RotationZ>
+                    <Scale>0.36891</Scale>
+                    <DerivativeTranslationX>0.00079</DerivativeTranslationX>
+                    <DerivativeTranslationY>-0.0006</DerivativeTranslationY>
+                    <DerivativeTranslationZ>-0.00144</DerivativeTranslationZ>
+                    <DerivativeRotationX>-0.06669</DerivativeRotationX>
+                    <DerivativeRotationY>0.75749</DerivativeRotationY>
+                    <DerivativeRotationZ>0.05129</DerivativeRotationZ>
+                    <DerivativeScale>-0.07201</DerivativeScale>
+                    <VelocityIncluded>false</VelocityIncluded>
+                </KinematicTransformation>
+                <KinematicTransformation>
+                    <Name>ITRF2020 to ITRF2014</Name>
+                    <SystemID>306</SystemID>
+                    <SourceRealization>ITRF2020</SourceRealization>
+                    <TargetRealization>ITRF2014</TargetRealization>
+                    <ReferenceEpoch>2015.00</ReferenceEpoch>
+                    <Type>FourteenParameters</Type>
+                    <TranslationX>-0.0014</TranslationX>
+                    <TranslationY>-0.0009</TranslationY>
+                    <TranslationZ>0.0014</TranslationZ>
+                    <RotationX>0</RotationX>
+                    <RotationY>0</RotationY>
+                    <RotationZ>0</RotationZ>
+                    <Scale>-0.42</Scale>
+                    <DerivativeTranslationX>0</DerivativeTranslationX>
+                    <DerivativeTranslationY>-0.0001</DerivativeTranslationY>
+                    <DerivativeTranslationZ>0.0002</DerivativeTranslationZ>
+                    <DerivativeRotationX>0</DerivativeRotationX>
+                    <DerivativeRotationY>0</DerivativeRotationY>
+                    <DerivativeRotationZ>0</DerivativeRotationZ>
+                    <DerivativeScale>0</DerivativeScale>
+                    <VelocityIncluded>false</VelocityIncluded>
+                </KinematicTransformation>
+            </KinematicTransformations>
+            <ReferenceFrameTransformations>
+                <ReferenceFrameTransformationInformation>
+                    <SourceFrameId>19</SourceFrameId>
+                    <SourceFrameEPSG>1165</SourceFrameEPSG>
+                    <SourceFrameISO>175</SourceFrameISO>
+                    <SourceFrameName>ITRF2014</SourceFrameName>
+                    <SourceFrameReferenceEpoch>2010.00</SourceFrameReferenceEpoch>
+                    <TargetFrameId>23</TargetFrameId>
+                    <TargetFrameEPSG>1116</TargetFrameEPSG>
+                    <TargetFrameISO>126</TargetFrameISO>
+                    <TargetFrameName>NAD83(2011)</TargetFrameName>
+                    <TargetFrameReferenceEpoch>2010.00</TargetFrameReferenceEpoch>
+                    <DisplacementModels>
+                        <SystemID>172</SystemID>
+                        <SystemID>255</SystemID>
+                        <SystemID>254</SystemID>
+                    </DisplacementModels>
+                    <KinematicTransformations>
+                        <SystemID>232</SystemID>
+                    </KinematicTransformations>
+                </ReferenceFrameTransformationInformation>
+                <ReferenceFrameTransformationInformation>
+                    <SourceFrameId>23</SourceFrameId>
+                    <SourceFrameEPSG>1116</SourceFrameEPSG>
+                    <SourceFrameISO>126</SourceFrameISO>
+                    <SourceFrameName>NAD83(2011)</SourceFrameName>
+                    <SourceFrameReferenceEpoch>2010.00</SourceFrameReferenceEpoch>
+                    <TargetFrameId>19</TargetFrameId>
+                    <TargetFrameEPSG>1165</TargetFrameEPSG>
+                    <TargetFrameISO>175</TargetFrameISO>
+                    <TargetFrameName>ITRF2014</TargetFrameName>
+                    <TargetFrameReferenceEpoch>2010.00</TargetFrameReferenceEpoch>
+                    <DisplacementModels>
+                        <SystemID>172</SystemID>
+                        <SystemID>255</SystemID>
+                        <SystemID>254</SystemID>
+                    </DisplacementModels>
+                    <KinematicTransformations>
+                        <SystemID>232</SystemID>
+                    </KinematicTransformations>
+                </ReferenceFrameTransformationInformation>
+                <ReferenceFrameTransformationInformation>
+                    <SourceFrameId>23</SourceFrameId>
+                    <SourceFrameEPSG>1116</SourceFrameEPSG>
+                    <SourceFrameISO>126</SourceFrameISO>
+                    <SourceFrameName>NAD83(2011)</SourceFrameName>
+                    <SourceFrameReferenceEpoch>2010.00</SourceFrameReferenceEpoch>
+                    <TargetFrameId>305</TargetFrameId>
+                    <TargetFrameEPSG>1322</TargetFrameEPSG>
+                    <TargetFrameISO>801</TargetFrameISO>
+                    <TargetFrameName>ITRF2020</TargetFrameName>
+                    <TargetFrameReferenceEpoch>2015.00</TargetFrameReferenceEpoch>
+                    <DisplacementModels>
+                        <SystemID>172</SystemID>
+                        <SystemID>332</SystemID>
+                        <SystemID>255</SystemID>
+                        <SystemID>254</SystemID>
+                    </DisplacementModels>
+                    <KinematicTransformations>
+                        <SystemID>232</SystemID>
+                        <SystemID>306</SystemID>
+                    </KinematicTransformations>
+                </ReferenceFrameTransformationInformation>
+                <ReferenceFrameTransformationInformation>
+                    <SourceFrameId>305</SourceFrameId>
+                    <SourceFrameEPSG>1322</SourceFrameEPSG>
+                    <SourceFrameISO>801</SourceFrameISO>
+                    <SourceFrameName>ITRF2020</SourceFrameName>
+                    <SourceFrameReferenceEpoch>2015.00</SourceFrameReferenceEpoch>
+                    <TargetFrameId>23</TargetFrameId>
+                    <TargetFrameEPSG>1116</TargetFrameEPSG>
+                    <TargetFrameISO>126</TargetFrameISO>
+                    <TargetFrameName>NAD83(2011)</TargetFrameName>
+                    <TargetFrameReferenceEpoch>2010.00</TargetFrameReferenceEpoch>
+                    <DisplacementModels>
+                        <SystemID>172</SystemID>
+                        <SystemID>332</SystemID>
+                        <SystemID>255</SystemID>
+                        <SystemID>254</SystemID>
+                    </DisplacementModels>
+                    <KinematicTransformations>
+                        <SystemID>306</SystemID>
+                        <SystemID>232</SystemID>
+                    </KinematicTransformations>
+                </ReferenceFrameTransformationInformation>
+            </ReferenceFrameTransformations>
+            <HorizontalAdjustment>
+                <Type>NoAdjustment</Type>
+            </HorizontalAdjustment>
+            <VerticalAdjustment>
+                <Type>GeoidModel</Type>
+                <GeoidName>GEOID18 (Conus) Fixed</GeoidName>
+                <GeoidID/>
+                <VerticalCoordinateReferenceSystemEPSG/>
+                <VerticalDatumEPSG/>
+            </VerticalAdjustment>
+            <CombinedScaleFactor>
+                <Location>
+                    <Latitude>40.74604439834</Latitude>
+                    <Longitude>-103.14677368979</Longitude>
+                    <Height>5280</Height>
+                </Location>
+                <Scale>0.99916660820707</Scale>
+            </CombinedScaleFactor>
+            <TectonicPlate>
+                <Name>Unknown</Name>
+            </TectonicPlate>
+        </CoordinateSystem>
+
+        <JobProperties>
+            <Reference/>
+            <Description/>
+            <Operator/>
+            <JobNote/>
+            <TectonicPlate>Unknown</TectonicPlate>
+            <ApplyJobPointNameRange>false</ApplyJobPointNameRange>
+            <MinimumJobPointName/>
+            <MaximumJobPointName/>
+        </JobProperties>
+
+        <JobSettings>
+            <NeighbourhoodAdjustment>
+                <Applied>false</Applied>
+                <WeightExponent>0.5</WeightExponent>
+            </NeighbourhoodAdjustment>
+            <Averaging>Weighted</Averaging>
+            <UseAttributesOfBaseCode>true</UseAttributesOfBaseCode>
+        </JobSettings>
+
+        <AssociatedFiles>
+            <LinkedFiles/>
+            <ActiveMapFiles>
+                <File Selectable="true">C:\ProgramData\Trimble\Trimble Data\System Files\ZONE 5.dxf</File>
+                <File Selectable="true">C:\Users\FPI\Downloads\ZONE 1.dxf</File>
+                <File Selectable="true">C:\ProgramData\Trimble\Trimble Data\System Files\COLORADO_NORTH_021926.csv</File>
+            </ActiveMapFiles>
+            <FeatureCodeLibrary>TallGrass_Survey_Codes_TRIMBLE_v20210408_MOD.fxl</FeatureCodeLibrary>
+            <ExportedFiles>
+                <File>JPA_031126_TOG_2025.csv</File>
+            </ExportedFiles>
+            <DefinitionFiles/>
+        </AssociatedFiles>
+
+        <TimeZone>
+            <ZoneName>Mountain Daylight Time</ZoneName>
+            <HoursToUTC>6</HoursToUTC>
+        </TimeZone>
+    </Environment>
+</JOBFile>

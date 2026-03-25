@@ -1,0 +1,47 @@
+{
+  "folders": [
+    {
+      "path": ".",
+      "name": "DataValidationTool v3.1"
+    }
+  ],
+  "settings": {
+    "python.defaultInterpreterPath": "${workspaceFolder}/venv/Scripts/python.exe",
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "files.exclude": {
+      "**/__pycache__": true,
+      "**/*.pyc": true,
+      "build/**": true,
+      "dist/**": true,
+      "venv/**": true,
+      "output/**": true
+    },
+    "files.associations": {
+      "*.fxl": "xml"
+    },
+    "python.analysis.extraPaths": [],
+    "editor.rulers": [120]
+  },
+  "extensions": {
+    "recommendations": [
+      "ms-python.python",
+      "ms-python.pylance",
+      "ms-python.debugpy"
+    ]
+  },
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Run DataValidationTool",
+        "type": "debugpy",
+        "request": "launch",
+        "program": "${workspaceFolder}/DataValidationTool-v3.1.py",
+        "console": "integratedTerminal",
+        "cwd": "${workspaceFolder}",
+        "python": "${workspaceFolder}/venv/Scripts/python.exe"
+      }
+    ]
+  }
+}

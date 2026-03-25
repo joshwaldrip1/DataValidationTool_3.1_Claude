@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls \"/c/Program Files \\(x86\\)/Inno Setup 6/ISCC.exe\")",
+      "Read(//c/Program Files/Inno Setup 6/**)",
+      "Bash(\"/c/JOSH'S PROGRAMS/DataValidationTool_3.1_Claude/venv/Scripts/python.exe\" -c \"import sys; print\\(sys.version\\)\")",
+      "Bash(pip install:*)"
+    ]
+  }
+}
