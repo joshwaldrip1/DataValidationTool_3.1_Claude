@@ -140,6 +140,14 @@
   ('bisect', 'C:\\Python313\\Lib\\bisect.py', 'PYMODULE'),
   ('bz2', 'C:\\Python313\\Lib\\bz2.py', 'PYMODULE'),
   ('calendar', 'C:\\Python313\\Lib\\calendar.py', 'PYMODULE'),
+  ('certifi',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\certifi\\__init__.py',
+   'PYMODULE'),
+  ('certifi.core',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\certifi\\core.py',
+   'PYMODULE'),
   ('cmd', 'C:\\Python313\\Lib\\cmd.py', 'PYMODULE'),
   ('code', 'C:\\Python313\\Lib\\code.py', 'PYMODULE'),
   ('codeop', 'C:\\Python313\\Lib\\codeop.py', 'PYMODULE'),
@@ -292,8 +300,2120 @@
    "C:\\JOSH'S "
    'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\et_xmlfile\\xmlfile.py',
    'PYMODULE'),
+  ('ezdxf',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\__init__.py',
+   'PYMODULE'),
+  ('ezdxf.__main__',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\__main__.py',
+   'PYMODULE'),
+  ('ezdxf._options',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\_options.py',
+   'PYMODULE'),
+  ('ezdxf.acc',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\acc\\__init__.py',
+   'PYMODULE'),
+  ('ezdxf.acis',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\acis\\__init__.py',
+   'PYMODULE'),
+  ('ezdxf.acis.abstract',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\acis\\abstract.py',
+   'PYMODULE'),
+  ('ezdxf.acis.api',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\acis\\api.py',
+   'PYMODULE'),
+  ('ezdxf.acis.cache',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\acis\\cache.py',
+   'PYMODULE'),
+  ('ezdxf.acis.const',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\acis\\const.py',
+   'PYMODULE'),
+  ('ezdxf.acis.dbg',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\acis\\dbg.py',
+   'PYMODULE'),
+  ('ezdxf.acis.dxf',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\acis\\dxf.py',
+   'PYMODULE'),
+  ('ezdxf.acis.entities',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\acis\\entities.py',
+   'PYMODULE'),
+  ('ezdxf.acis.hdr',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\acis\\hdr.py',
+   'PYMODULE'),
+  ('ezdxf.acis.mesh',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\acis\\mesh.py',
+   'PYMODULE'),
+  ('ezdxf.acis.sab',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\acis\\sab.py',
+   'PYMODULE'),
+  ('ezdxf.acis.sat',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\acis\\sat.py',
+   'PYMODULE'),
+  ('ezdxf.acis.type_hints',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\acis\\type_hints.py',
+   'PYMODULE'),
+  ('ezdxf.addons',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\__init__.py',
+   'PYMODULE'),
+  ('ezdxf.addons.acadctb',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\acadctb.py',
+   'PYMODULE'),
+  ('ezdxf.addons.acisbrowser',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\acisbrowser\\__init__.py',
+   'PYMODULE'),
+  ('ezdxf.addons.acisbrowser.browser',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\acisbrowser\\browser.py',
+   'PYMODULE'),
+  ('ezdxf.addons.acisbrowser.data',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\acisbrowser\\data.py',
+   'PYMODULE'),
+  ('ezdxf.addons.binpacking',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\binpacking.py',
+   'PYMODULE'),
+  ('ezdxf.addons.browser',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\browser\\__init__.py',
+   'PYMODULE'),
+  ('ezdxf.addons.browser.bookmarks',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\browser\\bookmarks.py',
+   'PYMODULE'),
+  ('ezdxf.addons.browser.browser',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\browser\\browser.py',
+   'PYMODULE'),
+  ('ezdxf.addons.browser.data',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\browser\\data.py',
+   'PYMODULE'),
+  ('ezdxf.addons.browser.find_dialog',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\browser\\find_dialog.py',
+   'PYMODULE'),
+  ('ezdxf.addons.browser.loader',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\browser\\loader.py',
+   'PYMODULE'),
+  ('ezdxf.addons.browser.model',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\browser\\model.py',
+   'PYMODULE'),
+  ('ezdxf.addons.browser.reflinks',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\browser\\reflinks.py',
+   'PYMODULE'),
+  ('ezdxf.addons.browser.tags',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\browser\\tags.py',
+   'PYMODULE'),
+  ('ezdxf.addons.browser.views',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\browser\\views.py',
+   'PYMODULE'),
+  ('ezdxf.addons.dimlines',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\dimlines.py',
+   'PYMODULE'),
+  ('ezdxf.addons.drawing',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\drawing\\__init__.py',
+   'PYMODULE'),
+  ('ezdxf.addons.drawing.backend',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\drawing\\backend.py',
+   'PYMODULE'),
+  ('ezdxf.addons.drawing.config',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\drawing\\config.py',
+   'PYMODULE'),
+  ('ezdxf.addons.drawing.dxf',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\drawing\\dxf.py',
+   'PYMODULE'),
+  ('ezdxf.addons.drawing.file_output',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\drawing\\file_output.py',
+   'PYMODULE'),
+  ('ezdxf.addons.drawing.frontend',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\drawing\\frontend.py',
+   'PYMODULE'),
+  ('ezdxf.addons.drawing.gfxproxy',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\drawing\\gfxproxy.py',
+   'PYMODULE'),
+  ('ezdxf.addons.drawing.layout',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\drawing\\layout.py',
+   'PYMODULE'),
+  ('ezdxf.addons.drawing.matplotlib',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\drawing\\matplotlib.py',
+   'PYMODULE'),
+  ('ezdxf.addons.drawing.mtext_complex',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\drawing\\mtext_complex.py',
+   'PYMODULE'),
+  ('ezdxf.addons.drawing.pipeline',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\drawing\\pipeline.py',
+   'PYMODULE'),
+  ('ezdxf.addons.drawing.properties',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\drawing\\properties.py',
+   'PYMODULE'),
+  ('ezdxf.addons.drawing.pymupdf',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\drawing\\pymupdf.py',
+   'PYMODULE'),
+  ('ezdxf.addons.drawing.pyqt',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\drawing\\pyqt.py',
+   'PYMODULE'),
+  ('ezdxf.addons.drawing.qtviewer',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\drawing\\qtviewer.py',
+   'PYMODULE'),
+  ('ezdxf.addons.drawing.recorder',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\drawing\\recorder.py',
+   'PYMODULE'),
+  ('ezdxf.addons.drawing.svg',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\drawing\\svg.py',
+   'PYMODULE'),
+  ('ezdxf.addons.drawing.text',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\drawing\\text.py',
+   'PYMODULE'),
+  ('ezdxf.addons.drawing.text_renderer',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\drawing\\text_renderer.py',
+   'PYMODULE'),
+  ('ezdxf.addons.drawing.type_hints',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\drawing\\type_hints.py',
+   'PYMODULE'),
+  ('ezdxf.addons.drawing.unified_text_renderer',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\drawing\\unified_text_renderer.py',
+   'PYMODULE'),
+  ('ezdxf.addons.dwg',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\dwg\\__init__.py',
+   'PYMODULE'),
+  ('ezdxf.addons.dwg.classes_section',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\dwg\\classes_section.py',
+   'PYMODULE'),
+  ('ezdxf.addons.dwg.const',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\dwg\\const.py',
+   'PYMODULE'),
+  ('ezdxf.addons.dwg.crc',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\dwg\\crc.py',
+   'PYMODULE'),
+  ('ezdxf.addons.dwg.fileheader',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\dwg\\fileheader.py',
+   'PYMODULE'),
+  ('ezdxf.addons.dwg.header_section',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\dwg\\header_section.py',
+   'PYMODULE'),
+  ('ezdxf.addons.dwg.loader',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\dwg\\loader.py',
+   'PYMODULE'),
+  ('ezdxf.addons.dxf2code',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\dxf2code.py',
+   'PYMODULE'),
+  ('ezdxf.addons.genetic_algorithm',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\genetic_algorithm.py',
+   'PYMODULE'),
+  ('ezdxf.addons.geo',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\geo.py',
+   'PYMODULE'),
+  ('ezdxf.addons.gerber_D6673',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\gerber_D6673.py',
+   'PYMODULE'),
+  ('ezdxf.addons.hpgl2',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\hpgl2\\__init__.py',
+   'PYMODULE'),
+  ('ezdxf.addons.hpgl2.api',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\hpgl2\\api.py',
+   'PYMODULE'),
+  ('ezdxf.addons.hpgl2.backend',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\hpgl2\\backend.py',
+   'PYMODULE'),
+  ('ezdxf.addons.hpgl2.deps',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\hpgl2\\deps.py',
+   'PYMODULE'),
+  ('ezdxf.addons.hpgl2.interpreter',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\hpgl2\\interpreter.py',
+   'PYMODULE'),
+  ('ezdxf.addons.hpgl2.page',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\hpgl2\\page.py',
+   'PYMODULE'),
+  ('ezdxf.addons.hpgl2.plotter',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\hpgl2\\plotter.py',
+   'PYMODULE'),
+  ('ezdxf.addons.hpgl2.polygon_buffer',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\hpgl2\\polygon_buffer.py',
+   'PYMODULE'),
+  ('ezdxf.addons.hpgl2.properties',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\hpgl2\\properties.py',
+   'PYMODULE'),
+  ('ezdxf.addons.hpgl2.tokenizer',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\hpgl2\\tokenizer.py',
+   'PYMODULE'),
+  ('ezdxf.addons.hpgl2.viewer',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\hpgl2\\viewer.py',
+   'PYMODULE'),
+  ('ezdxf.addons.importer',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\importer.py',
+   'PYMODULE'),
+  ('ezdxf.addons.iterdxf',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\iterdxf.py',
+   'PYMODULE'),
+  ('ezdxf.addons.menger_sponge',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\menger_sponge.py',
+   'PYMODULE'),
+  ('ezdxf.addons.meshex',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\meshex.py',
+   'PYMODULE'),
+  ('ezdxf.addons.mixins',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\mixins.py',
+   'PYMODULE'),
+  ('ezdxf.addons.mtextsurrogate',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\mtextsurrogate.py',
+   'PYMODULE'),
+  ('ezdxf.addons.mtxpl',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\mtxpl.py',
+   'PYMODULE'),
+  ('ezdxf.addons.odafc',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\odafc.py',
+   'PYMODULE'),
+  ('ezdxf.addons.openscad',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\openscad.py',
+   'PYMODULE'),
+  ('ezdxf.addons.pycsg',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\pycsg.py',
+   'PYMODULE'),
+  ('ezdxf.addons.r12export',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\r12export.py',
+   'PYMODULE'),
+  ('ezdxf.addons.r12writer',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\r12writer.py',
+   'PYMODULE'),
+  ('ezdxf.addons.sierpinski_pyramid',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\sierpinski_pyramid.py',
+   'PYMODULE'),
+  ('ezdxf.addons.tablepainter',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\tablepainter.py',
+   'PYMODULE'),
+  ('ezdxf.addons.text2path',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\text2path.py',
+   'PYMODULE'),
+  ('ezdxf.addons.xplayer',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\xplayer.py',
+   'PYMODULE'),
+  ('ezdxf.addons.xqt',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\addons\\xqt.py',
+   'PYMODULE'),
+  ('ezdxf.appsettings',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\appsettings.py',
+   'PYMODULE'),
+  ('ezdxf.audit',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\audit.py',
+   'PYMODULE'),
+  ('ezdxf.bbox',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\bbox.py',
+   'PYMODULE'),
+  ('ezdxf.blkrefs',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\blkrefs.py',
+   'PYMODULE'),
+  ('ezdxf.colors',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\colors.py',
+   'PYMODULE'),
+  ('ezdxf.commands',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\commands.py',
+   'PYMODULE'),
+  ('ezdxf.comments',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\comments.py',
+   'PYMODULE'),
+  ('ezdxf.disassemble',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\disassemble.py',
+   'PYMODULE'),
+  ('ezdxf.document',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\document.py',
+   'PYMODULE'),
+  ('ezdxf.dwginfo',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\dwginfo.py',
+   'PYMODULE'),
+  ('ezdxf.dynblkhelper',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\dynblkhelper.py',
+   'PYMODULE'),
+  ('ezdxf.edgeminer',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\edgeminer.py',
+   'PYMODULE'),
+  ('ezdxf.edgesmith',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\edgesmith.py',
+   'PYMODULE'),
+  ('ezdxf.entities',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\__init__.py',
+   'PYMODULE'),
+  ('ezdxf.entities.acad_proxy_entity',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\acad_proxy_entity.py',
+   'PYMODULE'),
+  ('ezdxf.entities.acad_table',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\acad_table.py',
+   'PYMODULE'),
+  ('ezdxf.entities.acad_xrec_roundtrip',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\acad_xrec_roundtrip.py',
+   'PYMODULE'),
+  ('ezdxf.entities.acis',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\acis.py',
+   'PYMODULE'),
+  ('ezdxf.entities.appdata',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\appdata.py',
+   'PYMODULE'),
+  ('ezdxf.entities.appid',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\appid.py',
+   'PYMODULE'),
+  ('ezdxf.entities.arc',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\arc.py',
+   'PYMODULE'),
+  ('ezdxf.entities.attrib',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\attrib.py',
+   'PYMODULE'),
+  ('ezdxf.entities.block',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\block.py',
+   'PYMODULE'),
+  ('ezdxf.entities.blockrecord',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\blockrecord.py',
+   'PYMODULE'),
+  ('ezdxf.entities.boundary_paths',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\boundary_paths.py',
+   'PYMODULE'),
+  ('ezdxf.entities.circle',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\circle.py',
+   'PYMODULE'),
+  ('ezdxf.entities.copy',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\copy.py',
+   'PYMODULE'),
+  ('ezdxf.entities.dictionary',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\dictionary.py',
+   'PYMODULE'),
+  ('ezdxf.entities.dimension',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\dimension.py',
+   'PYMODULE'),
+  ('ezdxf.entities.dimstyle',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\dimstyle.py',
+   'PYMODULE'),
+  ('ezdxf.entities.dimstyleoverride',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\dimstyleoverride.py',
+   'PYMODULE'),
+  ('ezdxf.entities.dxfclass',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\dxfclass.py',
+   'PYMODULE'),
+  ('ezdxf.entities.dxfentity',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\dxfentity.py',
+   'PYMODULE'),
+  ('ezdxf.entities.dxfgfx',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\dxfgfx.py',
+   'PYMODULE'),
+  ('ezdxf.entities.dxfgroups',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\dxfgroups.py',
+   'PYMODULE'),
+  ('ezdxf.entities.dxfns',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\dxfns.py',
+   'PYMODULE'),
+  ('ezdxf.entities.dxfobj',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\dxfobj.py',
+   'PYMODULE'),
+  ('ezdxf.entities.ellipse',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\ellipse.py',
+   'PYMODULE'),
+  ('ezdxf.entities.factory',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\factory.py',
+   'PYMODULE'),
+  ('ezdxf.entities.geodata',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\geodata.py',
+   'PYMODULE'),
+  ('ezdxf.entities.gradient',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\gradient.py',
+   'PYMODULE'),
+  ('ezdxf.entities.hatch',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\hatch.py',
+   'PYMODULE'),
+  ('ezdxf.entities.helix',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\helix.py',
+   'PYMODULE'),
+  ('ezdxf.entities.idbuffer',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\idbuffer.py',
+   'PYMODULE'),
+  ('ezdxf.entities.image',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\image.py',
+   'PYMODULE'),
+  ('ezdxf.entities.insert',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\insert.py',
+   'PYMODULE'),
+  ('ezdxf.entities.layer',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\layer.py',
+   'PYMODULE'),
+  ('ezdxf.entities.layout',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\layout.py',
+   'PYMODULE'),
+  ('ezdxf.entities.leader',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\leader.py',
+   'PYMODULE'),
+  ('ezdxf.entities.light',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\light.py',
+   'PYMODULE'),
+  ('ezdxf.entities.line',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\line.py',
+   'PYMODULE'),
+  ('ezdxf.entities.ltype',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\ltype.py',
+   'PYMODULE'),
+  ('ezdxf.entities.lwpolyline',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\lwpolyline.py',
+   'PYMODULE'),
+  ('ezdxf.entities.material',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\material.py',
+   'PYMODULE'),
+  ('ezdxf.entities.mesh',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\mesh.py',
+   'PYMODULE'),
+  ('ezdxf.entities.mleader',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\mleader.py',
+   'PYMODULE'),
+  ('ezdxf.entities.mline',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\mline.py',
+   'PYMODULE'),
+  ('ezdxf.entities.mpolygon',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\mpolygon.py',
+   'PYMODULE'),
+  ('ezdxf.entities.mtext',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\mtext.py',
+   'PYMODULE'),
+  ('ezdxf.entities.mtext_columns',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\mtext_columns.py',
+   'PYMODULE'),
+  ('ezdxf.entities.objectcollection',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\objectcollection.py',
+   'PYMODULE'),
+  ('ezdxf.entities.oleframe',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\oleframe.py',
+   'PYMODULE'),
+  ('ezdxf.entities.pattern',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\pattern.py',
+   'PYMODULE'),
+  ('ezdxf.entities.point',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\point.py',
+   'PYMODULE'),
+  ('ezdxf.entities.polygon',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\polygon.py',
+   'PYMODULE'),
+  ('ezdxf.entities.polyline',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\polyline.py',
+   'PYMODULE'),
+  ('ezdxf.entities.shape',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\shape.py',
+   'PYMODULE'),
+  ('ezdxf.entities.solid',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\solid.py',
+   'PYMODULE'),
+  ('ezdxf.entities.spatial_filter',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\spatial_filter.py',
+   'PYMODULE'),
+  ('ezdxf.entities.spline',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\spline.py',
+   'PYMODULE'),
+  ('ezdxf.entities.subentity',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\subentity.py',
+   'PYMODULE'),
+  ('ezdxf.entities.sun',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\sun.py',
+   'PYMODULE'),
+  ('ezdxf.entities.table',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\table.py',
+   'PYMODULE'),
+  ('ezdxf.entities.temporary_transform',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\temporary_transform.py',
+   'PYMODULE'),
+  ('ezdxf.entities.text',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\text.py',
+   'PYMODULE'),
+  ('ezdxf.entities.textstyle',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\textstyle.py',
+   'PYMODULE'),
+  ('ezdxf.entities.tolerance',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\tolerance.py',
+   'PYMODULE'),
+  ('ezdxf.entities.ucs',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\ucs.py',
+   'PYMODULE'),
+  ('ezdxf.entities.underlay',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\underlay.py',
+   'PYMODULE'),
+  ('ezdxf.entities.view',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\view.py',
+   'PYMODULE'),
+  ('ezdxf.entities.viewport',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\viewport.py',
+   'PYMODULE'),
+  ('ezdxf.entities.visualstyle',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\visualstyle.py',
+   'PYMODULE'),
+  ('ezdxf.entities.vport',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\vport.py',
+   'PYMODULE'),
+  ('ezdxf.entities.xdata',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\xdata.py',
+   'PYMODULE'),
+  ('ezdxf.entities.xdict',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\xdict.py',
+   'PYMODULE'),
+  ('ezdxf.entities.xline',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entities\\xline.py',
+   'PYMODULE'),
+  ('ezdxf.entitydb',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\entitydb.py',
+   'PYMODULE'),
+  ('ezdxf.enums',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\enums.py',
+   'PYMODULE'),
+  ('ezdxf.explode',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\explode.py',
+   'PYMODULE'),
+  ('ezdxf.eztypes',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\eztypes.py',
+   'PYMODULE'),
+  ('ezdxf.filemanagement',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\filemanagement.py',
+   'PYMODULE'),
+  ('ezdxf.fonts',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\fonts\\__init__.py',
+   'PYMODULE'),
+  ('ezdxf.fonts.font_face',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\fonts\\font_face.py',
+   'PYMODULE'),
+  ('ezdxf.fonts.font_manager',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\fonts\\font_manager.py',
+   'PYMODULE'),
+  ('ezdxf.fonts.font_measurements',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\fonts\\font_measurements.py',
+   'PYMODULE'),
+  ('ezdxf.fonts.font_synonyms',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\fonts\\font_synonyms.py',
+   'PYMODULE'),
+  ('ezdxf.fonts.fonts',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\fonts\\fonts.py',
+   'PYMODULE'),
+  ('ezdxf.fonts.glyphs',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\fonts\\glyphs.py',
+   'PYMODULE'),
+  ('ezdxf.fonts.lff',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\fonts\\lff.py',
+   'PYMODULE'),
+  ('ezdxf.fonts.shapefile',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\fonts\\shapefile.py',
+   'PYMODULE'),
+  ('ezdxf.fonts.ttfonts',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\fonts\\ttfonts.py',
+   'PYMODULE'),
+  ('ezdxf.gfxattribs',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\gfxattribs.py',
+   'PYMODULE'),
+  ('ezdxf.graphicsfactory',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\graphicsfactory.py',
+   'PYMODULE'),
+  ('ezdxf.groupby',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\groupby.py',
+   'PYMODULE'),
+  ('ezdxf.layouts',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\layouts\\__init__.py',
+   'PYMODULE'),
+  ('ezdxf.layouts.base',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\layouts\\base.py',
+   'PYMODULE'),
+  ('ezdxf.layouts.blocklayout',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\layouts\\blocklayout.py',
+   'PYMODULE'),
+  ('ezdxf.layouts.layout',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\layouts\\layout.py',
+   'PYMODULE'),
+  ('ezdxf.layouts.layouts',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\layouts\\layouts.py',
+   'PYMODULE'),
+  ('ezdxf.lldxf',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\lldxf\\__init__.py',
+   'PYMODULE'),
+  ('ezdxf.lldxf.attributes',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\lldxf\\attributes.py',
+   'PYMODULE'),
+  ('ezdxf.lldxf.const',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\lldxf\\const.py',
+   'PYMODULE'),
+  ('ezdxf.lldxf.encoding',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\lldxf\\encoding.py',
+   'PYMODULE'),
+  ('ezdxf.lldxf.extendedtags',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\lldxf\\extendedtags.py',
+   'PYMODULE'),
+  ('ezdxf.lldxf.fileindex',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\lldxf\\fileindex.py',
+   'PYMODULE'),
+  ('ezdxf.lldxf.hdrvars',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\lldxf\\hdrvars.py',
+   'PYMODULE'),
+  ('ezdxf.lldxf.loader',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\lldxf\\loader.py',
+   'PYMODULE'),
+  ('ezdxf.lldxf.packedtags',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\lldxf\\packedtags.py',
+   'PYMODULE'),
+  ('ezdxf.lldxf.repair',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\lldxf\\repair.py',
+   'PYMODULE'),
+  ('ezdxf.lldxf.tagger',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\lldxf\\tagger.py',
+   'PYMODULE'),
+  ('ezdxf.lldxf.tags',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\lldxf\\tags.py',
+   'PYMODULE'),
+  ('ezdxf.lldxf.tagwriter',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\lldxf\\tagwriter.py',
+   'PYMODULE'),
+  ('ezdxf.lldxf.types',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\lldxf\\types.py',
+   'PYMODULE'),
+  ('ezdxf.lldxf.validator',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\lldxf\\validator.py',
+   'PYMODULE'),
+  ('ezdxf.math',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\math\\__init__.py',
+   'PYMODULE'),
+  ('ezdxf.math._bezier3p',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\math\\_bezier3p.py',
+   'PYMODULE'),
+  ('ezdxf.math._bezier4p',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\math\\_bezier4p.py',
+   'PYMODULE'),
+  ('ezdxf.math._bspline',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\math\\_bspline.py',
+   'PYMODULE'),
+  ('ezdxf.math._construct',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\math\\_construct.py',
+   'PYMODULE'),
+  ('ezdxf.math._ctypes',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\math\\_ctypes.py',
+   'PYMODULE'),
+  ('ezdxf.math._mapbox_earcut',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\math\\_mapbox_earcut.py',
+   'PYMODULE'),
+  ('ezdxf.math._matrix44',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\math\\_matrix44.py',
+   'PYMODULE'),
+  ('ezdxf.math._vector',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\math\\_vector.py',
+   'PYMODULE'),
+  ('ezdxf.math.arc',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\math\\arc.py',
+   'PYMODULE'),
+  ('ezdxf.math.bbox',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\math\\bbox.py',
+   'PYMODULE'),
+  ('ezdxf.math.bezier',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\math\\bezier.py',
+   'PYMODULE'),
+  ('ezdxf.math.bezier_interpolation',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\math\\bezier_interpolation.py',
+   'PYMODULE'),
+  ('ezdxf.math.box',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\math\\box.py',
+   'PYMODULE'),
+  ('ezdxf.math.bspline',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\math\\bspline.py',
+   'PYMODULE'),
+  ('ezdxf.math.bulge',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\math\\bulge.py',
+   'PYMODULE'),
+  ('ezdxf.math.circle',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\math\\circle.py',
+   'PYMODULE'),
+  ('ezdxf.math.clipping',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\math\\clipping.py',
+   'PYMODULE'),
+  ('ezdxf.math.clustering',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\math\\clustering.py',
+   'PYMODULE'),
+  ('ezdxf.math.construct2d',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\math\\construct2d.py',
+   'PYMODULE'),
+  ('ezdxf.math.construct3d',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\math\\construct3d.py',
+   'PYMODULE'),
+  ('ezdxf.math.cspline',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\math\\cspline.py',
+   'PYMODULE'),
+  ('ezdxf.math.curvetools',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\math\\curvetools.py',
+   'PYMODULE'),
+  ('ezdxf.math.ellipse',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\math\\ellipse.py',
+   'PYMODULE'),
+  ('ezdxf.math.eulerspiral',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\math\\eulerspiral.py',
+   'PYMODULE'),
+  ('ezdxf.math.legacy',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\math\\legacy.py',
+   'PYMODULE'),
+  ('ezdxf.math.linalg',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\math\\linalg.py',
+   'PYMODULE'),
+  ('ezdxf.math.line',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\math\\line.py',
+   'PYMODULE'),
+  ('ezdxf.math.offset2d',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\math\\offset2d.py',
+   'PYMODULE'),
+  ('ezdxf.math.parametrize',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\math\\parametrize.py',
+   'PYMODULE'),
+  ('ezdxf.math.perlin',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\math\\perlin.py',
+   'PYMODULE'),
+  ('ezdxf.math.polyline',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\math\\polyline.py',
+   'PYMODULE'),
+  ('ezdxf.math.rtree',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\math\\rtree.py',
+   'PYMODULE'),
+  ('ezdxf.math.shape',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\math\\shape.py',
+   'PYMODULE'),
+  ('ezdxf.math.transformtools',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\math\\transformtools.py',
+   'PYMODULE'),
+  ('ezdxf.math.triangulation',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\math\\triangulation.py',
+   'PYMODULE'),
+  ('ezdxf.math.ucs',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\math\\ucs.py',
+   'PYMODULE'),
+  ('ezdxf.messenger',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\messenger.py',
+   'PYMODULE'),
+  ('ezdxf.msgtypes',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\msgtypes.py',
+   'PYMODULE'),
+  ('ezdxf.npshapes',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\npshapes.py',
+   'PYMODULE'),
+  ('ezdxf.path',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\path\\__init__.py',
+   'PYMODULE'),
+  ('ezdxf.path.commands',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\path\\commands.py',
+   'PYMODULE'),
+  ('ezdxf.path.converter',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\path\\converter.py',
+   'PYMODULE'),
+  ('ezdxf.path.nesting',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\path\\nesting.py',
+   'PYMODULE'),
+  ('ezdxf.path.path',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\path\\path.py',
+   'PYMODULE'),
+  ('ezdxf.path.shapes',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\path\\shapes.py',
+   'PYMODULE'),
+  ('ezdxf.path.tools',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\path\\tools.py',
+   'PYMODULE'),
+  ('ezdxf.protocols',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\protocols.py',
+   'PYMODULE'),
+  ('ezdxf.proxygraphic',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\proxygraphic.py',
+   'PYMODULE'),
+  ('ezdxf.query',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\query.py',
+   'PYMODULE'),
+  ('ezdxf.queryparser',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\queryparser.py',
+   'PYMODULE'),
+  ('ezdxf.r12strict',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\r12strict.py',
+   'PYMODULE'),
+  ('ezdxf.recover',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\recover.py',
+   'PYMODULE'),
+  ('ezdxf.render',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\render\\__init__.py',
+   'PYMODULE'),
+  ('ezdxf.render._linetypes',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\render\\_linetypes.py',
+   'PYMODULE'),
+  ('ezdxf.render.abstract_mtext_renderer',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\render\\abstract_mtext_renderer.py',
+   'PYMODULE'),
+  ('ezdxf.render.arrows',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\render\\arrows.py',
+   'PYMODULE'),
+  ('ezdxf.render.curves',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\render\\curves.py',
+   'PYMODULE'),
+  ('ezdxf.render.dim_base',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\render\\dim_base.py',
+   'PYMODULE'),
+  ('ezdxf.render.dim_curved',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\render\\dim_curved.py',
+   'PYMODULE'),
+  ('ezdxf.render.dim_diameter',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\render\\dim_diameter.py',
+   'PYMODULE'),
+  ('ezdxf.render.dim_linear',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\render\\dim_linear.py',
+   'PYMODULE'),
+  ('ezdxf.render.dim_ordinate',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\render\\dim_ordinate.py',
+   'PYMODULE'),
+  ('ezdxf.render.dim_radius',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\render\\dim_radius.py',
+   'PYMODULE'),
+  ('ezdxf.render.dimension',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\render\\dimension.py',
+   'PYMODULE'),
+  ('ezdxf.render.forms',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\render\\forms.py',
+   'PYMODULE'),
+  ('ezdxf.render.hatching',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\render\\hatching.py',
+   'PYMODULE'),
+  ('ezdxf.render.leader',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\render\\leader.py',
+   'PYMODULE'),
+  ('ezdxf.render.linetypes',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\render\\linetypes.py',
+   'PYMODULE'),
+  ('ezdxf.render.mesh',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\render\\mesh.py',
+   'PYMODULE'),
+  ('ezdxf.render.mleader',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\render\\mleader.py',
+   'PYMODULE'),
+  ('ezdxf.render.mline',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\render\\mline.py',
+   'PYMODULE'),
+  ('ezdxf.render.point',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\render\\point.py',
+   'PYMODULE'),
+  ('ezdxf.render.polyline',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\render\\polyline.py',
+   'PYMODULE'),
+  ('ezdxf.render.r12spline',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\render\\r12spline.py',
+   'PYMODULE'),
+  ('ezdxf.render.trace',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\render\\trace.py',
+   'PYMODULE'),
+  ('ezdxf.reorder',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\reorder.py',
+   'PYMODULE'),
+  ('ezdxf.revcloud',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\revcloud.py',
+   'PYMODULE'),
+  ('ezdxf.sections',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\sections\\__init__.py',
+   'PYMODULE'),
+  ('ezdxf.sections.acdsdata',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\sections\\acdsdata.py',
+   'PYMODULE'),
+  ('ezdxf.sections.blocks',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\sections\\blocks.py',
+   'PYMODULE'),
+  ('ezdxf.sections.classes',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\sections\\classes.py',
+   'PYMODULE'),
+  ('ezdxf.sections.entities',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\sections\\entities.py',
+   'PYMODULE'),
+  ('ezdxf.sections.header',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\sections\\header.py',
+   'PYMODULE'),
+  ('ezdxf.sections.headervars',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\sections\\headervars.py',
+   'PYMODULE'),
+  ('ezdxf.sections.objects',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\sections\\objects.py',
+   'PYMODULE'),
+  ('ezdxf.sections.table',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\sections\\table.py',
+   'PYMODULE'),
+  ('ezdxf.sections.tables',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\sections\\tables.py',
+   'PYMODULE'),
+  ('ezdxf.select',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\select.py',
+   'PYMODULE'),
+  ('ezdxf.tools',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\tools\\__init__.py',
+   'PYMODULE'),
+  ('ezdxf.tools._iso_pattern',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\tools\\_iso_pattern.py',
+   'PYMODULE'),
+  ('ezdxf.tools.analyze',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\tools\\analyze.py',
+   'PYMODULE'),
+  ('ezdxf.tools.binarydata',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\tools\\binarydata.py',
+   'PYMODULE'),
+  ('ezdxf.tools.clipping_portal',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\tools\\clipping_portal.py',
+   'PYMODULE'),
+  ('ezdxf.tools.codepage',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\tools\\codepage.py',
+   'PYMODULE'),
+  ('ezdxf.tools.complex_ltype',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\tools\\complex_ltype.py',
+   'PYMODULE'),
+  ('ezdxf.tools.crypt',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\tools\\crypt.py',
+   'PYMODULE'),
+  ('ezdxf.tools.debug',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\tools\\debug.py',
+   'PYMODULE'),
+  ('ezdxf.tools.difftags',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\tools\\difftags.py',
+   'PYMODULE'),
+  ('ezdxf.tools.handle',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\tools\\handle.py',
+   'PYMODULE'),
+  ('ezdxf.tools.indexing',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\tools\\indexing.py',
+   'PYMODULE'),
+  ('ezdxf.tools.juliandate',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\tools\\juliandate.py',
+   'PYMODULE'),
+  ('ezdxf.tools.pattern',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\tools\\pattern.py',
+   'PYMODULE'),
+  ('ezdxf.tools.rawloader',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\tools\\rawloader.py',
+   'PYMODULE'),
+  ('ezdxf.tools.standards',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\tools\\standards.py',
+   'PYMODULE'),
+  ('ezdxf.tools.strip',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\tools\\strip.py',
+   'PYMODULE'),
+  ('ezdxf.tools.test',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\tools\\test.py',
+   'PYMODULE'),
+  ('ezdxf.tools.text',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\tools\\text.py',
+   'PYMODULE'),
+  ('ezdxf.tools.text_layout',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\tools\\text_layout.py',
+   'PYMODULE'),
+  ('ezdxf.tools.text_size',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\tools\\text_size.py',
+   'PYMODULE'),
+  ('ezdxf.tools.zipmanager',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\tools\\zipmanager.py',
+   'PYMODULE'),
+  ('ezdxf.transform',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\transform.py',
+   'PYMODULE'),
+  ('ezdxf.units',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\units.py',
+   'PYMODULE'),
+  ('ezdxf.upright',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\upright.py',
+   'PYMODULE'),
+  ('ezdxf.urecord',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\urecord.py',
+   'PYMODULE'),
+  ('ezdxf.version',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\version.py',
+   'PYMODULE'),
+  ('ezdxf.xclip',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\xclip.py',
+   'PYMODULE'),
+  ('ezdxf.xref',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\xref.py',
+   'PYMODULE'),
+  ('ezdxf.zoom',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\ezdxf\\zoom.py',
+   'PYMODULE'),
   ('fileinput', 'C:\\Python313\\Lib\\fileinput.py', 'PYMODULE'),
   ('fnmatch', 'C:\\Python313\\Lib\\fnmatch.py', 'PYMODULE'),
+  ('fontTools',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\__init__.py',
+   'PYMODULE'),
+  ('fontTools.agl',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\agl.py',
+   'PYMODULE'),
+  ('fontTools.cffLib',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\cffLib\\__init__.py',
+   'PYMODULE'),
+  ('fontTools.cffLib.CFF2ToCFF',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\cffLib\\CFF2ToCFF.py',
+   'PYMODULE'),
+  ('fontTools.cffLib.CFFToCFF2',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\cffLib\\CFFToCFF2.py',
+   'PYMODULE'),
+  ('fontTools.cffLib.specializer',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\cffLib\\specializer.py',
+   'PYMODULE'),
+  ('fontTools.cffLib.transforms',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\cffLib\\transforms.py',
+   'PYMODULE'),
+  ('fontTools.cffLib.width',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\cffLib\\width.py',
+   'PYMODULE'),
+  ('fontTools.colorLib',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\colorLib\\__init__.py',
+   'PYMODULE'),
+  ('fontTools.colorLib.builder',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\colorLib\\builder.py',
+   'PYMODULE'),
+  ('fontTools.colorLib.errors',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\colorLib\\errors.py',
+   'PYMODULE'),
+  ('fontTools.colorLib.geometry',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\colorLib\\geometry.py',
+   'PYMODULE'),
+  ('fontTools.colorLib.table_builder',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\colorLib\\table_builder.py',
+   'PYMODULE'),
+  ('fontTools.colorLib.unbuilder',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\colorLib\\unbuilder.py',
+   'PYMODULE'),
+  ('fontTools.config',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\config\\__init__.py',
+   'PYMODULE'),
+  ('fontTools.designspaceLib',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\designspaceLib\\__init__.py',
+   'PYMODULE'),
+  ('fontTools.designspaceLib.split',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\designspaceLib\\split.py',
+   'PYMODULE'),
+  ('fontTools.designspaceLib.statNames',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\designspaceLib\\statNames.py',
+   'PYMODULE'),
+  ('fontTools.designspaceLib.types',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\designspaceLib\\types.py',
+   'PYMODULE'),
+  ('fontTools.encodings',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\encodings\\__init__.py',
+   'PYMODULE'),
+  ('fontTools.encodings.StandardEncoding',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\encodings\\StandardEncoding.py',
+   'PYMODULE'),
+  ('fontTools.encodings.codecs',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\encodings\\codecs.py',
+   'PYMODULE'),
+  ('fontTools.feaLib',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\feaLib\\__init__.py',
+   'PYMODULE'),
+  ('fontTools.feaLib.ast',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\feaLib\\ast.py',
+   'PYMODULE'),
+  ('fontTools.feaLib.error',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\feaLib\\error.py',
+   'PYMODULE'),
+  ('fontTools.feaLib.location',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\feaLib\\location.py',
+   'PYMODULE'),
+  ('fontTools.feaLib.lookupDebugInfo',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\feaLib\\lookupDebugInfo.py',
+   'PYMODULE'),
+  ('fontTools.misc',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\misc\\__init__.py',
+   'PYMODULE'),
+  ('fontTools.misc.arrayTools',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\misc\\arrayTools.py',
+   'PYMODULE'),
+  ('fontTools.misc.classifyTools',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\misc\\classifyTools.py',
+   'PYMODULE'),
+  ('fontTools.misc.cliTools',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\misc\\cliTools.py',
+   'PYMODULE'),
+  ('fontTools.misc.configTools',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\misc\\configTools.py',
+   'PYMODULE'),
+  ('fontTools.misc.cython',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\misc\\cython.py',
+   'PYMODULE'),
+  ('fontTools.misc.dictTools',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\misc\\dictTools.py',
+   'PYMODULE'),
+  ('fontTools.misc.encodingTools',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\misc\\encodingTools.py',
+   'PYMODULE'),
+  ('fontTools.misc.enumTools',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\misc\\enumTools.py',
+   'PYMODULE'),
+  ('fontTools.misc.etree',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\misc\\etree.py',
+   'PYMODULE'),
+  ('fontTools.misc.filenames',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\misc\\filenames.py',
+   'PYMODULE'),
+  ('fontTools.misc.fixedTools',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\misc\\fixedTools.py',
+   'PYMODULE'),
+  ('fontTools.misc.intTools',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\misc\\intTools.py',
+   'PYMODULE'),
+  ('fontTools.misc.iterTools',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\misc\\iterTools.py',
+   'PYMODULE'),
+  ('fontTools.misc.lazyTools',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\misc\\lazyTools.py',
+   'PYMODULE'),
+  ('fontTools.misc.loggingTools',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\misc\\loggingTools.py',
+   'PYMODULE'),
+  ('fontTools.misc.macCreatorType',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\misc\\macCreatorType.py',
+   'PYMODULE'),
+  ('fontTools.misc.macRes',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\misc\\macRes.py',
+   'PYMODULE'),
+  ('fontTools.misc.plistlib',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\misc\\plistlib\\__init__.py',
+   'PYMODULE'),
+  ('fontTools.misc.psCharStrings',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\misc\\psCharStrings.py',
+   'PYMODULE'),
+  ('fontTools.misc.roundTools',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\misc\\roundTools.py',
+   'PYMODULE'),
+  ('fontTools.misc.sstruct',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\misc\\sstruct.py',
+   'PYMODULE'),
+  ('fontTools.misc.textTools',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\misc\\textTools.py',
+   'PYMODULE'),
+  ('fontTools.misc.timeTools',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\misc\\timeTools.py',
+   'PYMODULE'),
+  ('fontTools.misc.transform',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\misc\\transform.py',
+   'PYMODULE'),
+  ('fontTools.misc.treeTools',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\misc\\treeTools.py',
+   'PYMODULE'),
+  ('fontTools.misc.vector',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\misc\\vector.py',
+   'PYMODULE'),
+  ('fontTools.misc.visitor',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\misc\\visitor.py',
+   'PYMODULE'),
+  ('fontTools.misc.xmlReader',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\misc\\xmlReader.py',
+   'PYMODULE'),
+  ('fontTools.misc.xmlWriter',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\misc\\xmlWriter.py',
+   'PYMODULE'),
+  ('fontTools.otlLib',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\otlLib\\__init__.py',
+   'PYMODULE'),
+  ('fontTools.otlLib.builder',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\otlLib\\builder.py',
+   'PYMODULE'),
+  ('fontTools.otlLib.error',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\otlLib\\error.py',
+   'PYMODULE'),
+  ('fontTools.otlLib.optimize',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\otlLib\\optimize\\__init__.py',
+   'PYMODULE'),
+  ('fontTools.otlLib.optimize.gpos',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\otlLib\\optimize\\gpos.py',
+   'PYMODULE'),
+  ('fontTools.pens',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\pens\\__init__.py',
+   'PYMODULE'),
+  ('fontTools.pens.basePen',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\pens\\basePen.py',
+   'PYMODULE'),
+  ('fontTools.pens.boundsPen',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\pens\\boundsPen.py',
+   'PYMODULE'),
+  ('fontTools.pens.filterPen',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\pens\\filterPen.py',
+   'PYMODULE'),
+  ('fontTools.pens.pointPen',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\pens\\pointPen.py',
+   'PYMODULE'),
+  ('fontTools.pens.recordingPen',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\pens\\recordingPen.py',
+   'PYMODULE'),
+  ('fontTools.pens.reverseContourPen',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\pens\\reverseContourPen.py',
+   'PYMODULE'),
+  ('fontTools.pens.t2CharStringPen',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\pens\\t2CharStringPen.py',
+   'PYMODULE'),
+  ('fontTools.pens.transformPen',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\pens\\transformPen.py',
+   'PYMODULE'),
+  ('fontTools.pens.ttGlyphPen',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\pens\\ttGlyphPen.py',
+   'PYMODULE'),
+  ('fontTools.ttLib',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\__init__.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.macUtils',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\macUtils.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.removeOverlaps',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\removeOverlaps.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.reorderGlyphs',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\reorderGlyphs.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.sfnt',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\sfnt.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.standardGlyphOrder',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\standardGlyphOrder.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\__init__.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.B_A_S_E_',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\B_A_S_E_.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.BitmapGlyphMetrics',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\BitmapGlyphMetrics.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.C_B_D_T_',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\C_B_D_T_.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.C_B_L_C_',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\C_B_L_C_.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.C_F_F_',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\C_F_F_.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.C_F_F__2',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\C_F_F__2.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.C_O_L_R_',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\C_O_L_R_.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.C_P_A_L_',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\C_P_A_L_.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.D_S_I_G_',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\D_S_I_G_.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.D__e_b_g',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\D__e_b_g.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.DefaultTable',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\DefaultTable.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.E_B_D_T_',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\E_B_D_T_.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.E_B_L_C_',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\E_B_L_C_.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.F_F_T_M_',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\F_F_T_M_.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.F__e_a_t',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\F__e_a_t.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.G_D_E_F_',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\G_D_E_F_.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.G_P_O_S_',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\G_P_O_S_.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.G_S_U_B_',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\G_S_U_B_.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.G_V_A_R_',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\G_V_A_R_.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.G__l_a_t',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\G__l_a_t.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.G__l_o_c',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\G__l_o_c.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.H_V_A_R_',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\H_V_A_R_.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.J_S_T_F_',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\J_S_T_F_.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.L_T_S_H_',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\L_T_S_H_.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.M_A_T_H_',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\M_A_T_H_.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.M_V_A_R_',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\M_V_A_R_.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.O_S_2f_2',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\O_S_2f_2.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.S_T_A_T_',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\S_T_A_T_.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.S_V_G_',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\S_V_G_.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.S__i_l_f',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\S__i_l_f.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.S__i_l_l',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\S__i_l_l.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.T_S_I_B_',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\T_S_I_B_.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.T_S_I_C_',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\T_S_I_C_.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.T_S_I_D_',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\T_S_I_D_.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.T_S_I_J_',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\T_S_I_J_.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.T_S_I_P_',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\T_S_I_P_.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.T_S_I_S_',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\T_S_I_S_.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.T_S_I_V_',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\T_S_I_V_.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.T_S_I__0',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\T_S_I__0.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.T_S_I__1',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\T_S_I__1.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.T_S_I__2',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\T_S_I__2.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.T_S_I__3',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\T_S_I__3.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.T_S_I__5',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\T_S_I__5.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.T_T_F_A_',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\T_T_F_A_.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.TupleVariation',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\TupleVariation.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.V_A_R_C_',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\V_A_R_C_.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.V_D_M_X_',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\V_D_M_X_.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.V_O_R_G_',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\V_O_R_G_.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.V_V_A_R_',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\V_V_A_R_.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables._a_n_k_r',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\_a_n_k_r.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables._a_v_a_r',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\_a_v_a_r.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables._b_s_l_n',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\_b_s_l_n.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables._c_i_d_g',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\_c_i_d_g.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables._c_m_a_p',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\_c_m_a_p.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables._c_v_a_r',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\_c_v_a_r.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables._c_v_t',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\_c_v_t.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables._f_e_a_t',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\_f_e_a_t.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables._f_p_g_m',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\_f_p_g_m.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables._f_v_a_r',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\_f_v_a_r.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables._g_a_s_p',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\_g_a_s_p.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables._g_c_i_d',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\_g_c_i_d.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables._g_l_y_f',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\_g_l_y_f.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables._g_v_a_r',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\_g_v_a_r.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables._h_d_m_x',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\_h_d_m_x.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables._h_e_a_d',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\_h_e_a_d.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables._h_h_e_a',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\_h_h_e_a.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables._h_m_t_x',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\_h_m_t_x.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables._k_e_r_n',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\_k_e_r_n.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables._l_c_a_r',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\_l_c_a_r.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables._l_o_c_a',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\_l_o_c_a.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables._l_t_a_g',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\_l_t_a_g.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables._m_a_x_p',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\_m_a_x_p.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables._m_e_t_a',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\_m_e_t_a.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables._m_o_r_t',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\_m_o_r_t.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables._m_o_r_x',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\_m_o_r_x.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables._n_a_m_e',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\_n_a_m_e.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables._o_p_b_d',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\_o_p_b_d.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables._p_o_s_t',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\_p_o_s_t.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables._p_r_e_p',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\_p_r_e_p.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables._p_r_o_p',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\_p_r_o_p.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables._s_b_i_x',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\_s_b_i_x.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables._t_r_a_k',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\_t_r_a_k.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables._v_h_e_a',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\_v_h_e_a.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables._v_m_t_x',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\_v_m_t_x.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.asciiTable',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\asciiTable.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.grUtils',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\grUtils.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.otBase',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\otBase.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.otConverters',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\otConverters.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.otData',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\otData.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.otTables',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\otTables.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.otTraverse',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\otTraverse.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.sbixGlyph',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\sbixGlyph.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.sbixStrike',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\sbixStrike.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.tables.ttProgram',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\tables\\ttProgram.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.ttCollection',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\ttCollection.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.ttFont',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\ttFont.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.ttGlyphSet',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\ttGlyphSet.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.ttVisitor',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\ttVisitor.py',
+   'PYMODULE'),
+  ('fontTools.ttLib.woff2',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttLib\\woff2.py',
+   'PYMODULE'),
+  ('fontTools.ttx',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\ttx.py',
+   'PYMODULE'),
+  ('fontTools.unicode',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\unicode.py',
+   'PYMODULE'),
+  ('fontTools.varLib',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\varLib\\__init__.py',
+   'PYMODULE'),
+  ('fontTools.varLib.builder',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\varLib\\builder.py',
+   'PYMODULE'),
+  ('fontTools.varLib.cff',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\varLib\\cff.py',
+   'PYMODULE'),
+  ('fontTools.varLib.errors',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\varLib\\errors.py',
+   'PYMODULE'),
+  ('fontTools.varLib.featureVars',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\varLib\\featureVars.py',
+   'PYMODULE'),
+  ('fontTools.varLib.merger',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\varLib\\merger.py',
+   'PYMODULE'),
+  ('fontTools.varLib.models',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\varLib\\models.py',
+   'PYMODULE'),
+  ('fontTools.varLib.multiVarStore',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\varLib\\multiVarStore.py',
+   'PYMODULE'),
+  ('fontTools.varLib.mvar',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\varLib\\mvar.py',
+   'PYMODULE'),
+  ('fontTools.varLib.stat',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\varLib\\stat.py',
+   'PYMODULE'),
+  ('fontTools.varLib.varStore',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\fontTools\\varLib\\varStore.py',
+   'PYMODULE'),
   ('fractions', 'C:\\Python313\\Lib\\fractions.py', 'PYMODULE'),
   ('ftplib', 'C:\\Python313\\Lib\\ftplib.py', 'PYMODULE'),
   ('getopt', 'C:\\Python313\\Lib\\getopt.py', 'PYMODULE'),
@@ -7508,6 +9628,202 @@
   ('pydoc_data.topics',
    'C:\\Python313\\Lib\\pydoc_data\\topics.py',
    'PYMODULE'),
+  ('pyogrio',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\pyogrio\\__init__.py',
+   'PYMODULE'),
+  ('pyogrio._compat',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\pyogrio\\_compat.py',
+   'PYMODULE'),
+  ('pyogrio._env',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\pyogrio\\_env.py',
+   'PYMODULE'),
+  ('pyogrio._version',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\pyogrio\\_version.py',
+   'PYMODULE'),
+  ('pyogrio.core',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\pyogrio\\core.py',
+   'PYMODULE'),
+  ('pyogrio.errors',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\pyogrio\\errors.py',
+   'PYMODULE'),
+  ('pyogrio.geopandas',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\pyogrio\\geopandas.py',
+   'PYMODULE'),
+  ('pyogrio.raw',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\pyogrio\\raw.py',
+   'PYMODULE'),
+  ('pyogrio.tests',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\pyogrio\\tests\\__init__.py',
+   'PYMODULE'),
+  ('pyogrio.tests.conftest',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\pyogrio\\tests\\conftest.py',
+   'PYMODULE'),
+  ('pyogrio.tests.test_arrow',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\pyogrio\\tests\\test_arrow.py',
+   'PYMODULE'),
+  ('pyogrio.tests.test_core',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\pyogrio\\tests\\test_core.py',
+   'PYMODULE'),
+  ('pyogrio.tests.test_geopandas_io',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\pyogrio\\tests\\test_geopandas_io.py',
+   'PYMODULE'),
+  ('pyogrio.tests.test_path',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\pyogrio\\tests\\test_path.py',
+   'PYMODULE'),
+  ('pyogrio.tests.test_raw_io',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\pyogrio\\tests\\test_raw_io.py',
+   'PYMODULE'),
+  ('pyogrio.tests.test_util',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\pyogrio\\tests\\test_util.py',
+   'PYMODULE'),
+  ('pyogrio.util',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\pyogrio\\util.py',
+   'PYMODULE'),
+  ('pyparsing',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\pyparsing\\__init__.py',
+   'PYMODULE'),
+  ('pyparsing.actions',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\pyparsing\\actions.py',
+   'PYMODULE'),
+  ('pyparsing.common',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\pyparsing\\common.py',
+   'PYMODULE'),
+  ('pyparsing.core',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\pyparsing\\core.py',
+   'PYMODULE'),
+  ('pyparsing.diagram',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\pyparsing\\diagram\\__init__.py',
+   'PYMODULE'),
+  ('pyparsing.exceptions',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\pyparsing\\exceptions.py',
+   'PYMODULE'),
+  ('pyparsing.helpers',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\pyparsing\\helpers.py',
+   'PYMODULE'),
+  ('pyparsing.results',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\pyparsing\\results.py',
+   'PYMODULE'),
+  ('pyparsing.testing',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\pyparsing\\testing.py',
+   'PYMODULE'),
+  ('pyparsing.unicode',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\pyparsing\\unicode.py',
+   'PYMODULE'),
+  ('pyparsing.util',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\pyparsing\\util.py',
+   'PYMODULE'),
+  ('pyparsing.warnings',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\pyparsing\\warnings.py',
+   'PYMODULE'),
+  ('pyproj',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\pyproj\\__init__.py',
+   'PYMODULE'),
+  ('pyproj.__main__',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\pyproj\\__main__.py',
+   'PYMODULE'),
+  ('pyproj._show_versions',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\pyproj\\_show_versions.py',
+   'PYMODULE'),
+  ('pyproj.aoi',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\pyproj\\aoi.py',
+   'PYMODULE'),
+  ('pyproj.crs',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\pyproj\\crs\\__init__.py',
+   'PYMODULE'),
+  ('pyproj.crs._cf1x8',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\pyproj\\crs\\_cf1x8.py',
+   'PYMODULE'),
+  ('pyproj.crs.coordinate_operation',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\pyproj\\crs\\coordinate_operation.py',
+   'PYMODULE'),
+  ('pyproj.crs.coordinate_system',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\pyproj\\crs\\coordinate_system.py',
+   'PYMODULE'),
+  ('pyproj.crs.crs',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\pyproj\\crs\\crs.py',
+   'PYMODULE'),
+  ('pyproj.crs.datum',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\pyproj\\crs\\datum.py',
+   'PYMODULE'),
+  ('pyproj.crs.enums',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\pyproj\\crs\\enums.py',
+   'PYMODULE'),
+  ('pyproj.datadir',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\pyproj\\datadir.py',
+   'PYMODULE'),
+  ('pyproj.enums',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\pyproj\\enums.py',
+   'PYMODULE'),
+  ('pyproj.exceptions',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\pyproj\\exceptions.py',
+   'PYMODULE'),
+  ('pyproj.geod',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\pyproj\\geod.py',
+   'PYMODULE'),
+  ('pyproj.network',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\pyproj\\network.py',
+   'PYMODULE'),
+  ('pyproj.proj',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\pyproj\\proj.py',
+   'PYMODULE'),
+  ('pyproj.sync',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\pyproj\\sync.py',
+   'PYMODULE'),
+  ('pyproj.transformer',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\pyproj\\transformer.py',
+   'PYMODULE'),
+  ('pyproj.utils',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\pyproj\\utils.py',
+   'PYMODULE'),
   ('pythoncom',
    "C:\\JOSH'S "
    'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\pythoncom.py',
@@ -7940,10 +10256,6 @@
    "C:\\JOSH'S "
    'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\setuptools\\_vendor\\tomli\\_types.py',
    'PYMODULE'),
-  ('setuptools._vendor.typing_extensions',
-   "C:\\JOSH'S "
-   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\setuptools\\_vendor\\typing_extensions.py',
-   'PYMODULE'),
   ('setuptools._vendor.zipp',
    "C:\\JOSH'S "
    'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\setuptools\\_vendor\\zipp\\__init__.py',
@@ -8144,6 +10456,7 @@
   ('tempfile', 'C:\\Python313\\Lib\\tempfile.py', 'PYMODULE'),
   ('textwrap', 'C:\\Python313\\Lib\\textwrap.py', 'PYMODULE'),
   ('threading', 'C:\\Python313\\Lib\\threading.py', 'PYMODULE'),
+  ('timeit', 'C:\\Python313\\Lib\\timeit.py', 'PYMODULE'),
   ('tkinter', 'C:\\Python313\\Lib\\tkinter\\__init__.py', 'PYMODULE'),
   ('tkinter.commondialog',
    'C:\\Python313\\Lib\\tkinter\\commondialog.py',
@@ -8179,6 +10492,10 @@
   ('tracemalloc', 'C:\\Python313\\Lib\\tracemalloc.py', 'PYMODULE'),
   ('tty', 'C:\\Python313\\Lib\\tty.py', 'PYMODULE'),
   ('typing', 'C:\\Python313\\Lib\\typing.py', 'PYMODULE'),
+  ('typing_extensions',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\typing_extensions.py',
+   'PYMODULE'),
   ('tzdata',
    "C:\\JOSH'S "
    'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\tzdata\\__init__.py',

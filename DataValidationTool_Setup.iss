@@ -1,8 +1,8 @@
-; Inno Setup script for Data Validation Tool v3.1
+; Inno Setup script for Data Validation Tool v3.2
 ; Default install dir: Program Files (admin) or %LOCALAPPDATA%\Programs (per-user)
 
 #define AppName "Data Validation Tool"
-#define AppVersion "3.1"
+#define AppVersion "3.2"
 #define AppPublisher "Topographic Land Surveyors"
 #define AppExeName "DataValidationTool.exe"
 #define SourceDir "dist\DataValidationTool"
@@ -18,7 +18,7 @@ DefaultGroupName={#AppName}
 DisableDirPage=no
 DisableProgramGroupPage=yes
 OutputDir=dist
-OutputBaseFilename=DataValidationTool_v3.1_Setup
+OutputBaseFilename=DataValidationTool_v3.2_Setup
 Compression=lzma2/ultra64
 SolidCompression=yes
 WizardStyle=modern
@@ -56,3 +56,4 @@ Filename: "{app}\{#AppExeName}"; Description: "Launch {#AppName}"; Flags: nowait
 Type: files; Name: "{app}\config.json"
 Type: files; Name: "{app}\validation_log.json"
 Type: files; Name: "{app}\crdb_watchlist.json"
+Type: files; Name: "{app}\client_schemas.json"

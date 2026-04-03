@@ -4,7 +4,30 @@
       "Bash(ls \"/c/Program Files \\(x86\\)/Inno Setup 6/ISCC.exe\")",
       "Read(//c/Program Files/Inno Setup 6/**)",
       "Bash(\"/c/JOSH'S PROGRAMS/DataValidationTool_3.1_Claude/venv/Scripts/python.exe\" -c \"import sys; print\\(sys.version\\)\")",
-      "Bash(pip install:*)"
+      "Bash(pip install:*)",
+      "Bash(venv/Scripts/python.exe -c \"import numpy; print\\(numpy.__version__\\)\")",
+      "Bash(venv/Scripts/python.exe -c \"import pandas; print\\(pandas.__version__\\)\")",
+      "Bash(venv/Scripts/pip install:*)",
+      "Bash(\"C:/JOSH'S PROGRAMS/DataValidationTool_3.1_Claude/venv/Scripts/pip.exe\" install pyogrio)",
+      "Bash(C:/JOSH'S PROGRAMS/DataValidationTool_3.1_Claude/venv/Scripts/python.exe:*)",
+      "Bash(\"C:/JOSH'S PROGRAMS/DataValidationTool_3.1_Claude/venv/Scripts/python.exe\" -m py_compile \"C:/JOSH'S PROGRAMS/DataValidationTool_3.1_Claude/DataValidationTool-v3.1.py\")",
+      "Bash(\"C:/JOSH'S PROGRAMS/DataValidationTool_3.1_Claude/venv/Scripts/python.exe\" -c \"import ezdxf; print\\(ezdxf.__version__\\)\")",
+      "Bash(winget search:*)",
+      "Bash(pip search:*)",
+      "Bash(grep -iE \"\\\\.\\(ini|cfg|prj|csd|xml|wkt\\)$\")",
+      "Bash(venv/Scripts/python -c \"import pyproj; print\\(pyproj.__file__\\)\")",
+      "Bash(C:/JOSH'S PROGRAMS/DataValidationTool_3.1_Claude/venv/Scripts/pip.exe install:*)",
+      "Bash(/c/JOSH'S PROGRAMS/DataValidationTool_3.1_Claude/venv/Scripts/python.exe:*)",
+      "Bash(\"/c/JOSH'S PROGRAMS/DataValidationTool_3.1_Claude/venv/Scripts/python.exe\" -m PyInstaller --clean --noconfirm DataValidationTool.spec)",
+      "Bash(cp:*)",
+      "Bash(venv/Scripts/python.exe -m PyInstaller --clean --noconfirm DataValidationTool.spec)",
+      "Bash(where iscc:*)",
+      "Bash(venv/Scripts/python.exe -m PyInstaller --noconfirm DataValidationTool.spec)",
+      "Bash(gh auth:*)",
+      "Bash(gh repo:*)",
+      "Bash(gh api:*)",
+      "Bash(start \"https://github.com/settings/personal-access-tokens/new\")",
+      "Bash(gh release create v3.2 --repo joshwaldrip1/DataValidationTool --target v3.2 --title 'Data Validation Tool v3.2' --notes ':*)"
     ]
   }
 }

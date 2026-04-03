@@ -1,4 +1,4 @@
-# Data Validation Tool v3.1  (Windows)
+# Data Validation Tool v3.2  (Windows)
 # - Multi-file drag & drop (CSV + FXL together)
 # - Single Excel instance/workbook; single-run validation
 # - Full VBA module included (no missing methods)
@@ -156,7 +156,7 @@ except Exception:
 class DataValidationTool(TkBase):
     def __init__(self):
         super().__init__()
-        self.title("Data Validation Tool v3.1")
+        self.title("Data Validation Tool v3.2")
         _place_window(self, 820, 520)
 
         # state
@@ -248,6 +248,8 @@ class DataValidationTool(TkBase):
 
         # Deferred startup: show any pending watch-list notifications
         self.after(800, self._check_pending_notifications)  # type: ignore[attr-defined]
+        # Deferred startup: check watched CRDBs for changes (catches missed scheduled runs)
+        self.after(2000, self._startup_watchlist_check)  # type: ignore[attr-defined]
 
         # UI
         self._build_ui()
@@ -2227,21 +2229,10 @@ class DataValidationTool(TkBase):
         # now and promote any matches to _pending_photo_found so _offer_photo_rename
         # can present them for disk renaming.
         if _old_photo_names and self.jxl_path:
-            _jxl_dir2 = os.path.dirname(os.path.abspath(self.jxl_path))
-            _sync2 = self._find_sync_folder(_jxl_dir2)  # type: ignore[attr-defined]
-            _media_exts2 = {".jpg", ".jpeg", ".png", ".tif", ".tiff", ".bmp",
-                            ".heic", ".mp4", ".mov"}
-            _old_idx: dict[str, str] = {}
-            for _sr2 in ([_sync2] if _sync2 else []) + [_jxl_dir2]:
-                try:
-                    for _dp2, _, _fns2 in os.walk(_sr2):
-                        for _fn2 in _fns2:
-                            if os.path.splitext(_fn2)[1].lower() in _media_exts2:
-                                _k2 = _fn2.lower()
-                                if _k2 not in _old_idx:
-                                    _old_idx[_k2] = os.path.join(_dp2, _fn2)
-                except OSError:
-                    pass
+            _old_idx = self._build_jxl_media_index(  # type: ignore[attr-defined]
+                [self.jxl_path],
+                {os.path.abspath(self.jxl_path): self._jxl_data} if self._jxl_data else None,
+            )
             for _pt2, _old_bn in _old_photo_names.items():
                 # Skip if already found under the JXL-authoritative name
                 if _pt2 in self._pending_photo_found:
@@ -5148,7 +5139,7 @@ End Sub
         sb.pack(side="right", fill="y")
         text.pack(fill="both", expand=True)
         help_content = (
-            "DATA VALIDATION TOOL v3.1 — Quick Reference\n"
+            "DATA VALIDATION TOOL v3.2 — Quick Reference\n"
             "═══════════════════════════════════════════\n\n"
             "HOW TO USE\n"
             "──────────\n"
@@ -5438,7 +5429,8 @@ End Sub
                 pt["wgs84_lon"] = _sfloat(wgs.findtext("Longitude"))
                 pt["wgs84_height"] = _sfloat(wgs.findtext("Height"))
             else:
-                rtx = pr.find("RTXECEF") or pr.find("ECEF")
+                _rtx1 = pr.find("RTXECEF")
+                rtx = _rtx1 if _rtx1 is not None else pr.find("ECEF")
                 if rtx is not None:
                     rx = _sfloat(rtx.findtext("X"))
                     ry = _sfloat(rtx.findtext("Y"))
@@ -5465,7 +5457,8 @@ End Sub
                             pt["_ecef_dy"] = dy
                             pt["_ecef_dz"] = dz
                             pt["_rtk_base"] = base_name
-            grid = pr.find("ComputedGrid") or pr.find("Grid")
+            _grid1 = pr.find("ComputedGrid")
+            grid = _grid1 if _grid1 is not None else pr.find("Grid")
             if grid is not None:
                 pt["grid_north"] = _sfloat(grid.findtext("North"))
                 pt["grid_east"] = _sfloat(grid.findtext("East"))
@@ -5709,48 +5702,182 @@ End Sub
             d = parent
         return None
 
+    # ------------------------------------------------------------------
+    #  Tiered media-index helpers
+    # ------------------------------------------------------------------
+    _MEDIA_EXTS: set[str] = {
+        ".jpg", ".jpeg", ".png", ".tif", ".tiff", ".bmp", ".heic", ".mp4", ".mov",
+    }
+
+    def _scan_dir_media(self, directory: str) -> dict[str, str]:
+        """Return cached {basename_lower: full_path} for all media under *directory*."""
+        abs_dir = os.path.abspath(directory)
+        cached = self._media_index_cache.get(abs_dir)
+        if cached is not None:
+            return cached
+        idx: dict[str, str] = {}
+        try:
+            for dirpath, _, filenames in os.walk(abs_dir):
+                for fn in filenames:
+                    if os.path.splitext(fn)[1].lower() in self._MEDIA_EXTS:
+                        key = fn.lower()
+                        if key not in idx:
+                            idx[key] = os.path.join(dirpath, fn)
+        except OSError:
+            pass
+        self._media_index_cache[abs_dir] = idx
+        return idx
+
+    def _build_jxl_media_index(
+        self,
+        jxl_paths: list[str],
+        jxl_data_map: dict[str, dict[str, Any]] | None = None,
+    ) -> dict[str, str]:
+        """Build {basename_lower: full_path} using a tiered search strategy.
+
+        For every JXL, scan **only** its ``<stem> Files`` companion folder.
+        When a companion folder is missing, fall back to a SYNC-wide scan
+        and use file-size comparison to disambiguate duplicate basenames.
+        """
+        media_index: dict[str, str] = {}
+        if not jxl_paths:
+            return media_index
+
+        # ── Strict companion-folder search ─────────────────────────────
+        missing_jxl_paths: list[str] = []
+        for jxl_path in jxl_paths:
+            abs_path = os.path.abspath(jxl_path)
+            jxl_dir = os.path.dirname(abs_path)
+            stem = os.path.splitext(os.path.basename(abs_path))[0]
+            companion = os.path.join(jxl_dir, f"{stem} Files")
+            if os.path.isdir(companion):
+                for k, v in self._scan_dir_media(companion).items():
+                    if k not in media_index:
+                        media_index[k] = v
+            else:
+                missing_jxl_paths.append(jxl_path)
+
+        if not missing_jxl_paths:
+            return media_index
+
+        # ── Fallback: XML-referenced folders + SYNC with file-size ─────
+        # Collect basenames we still need, the subfolder names the JXL XML
+        # actually references, and SYNC roots — then scan them all in one
+        # pass.  When a basename has multiple candidates, prefer the file
+        # from the XML-referenced folder; otherwise use file-size matching.
+        needed: set[str] = set()                 # basename_lower values
+        xml_folders: set[str] = set()            # folders named in the XML
+        xml_ref_paths: dict[str, str] = {}       # basename_lower → full XML-referenced path
+        if jxl_data_map:
+            for jxl_path in missing_jxl_paths:
+                abs_path = os.path.abspath(jxl_path)
+                jxl_dir = os.path.dirname(abs_path)
+                jdata = jxl_data_map.get(abs_path)
+                if not jdata:
+                    continue
+                for pt in jdata.get("points", {}).values():
+                    photo_path_raw: str = str(pt.get("photo_path") or "")
+                    photo_name: str = str(pt.get("photo_name") or "")
+                    bn = photo_name or os.path.basename(photo_path_raw.replace("\\", "/"))
+                    if not bn:
+                        continue
+                    key = bn.lower()
+                    if key in media_index:
+                        continue
+                    needed.add(key)
+                    # Extract the referenced subfolder from the XML path
+                    if photo_path_raw:
+                        rel = photo_path_raw.replace("\\", "/")
+                        parts = rel.split("/")
+                        if len(parts) >= 2:
+                            ref_folder = os.path.join(jxl_dir, parts[0])
+                            if os.path.isdir(ref_folder):
+                                xml_folders.add(ref_folder)
+                        # Full literal path for file-size reference
+                        full_ref = os.path.join(
+                            jxl_dir,
+                            photo_path_raw.replace("\\", os.sep).replace("/", os.sep),
+                        )
+                        if key not in xml_ref_paths and os.path.isfile(full_ref):
+                            xml_ref_paths[key] = full_ref
+
+        if not needed:
+            return media_index
+
+        # Gather SYNC roots
+        sync_roots: set[str] = set()
+        for jxl_path in missing_jxl_paths:
+            s = self._find_sync_folder(os.path.dirname(os.path.abspath(jxl_path)))
+            if s:
+                sync_roots.add(os.path.abspath(s))
+
+        # Scan XML-referenced folders + SYNC, collecting ALL candidates
+        # per basename so we can disambiguate.
+        all_candidates: dict[str, list[str]] = {}   # basename_lower → [paths]
+        xml_folder_abs: set[str] = {os.path.abspath(f) for f in xml_folders}
+
+        for folder in list(xml_folders) + [s for s in sync_roots]:
+            try:
+                for dirpath, _, filenames in os.walk(folder):
+                    for fn in filenames:
+                        key = fn.lower()
+                        if key in needed and os.path.splitext(fn)[1].lower() in self._MEDIA_EXTS:
+                            full = os.path.join(dirpath, fn)
+                            if key not in all_candidates:
+                                all_candidates[key] = []
+                            if full not in all_candidates[key]:
+                                all_candidates[key].append(full)
+            except OSError:
+                pass
+
+        # Pick the best candidate for each basename
+        for key, candidates in all_candidates.items():
+            if key in media_index:
+                continue
+            if len(candidates) == 1:
+                media_index[key] = candidates[0]
+                continue
+            # Prefer a candidate from the XML-referenced folder
+            xml_hit: str | None = None
+            for c in candidates:
+                if any(os.path.abspath(c).startswith(xf + os.sep) for xf in xml_folder_abs):
+                    xml_hit = c
+                    break
+            if xml_hit:
+                media_index[key] = xml_hit
+                continue
+            # Multiple candidates, none in XML folder — use file-size match
+            ref_path = xml_ref_paths.get(key)
+            if ref_path:
+                try:
+                    ref_size = os.path.getsize(ref_path)
+                    for c in candidates:
+                        try:
+                            if os.path.getsize(c) == ref_size:
+                                media_index[key] = c
+                                break
+                        except OSError:
+                            continue
+                except OSError:
+                    pass
+            # Last resort — take the first candidate
+            if key not in media_index:
+                media_index[key] = candidates[0]
+
+        return media_index
+
     def _find_jxl_photos(
         self, jxl_path: str, jxl_data: dict[str, Any]
     ) -> tuple[dict[str, str], dict[str, str]]:
         """Return (found, missing) where found={pt_name: full_path}, missing={pt_name: filename}.
 
-        Uses the same full-index SYNC scan approach as _find_crdb_media so that
-        photos deep inside SYNC sub-folders are reliably discovered.
+        Uses the tiered media-index helper: single-JXL mode scans the JXL's
+        parent directory; multi-JXL mode would use companion folders.
         """
-        _media_exts = {".jpg", ".jpeg", ".png", ".tif", ".tiff", ".bmp", ".heic", ".mp4", ".mov"}
-        jxl_dir = os.path.dirname(os.path.abspath(jxl_path))
-
-        # Build a single {basename_lower: full_path} index from every file in SYNC
-        # (and the JXL's own directory as fallback), scanning each tree only once.
-        media_index: dict[str, str] = {}
-        _sync = self._find_sync_folder(jxl_dir)
-        scan_roots: list[str] = []
-        if _sync:
-            scan_roots.append(_sync)
-        scan_roots.append(jxl_dir)  # fallback: files sitting next to the JXL
-
-        for root in scan_roots:
-            try:
-                abs_root = os.path.abspath(root)
-                cached = self._media_index_cache.get(abs_root)
-                if cached is not None:
-                    for k, v in cached.items():
-                        if k not in media_index:
-                            media_index[k] = v
-                    continue
-                root_index: dict[str, str] = {}
-                for dirpath, _, filenames in os.walk(root):
-                    for fn in filenames:
-                        if os.path.splitext(fn)[1].lower() in _media_exts:
-                            key = fn.lower()
-                            if key not in root_index:
-                                root_index[key] = os.path.join(dirpath, fn)
-                self._media_index_cache[abs_root] = root_index
-                for k, v in root_index.items():
-                    if k not in media_index:
-                        media_index[k] = v
-            except OSError:
-                pass
+        media_index = self._build_jxl_media_index(
+            [jxl_path],
+            {os.path.abspath(jxl_path): jxl_data},
+        )
 
         found: dict[str, str] = {}
         missing: dict[str, str] = {}
@@ -5867,7 +5994,7 @@ End Sub
     def _rename_jxl_photos(self, jxl_paths: list[str]) -> None:
         """Parse multiple JXL files dropped directly and offer to rename auto-generated photo filenames.
 
-        Uses _find_crdb_media (full SYNC recursive index) for consistent photo discovery.
+        Uses _build_jxl_media_index (companion-folder search with file-size fallback).
         """
         self.status.config(text=f"Scanning {len(jxl_paths)} JXL file(s) for photos…")
         self.update_idletasks()
@@ -5902,34 +6029,39 @@ End Sub
             )
             return
 
-        # Discover media using the same full-index SYNC scan as the CRDB flow
-        anchor_path = jxl_paths[0]
-        media_found, _ = self._find_crdb_media(anchor_path, jxl_map, all_matched_pts)  # type: ignore[attr-defined]
+        # Build media index PER JXL — different JXLs can have photos with
+        # the same basename (e.g. IMG_14.jpg) that are different files in
+        # different companion folders.  A single global index would clobber
+        # all but the first.
+        jxl_items: list[tuple[str, dict[str, Any], dict[str, str]]] = []
+        any_found = False
+        for jxl_path in jxl_paths:
+            abs_path = os.path.abspath(jxl_path)
+            jxl_item_data: dict[str, Any] | None = all_jxl_data.get(abs_path)
+            if not jxl_item_data:
+                continue
+            per_idx = self._build_jxl_media_index(  # type: ignore[attr-defined]
+                [jxl_path], {abs_path: jxl_item_data},
+            )
+            per_jxl_found: dict[str, str] = {}
+            for pt_name, pt in jxl_item_data.get("points", {}).items():
+                photo_ref: str = str(pt.get("photo_path") or pt.get("photo_name") or "")
+                basename = os.path.basename(photo_ref.replace("\\", "/"))
+                if basename and basename.lower() in per_idx:
+                    per_jxl_found[pt_name] = per_idx[basename.lower()]
+            if per_jxl_found:
+                any_found = True
+                jxl_items.append((jxl_path, jxl_item_data, per_jxl_found))
 
         self.status.config(text="Ready")
 
-        if not media_found:
+        if not any_found:
             messagebox.showinfo(
                 "No Photos Found",
                 "Photo references were found in the JXL file(s) but none of the image "
                 "files could be located on disk.",
             )
             return
-
-        # Build per-JXL items list expected by _offer_photo_rename_multi
-        jxl_items: list[tuple[str, dict[str, Any], dict[str, str]]] = []
-        for jxl_path in jxl_paths:
-            abs_path = os.path.abspath(jxl_path)
-            jxl_item_data: dict[str, Any] | None = all_jxl_data.get(abs_path)
-            if not jxl_item_data:
-                continue
-            per_jxl_found: dict[str, str] = {
-                pt_name: media_found[pt_name.upper()]
-                for pt_name, pt in jxl_item_data.get("points", {}).items()
-                if pt.get("photo_name") and pt_name.upper() in media_found
-            }
-            if per_jxl_found:
-                jxl_items.append((jxl_path, jxl_item_data, per_jxl_found))
 
         if not jxl_items:
             messagebox.showinfo(
@@ -6130,45 +6262,29 @@ End Sub
         errors: list[str] = []
         first_jxl_data: dict[str, Any] | None = None
 
+        # Pre-parse all JXLs so we can build the media index before the main loop.
+        _all_jxl_data: dict[str, dict[str, Any]] = {}
         for jxl_path in jxl_paths:
             try:
-                # Reuse cached parse from FXL-detection step above (avoids re-parsing first JXL).
-                # attrs_by_pt is now embedded in jxl_data["attrs_by_pt"] — no separate XML pass.
-                jxl_data = _parse_cache.pop(os.path.abspath(jxl_path), None) \
+                _d = _parse_cache.pop(os.path.abspath(jxl_path), None) \
                     or self._parse_jxl(jxl_path)  # type: ignore[attr-defined]
+                _all_jxl_data[os.path.abspath(jxl_path)] = _d
+            except Exception as e:
+                errors.append(f"{os.path.basename(jxl_path)}: {e}")
+
+        # Build the media index once (single JXL → parent dir; multi → companion folders).
+        _media_idx: dict[str, str] = self._build_jxl_media_index(  # type: ignore[attr-defined]
+            jxl_paths, _all_jxl_data,
+        )
+
+        for jxl_path in jxl_paths:
+            try:
+                jxl_data = _all_jxl_data.get(os.path.abspath(jxl_path))
+                if jxl_data is None:
+                    continue  # parse failed earlier
                 if first_jxl_data is None:
                     first_jxl_data = jxl_data
                 attrs_by_pt: dict[str, list[str]] = jxl_data.get("attrs_by_pt") or {}
-
-                # Build a media index for photo name resolution — only when this JXL
-                # actually contains photo-extension values (skipping OneDrive os.walk
-                # entirely for JXLs with no photos, which is the common slow-path case).
-                # Pass 1 — exact filename match (file still has original name, no rename needed).
-                # Pass 2 — prefix scan for "{pt_name}_*" (file was renamed, XML still has old name).
-                _media_exts: set[str] = {".jpg", ".jpeg", ".png", ".tif", ".tiff", ".bmp", ".heic", ".mp4", ".mov"}
-                _media_idx: dict[str, str] = {}
-                _has_photos: bool = any(
-                    os.path.splitext(str(v).lower())[1] in _media_exts
-                    for vals in attrs_by_pt.values()
-                    for v in vals if v
-                )
-                if _has_photos:
-                    try:
-                        _jxl_dir = os.path.dirname(os.path.abspath(jxl_path))
-                        _sync_root = self._find_sync_folder(_jxl_dir)  # type: ignore[attr-defined]
-                        _scan_roots: list[str] = ([_sync_root] if _sync_root else []) + [_jxl_dir]
-                        for _sr in _scan_roots:
-                            try:
-                                for _dp, _, _fns in os.walk(_sr):
-                                    for _fn in _fns:
-                                        if os.path.splitext(_fn)[1].lower() in _media_exts:
-                                            _k = _fn.lower()
-                                            if _k not in _media_idx:
-                                                _media_idx[_k] = os.path.join(_dp, _fn)
-                            except OSError:
-                                pass
-                    except Exception:
-                        pass
 
                 pts: dict[str, Any] = jxl_data.get("points") or {}
                 for pt_name, pt in pts.items():
@@ -6188,7 +6304,7 @@ End Sub
                         for _i, _v in enumerate(attr_vals):
                             if not _v:
                                 continue
-                            if os.path.splitext(str(_v).lower())[1] not in _media_exts:
+                            if os.path.splitext(str(_v).lower())[1] not in self._MEDIA_EXTS:
                                 continue
                             if _v.lower() in _media_idx:
                                 continue  # Pass 1: exact match — name is still current
@@ -6750,7 +6866,7 @@ End Sub
 
         # Stage 2: Field Data folder and all subfolders (automatic, skips
         #          already-found JXLs from the SYNC walk above)
-        if _field_data_dir and not found:
+        if _field_data_dir:
             found.update(_collect_jxls_from(_field_data_dir))
 
         if found:
@@ -6852,9 +6968,12 @@ End Sub
         _media: dict[str, str] = media_found or {}
         import sqlite3
 
-        # Group rows by code
+        # Group rows by code, skipping sentinel elevations
         by_code: dict[str, list[dict[str, Any]]] = {}
         for row in rows:
+            _z_val = row.get("Z")
+            if _z_val is not None and isinstance(_z_val, (int, float)) and _z_val <= -99999999:
+                continue
             c = row["code"] or "UNKNOWN"
             by_code.setdefault(c, []).append(row)
 
@@ -7131,6 +7250,10 @@ End Sub
             writer.writerow(header)
 
             for row in rows:
+                # Skip points with sentinel "no data" elevations
+                _z_val = row.get("Z")
+                if _z_val is not None and isinstance(_z_val, (int, float)) and _z_val <= -99999999:
+                    continue
                 pkey = row["point_name"].strip().upper()
                 pt_jxl = matched_pts.get(pkey)
                 attrs = row.get("attrs", [])
@@ -7180,6 +7303,406 @@ End Sub
                     # else: leave as empty string (unknown column)
 
                 writer.writerow(csv_row)
+
+    # ---------- Multi-format export helpers ----------
+
+    def _find_gis_output_dir(self, crdb_path: str) -> str:
+        """Compute the GIS weekly-update output directory for today.
+
+        Walks up from the CRDB folder looking for an ASBUILT directory,
+        then returns ASBUILT/0_GIS/WEEKLY_UPDATE/YYYYMMDD.
+        Falls back to <crdb_dir>/0_GIS/WEEKLY_UPDATE/YYYYMMDD if ASBUILT
+        is not found within 6 ancestor levels.
+        """
+        crdb_dir = os.path.dirname(os.path.abspath(crdb_path))
+        today = datetime.date.today().strftime("%Y%m%d")
+
+        # Walk up looking for ASBUILT
+        d = crdb_dir
+        for _ in range(7):
+            if os.path.basename(d).upper() == "ASBUILT":
+                return os.path.join(d, "0_GIS", "WEEKLY_UPDATE", today)
+            parent = os.path.dirname(d)
+            if parent == d:
+                break
+            d = parent
+
+        # Also check if ASBUILT is a child of crdb_dir or any ancestor
+        d = crdb_dir
+        for _ in range(7):
+            candidate = os.path.join(d, "ASBUILT")
+            if os.path.isdir(candidate):
+                return os.path.join(candidate, "0_GIS", "WEEKLY_UPDATE", today)
+            parent = os.path.dirname(d)
+            if parent == d:
+                break
+            d = parent
+
+        # Fallback
+        return os.path.join(crdb_dir, "0_GIS", "WEEKLY_UPDATE", today)
+
+    def _write_crdb_shp(
+        self,
+        output_path: str,
+        rows: list[dict[str, Any]],
+        matched_pts: dict[str, dict[str, Any]],
+        media_found: dict[str, str] | None = None,
+    ) -> None:
+        """Write a single combined Shapefile (.shp/.shx/.dbf/.prj) with all points.
+
+        Pure-Python writer using struct — no external dependencies.
+        Geometry is WGS84 Point from JXL geodetic data.
+        """
+        _media: dict[str, str] = media_found or {}
+        max_attrs = 28
+
+        # --- Define DBF field descriptors ---
+        # (name, type, size, decimal)
+        dbf_fields: list[tuple[str, str, int, int]] = [
+            ("point_name", "C", 50, 0),
+            ("N", "N", 20, 10),
+            ("E", "N", 20, 10),
+            ("Z", "N", 20, 10),
+            ("code", "C", 30, 0),
+        ]
+        for i in range(1, max_attrs + 1):
+            dbf_fields.append((f"ATT_{i}", "C", 80, 0))
+        dbf_fields += [
+            ("h_prec", "N", 12, 4),
+            ("v_prec", "N", 12, 4),
+            ("pdop", "N", 8, 2),
+            ("sats", "N", 4, 0),
+            ("method", "C", 20, 0),
+            ("media", "C", 100, 0),
+            ("src_jxl", "C", 100, 0),
+        ]
+
+        record_size = 1  # deletion flag byte
+        for _, _, sz, _ in dbf_fields:
+            record_size += sz
+
+        # --- Collect records and geometry ---
+        shp_records: list[tuple[float | None, float | None, list[bytes]]] = []
+        dbf_records: list[bytes] = []
+
+        for row in rows:
+            _z_val = row.get("Z")
+            if _z_val is not None and isinstance(_z_val, (int, float)) and _z_val <= -99999999:
+                continue
+            pkey = row["point_name"].strip().upper()
+            pt_jxl = matched_pts.get(pkey)
+            lon: float | None = None
+            lat: float | None = None
+            h_prec = ""
+            v_prec = ""
+            pdop_val = ""
+            sats_val = ""
+            method = ""
+            src_jxl = ""
+            if pt_jxl:
+                lon = cast(float | None, pt_jxl.get("wgs84_lon"))
+                lat = cast(float | None, pt_jxl.get("wgs84_lat"))
+                _hp = pt_jxl.get("h_precision")
+                h_prec = f"{_hp:.4f}" if _hp is not None else ""
+                _vp = pt_jxl.get("v_precision")
+                v_prec = f"{_vp:.4f}" if _vp is not None else ""
+                _pd = pt_jxl.get("pdop")
+                pdop_val = f"{_pd:.2f}" if _pd is not None else ""
+                _ns = pt_jxl.get("num_satellites")
+                sats_val = str(_ns) if _ns is not None else ""
+                method = str(pt_jxl.get("survey_method") or "")
+                src_jxl = str(pt_jxl.get("source") or "")
+
+            media_path = _media.get(pkey, "")
+            media_file = os.path.basename(media_path) if media_path else ""
+
+            attrs = row.get("attrs", [])
+            attr_vals = [attrs[i] if i < len(attrs) else "" for i in range(max_attrs)]
+
+            # Build DBF record
+            rec = b"\x20"  # not deleted
+            for (fname, ftype, fsize, fdec), val in zip(
+                dbf_fields,
+                [row["point_name"], row["N"], row["E"], row["Z"], row.get("code", "")]
+                + attr_vals
+                + [h_prec, v_prec, pdop_val, sats_val, method, media_file, src_jxl],
+            ):
+                if ftype == "N":
+                    s = str(val).strip() if val not in (None, "") else ""
+                    rec += s.rjust(fsize)[:fsize].encode("latin-1")
+                else:
+                    s = str(val) if val is not None else ""
+                    rec += s.ljust(fsize)[:fsize].encode("latin-1", errors="replace")
+            dbf_records.append(rec)
+            shp_records.append((lon, lat, []))
+
+        num_records = len(dbf_records)
+        os.makedirs(os.path.dirname(output_path) or ".", exist_ok=True)
+        base = os.path.splitext(output_path)[0]
+
+        # --- Write .prj (WGS84) ---
+        with open(base + ".prj", "w", encoding="utf-8") as f:
+            f.write(
+                'GEOGCS["GCS_WGS_1984",DATUM["D_WGS_1984",'
+                'SPHEROID["WGS_1984",6378137.0,298.257223563]],'
+                'PRIMEM["Greenwich",0.0],'
+                'UNIT["Degree",0.0174532925199433]]'
+            )
+
+        # --- Compute bounding box ---
+        valid_pts = [(lon, lat) for lon, lat, _ in shp_records
+                     if lon is not None and lat is not None]
+        if valid_pts:
+            xmin = min(p[0] for p in valid_pts)  # type: ignore[arg-type]
+            ymin = min(p[1] for p in valid_pts)  # type: ignore[arg-type]
+            xmax = max(p[0] for p in valid_pts)  # type: ignore[arg-type]
+            ymax = max(p[1] for p in valid_pts)  # type: ignore[arg-type]
+        else:
+            xmin = ymin = xmax = ymax = 0.0
+
+        # --- Write .shp ---
+        # Each point record: record header (8) + shape type (4) + X,Y (16) = 28 bytes
+        # Null shape record: record header (8) + shape type (4) = 12 bytes
+        shp_content_length = 50  # file header = 100 bytes = 50 16-bit words
+        offsets: list[int] = []
+        content_lengths: list[int] = []
+        for lon, lat, _ in shp_records:
+            offsets.append(shp_content_length)
+            if lon is not None and lat is not None:
+                rec_len = 10  # (4+16) / 2 = 10 words
+            else:
+                rec_len = 2   # 4 / 2 = 2 words
+            content_lengths.append(rec_len)
+            shp_content_length += 4 + rec_len  # record header (4 words) + content
+
+        with open(base + ".shp", "wb") as f:
+            # File header
+            f.write(struct.pack(">I", 9994))           # file code
+            f.write(b"\x00" * 20)                      # unused
+            f.write(struct.pack(">I", shp_content_length))  # file length in 16-bit words
+            f.write(struct.pack("<I", 1000))            # version
+            f.write(struct.pack("<I", 1))               # shape type = Point
+            f.write(struct.pack("<d", xmin))
+            f.write(struct.pack("<d", ymin))
+            f.write(struct.pack("<d", xmax))
+            f.write(struct.pack("<d", ymax))
+            f.write(struct.pack("<d", 0.0))             # zmin
+            f.write(struct.pack("<d", 0.0))             # zmax
+            f.write(struct.pack("<d", 0.0))             # mmin
+            f.write(struct.pack("<d", 0.0))             # mmax
+
+            for i, (lon, lat, _) in enumerate(shp_records):
+                f.write(struct.pack(">II", i + 1, content_lengths[i]))
+                if lon is not None and lat is not None:
+                    f.write(struct.pack("<I", 1))       # Point
+                    f.write(struct.pack("<dd", lon, lat))
+                else:
+                    f.write(struct.pack("<I", 0))       # Null shape
+
+        # --- Write .shx ---
+        shx_length = 50 + num_records * 4  # header + 8 bytes per record (in 16-bit words: 4)
+        with open(base + ".shx", "wb") as f:
+            f.write(struct.pack(">I", 9994))
+            f.write(b"\x00" * 20)
+            f.write(struct.pack(">I", shx_length))
+            f.write(struct.pack("<I", 1000))
+            f.write(struct.pack("<I", 1))
+            f.write(struct.pack("<d", xmin))
+            f.write(struct.pack("<d", ymin))
+            f.write(struct.pack("<d", xmax))
+            f.write(struct.pack("<d", ymax))
+            f.write(struct.pack("<d", 0.0))
+            f.write(struct.pack("<d", 0.0))
+            f.write(struct.pack("<d", 0.0))
+            f.write(struct.pack("<d", 0.0))
+            for offset, clen in zip(offsets, content_lengths):
+                f.write(struct.pack(">II", offset, clen))
+
+        # --- Write .dbf ---
+        today = datetime.date.today()
+        header_size = 32 + len(dbf_fields) * 32 + 1  # +1 for header terminator
+        with open(base + ".dbf", "wb") as f:
+            # DBF header
+            f.write(struct.pack("<B", 3))               # version
+            f.write(struct.pack("<3B", today.year - 1900, today.month, today.day))
+            f.write(struct.pack("<I", num_records))
+            f.write(struct.pack("<H", header_size))
+            f.write(struct.pack("<H", record_size))
+            f.write(b"\x00" * 20)                       # reserved
+
+            # Field descriptors
+            for fname, ftype, fsize, fdec in dbf_fields:
+                f.write(fname.encode("latin-1").ljust(11, b"\x00")[:11])
+                f.write(ftype.encode("latin-1"))
+                f.write(b"\x00" * 4)                    # reserved
+                f.write(struct.pack("<B", fsize))
+                f.write(struct.pack("<B", fdec))
+                f.write(b"\x00" * 14)                   # reserved
+
+            f.write(b"\r")  # header terminator
+
+            for rec in dbf_records:
+                f.write(rec)
+
+            f.write(b"\x1a")  # EOF marker
+
+    def _write_crdb_landxml(
+        self,
+        output_path: str,
+        rows: list[dict[str, Any]],
+        matched_pts: dict[str, dict[str, Any]],
+    ) -> None:
+        """Write a LandXML 1.2 file with CgPoints for all survey points.
+
+        Coordinates are WGS84 lat/lon/height from JXL. Points without
+        geodetic data use local N/E/Z.
+        """
+        ns = "http://www.landxml.org/schema/LandXML-1.2"
+        now = datetime.datetime.now()
+        stem = os.path.splitext(os.path.basename(output_path))[0]
+
+        root = ET.Element("LandXML", attrib={
+            "xmlns": ns,
+            "version": "1.2",
+            "date": now.strftime("%Y-%m-%d"),
+            "time": now.strftime("%H:%M:%S"),
+        })
+        ET.SubElement(root, "Project", attrib={"name": stem})
+
+        cg_points = ET.SubElement(root, "CgPoints")
+
+        for row in rows:
+            _z_val = row.get("Z")
+            if _z_val is not None and isinstance(_z_val, (int, float)) and _z_val <= -99999999:
+                continue
+            pkey = row["point_name"].strip().upper()
+            pt_jxl = matched_pts.get(pkey)
+
+            attribs: dict[str, str] = {"name": row["point_name"]}
+            code = row.get("code", "")
+            if code:
+                attribs["code"] = code
+
+            if pt_jxl:
+                lat = pt_jxl.get("wgs84_lat")
+                lon = pt_jxl.get("wgs84_lon")
+                ht = pt_jxl.get("wgs84_height")
+                if lat is not None and lon is not None:
+                    coord_text = f"{lat} {lon}"
+                    if ht is not None:
+                        coord_text += f" {ht}"
+                else:
+                    coord_text = f"{row['N']} {row['E']} {row['Z']}"
+            else:
+                coord_text = f"{row['N']} {row['E']} {row['Z']}"
+
+            cg_pt = ET.SubElement(cg_points, "CgPoint", attrib=attribs)
+            cg_pt.text = coord_text
+
+        os.makedirs(os.path.dirname(output_path) or ".", exist_ok=True)
+        tree = ET.ElementTree(root)
+        ET.indent(tree, space="  ")
+        tree.write(output_path, xml_declaration=True, encoding="UTF-8")
+
+    def _write_crdb_kmz(
+        self,
+        output_path: str,
+        rows: list[dict[str, Any]],
+        matched_pts: dict[str, dict[str, Any]],
+        fxl_data: dict[str, list[dict[str, Any]]],
+        media_found: dict[str, str] | None = None,
+    ) -> None:
+        """Write a KMZ file (zipped KML) with one Folder per feature code.
+
+        Each Placemark includes point name, code, attributes, GNSS quality,
+        and media filename in the description.
+        """
+        import zipfile
+
+        _media: dict[str, str] = media_found or {}
+        stem = os.path.splitext(os.path.basename(output_path))[0]
+
+        # Group rows by code, skipping sentinel elevations
+        by_code: dict[str, list[dict[str, Any]]] = {}
+        for row in rows:
+            _z_val = row.get("Z")
+            if _z_val is not None and isinstance(_z_val, (int, float)) and _z_val <= -99999999:
+                continue
+            c = row.get("code") or "UNKNOWN"
+            by_code.setdefault(c, []).append(row)
+
+        kml_ns = "http://www.opengis.net/kml/2.2"
+        kml = ET.Element("kml", attrib={"xmlns": kml_ns})
+        document = ET.SubElement(kml, "Document")
+        ET.SubElement(document, "name").text = stem
+
+        for code in sorted(by_code.keys()):
+            code_rows = by_code[code]
+            folder = ET.SubElement(document, "Folder")
+            ET.SubElement(folder, "name").text = code
+
+            # Get FXL attribute names for this code
+            fxl_attrs = fxl_data.get(code, [])
+
+            for row in code_rows:
+                pkey = row["point_name"].strip().upper()
+                pt_jxl = matched_pts.get(pkey)
+
+                lon: float | None = None
+                lat: float | None = None
+                alt: float | None = None
+                if pt_jxl:
+                    lon = cast(float | None, pt_jxl.get("wgs84_lon"))
+                    lat = cast(float | None, pt_jxl.get("wgs84_lat"))
+                    alt = cast(float | None, pt_jxl.get("wgs84_height"))
+
+                if lon is None or lat is None:
+                    continue  # Skip points without geodetic position
+
+                pm = ET.SubElement(folder, "Placemark")
+                ET.SubElement(pm, "name").text = row["point_name"]
+
+                # Build description with attributes and GNSS data
+                desc_parts: list[str] = [f"Code: {code}"]
+                attrs = row.get("attrs", [])
+                for i, val in enumerate(attrs):
+                    if val:
+                        attr_name = (fxl_attrs[i].get("name", f"Attr{i+1}")
+                                     if i < len(fxl_attrs) else f"Attr{i+1}")
+                        desc_parts.append(f"{attr_name}: {val}")
+                if pt_jxl:
+                    hp = pt_jxl.get("h_precision")
+                    vp = pt_jxl.get("v_precision")
+                    if hp is not None:
+                        desc_parts.append(f"H Precision: {hp:.4f}")
+                    if vp is not None:
+                        desc_parts.append(f"V Precision: {vp:.4f}")
+                    pd_val = pt_jxl.get("pdop")
+                    if pd_val is not None:
+                        desc_parts.append(f"PDOP: {pd_val:.2f}")
+                    ns_val = pt_jxl.get("num_satellites")
+                    if ns_val is not None:
+                        desc_parts.append(f"Satellites: {ns_val}")
+                    sm = pt_jxl.get("survey_method")
+                    if sm:
+                        desc_parts.append(f"Method: {sm}")
+                media_path = _media.get(pkey, "")
+                if media_path:
+                    desc_parts.append(f"Photo: {os.path.basename(media_path)}")
+
+                ET.SubElement(pm, "description").text = "\n".join(desc_parts)
+
+                point = ET.SubElement(pm, "Point")
+                coord_str = f"{lon},{lat}"
+                if alt is not None:
+                    coord_str += f",{alt}"
+                ET.SubElement(point, "coordinates").text = coord_str
+
+        os.makedirs(os.path.dirname(output_path) or ".", exist_ok=True)
+        kml_bytes = ET.tostring(kml, xml_declaration=True, encoding="UTF-8")
+
+        with zipfile.ZipFile(output_path, "w", zipfile.ZIP_DEFLATED) as zf:
+            zf.writestr("doc.kml", kml_bytes)
 
     # ---------- DWG geometry export ----------
 
@@ -7236,13 +7759,26 @@ End Sub
             raise RuntimeError("win32com is not available")
         we_started = False
         try:
-            acad = win32.GetActiveObject("AutoCAD.Application")
+            acad: Any = win32.GetActiveObject("AutoCAD.Application")  # type: ignore[reportUnknownVariableType,reportUnknownMemberType]
         except Exception:
             acad = win32.Dispatch("AutoCAD.Application")
-            acad.Visible = False
             we_started = True
-        doc = acad.Documents.Open(dwg_path, True)  # ReadOnly
-        return acad, doc, we_started
+            # Some AutoCAD versions need time to initialize before
+            # accepting property changes — retry Visible with a brief wait.
+            import time
+            for _attempt in range(10):
+                try:
+                    acad.Visible = False
+                    break
+                except Exception:
+                    time.sleep(1)
+            else:
+                try:
+                    acad.Visible = False
+                except Exception:
+                    pass
+        doc: Any = acad.Documents.Open(dwg_path, True)  # type: ignore[reportUnknownVariableType,reportUnknownMemberType]  # ReadOnly
+        return acad, doc, we_started  # type: ignore[reportUnknownVariableType]
 
     def _read_dwg_cs_code(self, doc: Any) -> str:
         """Best-effort read of the coordinate system code from a Map 3D drawing."""
@@ -7273,6 +7809,455 @@ End Sub
         except Exception:
             pass
         return ""
+
+    def _convert_dwg_to_dxf(self, dwg_path: str) -> tuple[str, str]:
+        """Convert a DWG file to DXF via AutoCAD COM SaveAs.
+
+        Copies the DWG to a temp directory first (so it is never locked or
+        read-only), opens the copy in AutoCAD, queries the Map 3D coordinate
+        system, does a single SaveAs to DXF, then closes the document.
+
+        Returns ``(dxf_path, cs_code)`` where *cs_code* is the Map 3D
+        coordinate system string (e.g. ``"TX83-SF"``) or empty if not set.
+        Raises RuntimeError if conversion fails.
+        """
+        import shutil
+        import tempfile
+        import win32com.client as win32  # type: ignore[import-untyped]
+
+        output_dir = tempfile.mkdtemp(prefix="dvt_dxf_")
+        stem = os.path.splitext(os.path.basename(dwg_path))[0]
+        dxf_path = os.path.join(output_dir, stem + ".dxf")
+        cs_code = ""
+
+        # Copy the DWG so we always have a writable, unlocked copy
+        tmp_dwg = os.path.join(output_dir, os.path.basename(dwg_path))
+        shutil.copy2(dwg_path, tmp_dwg)
+
+        acad: Any = None  # type: ignore[reportUnknownVariableType]
+        doc: Any = None  # type: ignore[reportUnknownVariableType]
+        docs_before = 0
+        try:
+            try:
+                acad = win32.GetActiveObject("AutoCAD.Application")  # type: ignore[reportUnknownMemberType]
+            except Exception:
+                acad = win32.Dispatch("AutoCAD.Application")  # type: ignore[reportUnknownMemberType]
+
+            # Wait for AutoCAD to be ready (visibility not required)
+            import time
+            for _ in range(15):
+                try:
+                    _ = acad.Documents  # type: ignore[reportUnknownMemberType]
+                    break
+                except Exception:
+                    time.sleep(1)
+
+            # Remember how many docs were open before we add ours
+            try:
+                docs_before = int(acad.Documents.Count)  # type: ignore[reportUnknownMemberType,reportUnknownArgumentType]
+            except Exception:
+                pass
+
+            # Try to read the CS code from any already-open document first.
+            # The original DWG (open by the user) has the Map 3D CS assigned;
+            # the temp copy we're about to open may not.
+            for _di in range(docs_before):
+                if cs_code:
+                    break
+                try:
+                    _existing_doc: Any = acad.Documents.Item(_di)  # type: ignore[reportUnknownMemberType,reportUnknownVariableType]
+                    for var_name in ("CGEOCS", "MAPCSCODE"):
+                        try:
+                            val = _existing_doc.GetVariable(var_name)  # type: ignore[reportUnknownMemberType]
+                            if val and str(val).strip():  # type: ignore[reportUnknownArgumentType]
+                                cs_code = str(val).strip()  # type: ignore[reportUnknownArgumentType]
+                                break
+                        except Exception:
+                            continue
+                except Exception:
+                    continue
+
+            # Open the COPY (not the original) — no lock conflicts
+            doc = acad.Documents.Open(tmp_dwg, False)  # type: ignore[reportUnknownMemberType]  # False = not ReadOnly
+
+            # If CS not found from existing docs, try the temp copy
+            if not cs_code:
+                for var_name in ("CGEOCS", "MAPCSCODE"):
+                    try:
+                        val = doc.GetVariable(var_name)  # type: ignore[reportUnknownMemberType]
+                        if val and str(val).strip():  # type: ignore[reportUnknownArgumentType]
+                            cs_code = str(val).strip()  # type: ignore[reportUnknownArgumentType]
+                            break
+                    except Exception:
+                        continue
+
+            # acR2018_dxf = 61
+            AC_SAVE_AS_R2018_DXF = 61
+            doc.SaveAs(dxf_path, AC_SAVE_AS_R2018_DXF)  # type: ignore[reportUnknownMemberType]
+
+        finally:
+            if doc is not None:
+                try:
+                    doc.Close(False)  # type: ignore[reportUnknownMemberType]  # False = don't save changes
+                except Exception:
+                    pass
+            # Quit AutoCAD if it had no documents open before we started
+            if acad is not None and docs_before == 0:
+                import time as _t
+                _t.sleep(1)  # give AutoCAD a moment to finish closing the doc
+                try:
+                    # Double-check no documents remain
+                    _remaining = int(acad.Documents.Count)  # type: ignore[reportUnknownMemberType,reportUnknownArgumentType]
+                    if _remaining == 0:
+                        acad.Quit()  # type: ignore[reportUnknownMemberType]
+                except Exception:
+                    # If Documents.Count fails, AutoCAD may already be shutting down
+                    try:
+                        acad.Quit()  # type: ignore[reportUnknownMemberType]
+                    except Exception:
+                        pass
+            # Remove the temp DWG copy
+            try:
+                os.remove(tmp_dwg)
+            except Exception:
+                pass
+
+        if not os.path.isfile(dxf_path):
+            raise RuntimeError(
+                "AutoCAD SaveAs did not produce a DXF file.\n"
+                "Ensure AutoCAD is installed and the DWG is valid.")
+
+        # If AutoCAD didn't provide a CS code, try to find a .prj file
+        # near the DWG and resolve it to an Autodesk CS code.
+        # Walk up to 3 levels from the DWG to find project-level .prj files
+        # (e.g. DWG in ASBUILT/WORKING/, .prj in PROJECT_DATA/SHP/)
+        if not cs_code:
+            import glob as _glob
+            dwg_dir = os.path.dirname(os.path.abspath(dwg_path))
+            _search_dirs = [dwg_dir]
+            _d = dwg_dir
+            for _ in range(3):
+                _d = os.path.dirname(_d)
+                if _d and _d != os.path.dirname(_d):  # stop at root
+                    _search_dirs.append(_d)
+            for _search_dir in _search_dirs:
+                for _prj in _glob.glob(os.path.join(_search_dir, "**", "*.prj"), recursive=True):
+                    try:
+                        with open(_prj, encoding="utf-8") as _pf:
+                            _wkt = _pf.read().strip()
+                        if _wkt and "PROJCS" in _wkt:
+                            from pyproj import CRS as _CRS  # type: ignore[import-untyped]
+                            _prj_crs: Any = _CRS.from_wkt(_wkt)  # type: ignore[reportUnknownVariableType,reportUnknownMemberType]
+                            _prj_epsg: Any = _prj_crs.to_epsg()  # type: ignore[reportUnknownVariableType,reportUnknownMemberType]
+                            if _prj_epsg:
+                                # Reverse-lookup the Autodesk code from the EPSG
+                                _ad_map = self._load_autodesk_cs_map()  # type: ignore[attr-defined]
+                                for _ak, _av in _ad_map.items():
+                                    if _av == int(_prj_epsg):  # type: ignore[reportUnknownArgumentType]
+                                        cs_code = _ak
+                                        break
+                                if not cs_code:
+                                    cs_code = str(_prj_epsg)  # type: ignore[reportUnknownArgumentType]
+                                break
+                    except Exception:
+                        continue
+                if cs_code:
+                    break
+
+        return dxf_path, cs_code
+
+    def _read_dwg_geometry_ezdxf(
+        self, dwg_path: str,
+    ) -> tuple[dict[str, int], dict[str, list[dict[str, Any]]], str]:
+        """Read DWG/DXF geometry using ezdxf.
+
+        If the file is a .dwg, it is first converted to .dxf via AutoCAD COM
+        SaveAs, and the Map 3D coordinate system is queried at that time.
+
+        Returns ``(layer_counts, geometry_dict, cs_code)`` where *cs_code*
+        is the coordinate-system identifier from AutoCAD Map 3D (empty
+        string if not detected).
+        """
+        import ezdxf  # type: ignore[import-untyped]
+
+        read_path = dwg_path
+        tmp_dxf: str | None = None
+        cs_code = ""
+
+        # ezdxf can only read DXF — convert DWG first via AutoCAD COM
+        if dwg_path.lower().endswith(".dwg"):
+            tmp_dxf, cs_code = self._convert_dwg_to_dxf(dwg_path)
+            read_path = tmp_dxf
+
+        try:
+            doc = ezdxf.readfile(read_path)  # type: ignore[reportUnknownMemberType,reportPrivateImportUsage]
+            msp = doc.modelspace()
+
+            layer_counts: dict[str, int] = {}
+            geom: dict[str, list[dict[str, Any]]] = {}
+
+            # Sentinel elevation value — skip points with this Z
+            _NO_ELEV = -99999999.0
+
+            def _clean_z(z: float) -> float:
+                """Replace sentinel elevations with 0."""
+                return 0.0 if z <= _NO_ELEV else z
+
+            # Build layer color lookup for ByLayer (ACI 256) resolution
+            _layer_colors: dict[str, int] = {}
+            try:
+                for _lyr in doc.layers:  # type: ignore[reportUnknownMemberType]
+                    _ln: str = _lyr.dxf.name  # type: ignore[reportUnknownMemberType]
+                    _lc: int = _lyr.color  # type: ignore[reportUnknownMemberType]
+                    _layer_colors[_ln] = _lc
+            except Exception:
+                pass
+
+            for entity in msp:
+                dxf = entity.dxf
+                layer = dxf.layer if dxf.hasattr("layer") else "0"
+                color = dxf.color if dxf.hasattr("color") else 256
+                etype = entity.dxftype()
+
+                # Resolve ByLayer (256) and ByBlock (0) to actual layer color
+                if color in (0, 256):
+                    color = _layer_colors.get(layer, 7)
+
+                if etype == "LWPOLYLINE":
+                    pts: list[tuple[float, float]] = [(p[0], p[1]) for p in entity.get_points(format="xy")]  # type: ignore[reportUnknownMemberType,reportAttributeAccessIssue]
+                    pts3: list[tuple[float, float, float]] = [(p[0], p[1], _clean_z(p[2] if len(p) > 2 else 0.0)) for p in entity.get_points(format="xyz")]  # type: ignore[reportUnknownMemberType,reportAttributeAccessIssue]
+                    if len(pts) < 2:
+                        continue
+                    closed: bool = entity.closed  # type: ignore[reportUnknownMemberType,reportAttributeAccessIssue]
+                    layer_counts[layer] = layer_counts.get(layer, 0) + 1
+                    geom.setdefault(layer, [])
+                    if closed:
+                        if pts[-1] != pts[0]:
+                            pts.append(pts[0])
+                            pts3.append(pts3[0])
+                        geom[layer].append({"geom_type": "POLYGON", "coords": [pts],
+                                            "coords_3d": [pts3],
+                                            "entity_type": "AcDbLWPolyline", "color": color})
+                    else:
+                        geom[layer].append({"geom_type": "LINESTRING", "coords": pts,
+                                            "coords_3d": pts3,
+                                            "entity_type": "AcDbLWPolyline", "color": color})
+
+                elif etype == "POLYLINE":
+                    pts: list[tuple[float, float]] = [(v.dxf.location.x, v.dxf.location.y)  # type: ignore[reportUnknownMemberType,reportAttributeAccessIssue]
+                           for v in entity.vertices if v.dxf.hasattr("location")]  # type: ignore[reportUnknownMemberType,reportAttributeAccessIssue]
+                    pts3: list[tuple[float, float, float]] = [  # type: ignore[reportUnknownMemberType,reportAttributeAccessIssue]
+                        (v.dxf.location.x, v.dxf.location.y,  # type: ignore[reportUnknownMemberType]
+                         _clean_z(v.dxf.location.z if hasattr(v.dxf.location, "z") else 0.0))  # type: ignore[reportUnknownMemberType,reportUnknownArgumentType]
+                        for v in entity.vertices if v.dxf.hasattr("location")]  # type: ignore[reportUnknownMemberType,reportAttributeAccessIssue]
+                    if len(pts) < 2:
+                        continue
+                    closed: bool = entity.is_closed  # type: ignore[reportUnknownMemberType,reportAttributeAccessIssue]
+                    layer_counts[layer] = layer_counts.get(layer, 0) + 1
+                    geom.setdefault(layer, [])
+                    if closed:
+                        if pts[-1] != pts[0]:
+                            pts.append(pts[0])
+                            pts3.append(pts3[0])
+                        geom[layer].append({"geom_type": "POLYGON", "coords": [pts],
+                                            "coords_3d": [pts3],
+                                            "entity_type": "AcDbPolyline", "color": color})
+                    else:
+                        geom[layer].append({"geom_type": "LINESTRING", "coords": pts,
+                                            "coords_3d": pts3,
+                                            "entity_type": "AcDbPolyline", "color": color})
+
+                elif etype == "LINE":
+                    sp = dxf.start
+                    ep = dxf.end
+                    _sz = _clean_z(sp.z if hasattr(sp, "z") else 0.0)
+                    _ez = _clean_z(ep.z if hasattr(ep, "z") else 0.0)
+                    layer_counts[layer] = layer_counts.get(layer, 0) + 1
+                    geom.setdefault(layer, [])
+                    geom[layer].append({"geom_type": "LINESTRING",
+                                        "coords": [(sp.x, sp.y), (ep.x, ep.y)],
+                                        "coords_3d": [(sp.x, sp.y, _sz), (ep.x, ep.y, _ez)],
+                                        "entity_type": "AcDbLine", "color": color})
+
+                elif etype == "POINT":
+                    loc = dxf.location
+                    _pz = loc.z if hasattr(loc, "z") else 0.0
+                    # Skip points with sentinel "no data" elevations
+                    if _pz <= _NO_ELEV or loc.x <= _NO_ELEV or loc.y <= _NO_ELEV:
+                        continue
+                    _pz = _clean_z(_pz)
+                    layer_counts[layer] = layer_counts.get(layer, 0) + 1
+                    geom.setdefault(layer, [])
+                    geom[layer].append({"geom_type": "POINT",
+                                        "coords": (loc.x, loc.y),
+                                        "coords_3d": (loc.x, loc.y, _pz),
+                                        "entity_type": "AcDbPoint", "color": color})
+
+            # cs_code was already obtained from AutoCAD COM during conversion
+
+        finally:
+            # Clean up temp DXF directory
+            if tmp_dxf:
+                try:
+                    import shutil
+                    shutil.rmtree(os.path.dirname(tmp_dxf), ignore_errors=True)
+                except Exception:
+                    pass
+
+        return layer_counts, geom, cs_code
+
+    def _parse_dxf_geometry(
+        self, dxf_path: str,
+    ) -> tuple[dict[str, int], dict[str, list[dict[str, Any]]]]:
+        """Parse a DXF file and extract geometry by layer.
+
+        Returns ``(layer_counts, geometry_dict)`` where geometry_dict is
+        ``{layer_name: [entity_dict, ...]}``, same format as _extract_dwg_geometry.
+        This is much faster than COM iteration since DXF is a text file.
+        """
+        layer_counts: dict[str, int] = {}
+        geom: dict[str, list[dict[str, Any]]] = {}
+
+        _supported = {"LWPOLYLINE", "POLYLINE", "LINE", "POINT"}
+
+        with open(dxf_path, "r", encoding="utf-8", errors="replace") as f:
+            lines = f.readlines()
+
+        # DXF is pairs of (group_code, value) lines
+        i = 0
+        n = len(lines)
+
+        def _next_pair() -> tuple[int, str] | None:
+            nonlocal i
+            while i + 1 < n:
+                try:
+                    code = int(lines[i].strip())
+                except (ValueError, IndexError):
+                    i += 2
+                    continue
+                val = lines[i + 1].strip()
+                i += 2
+                return code, val
+            return None
+
+        # Skip to ENTITIES section
+        in_entities = False
+        while i < n:
+            pair = _next_pair()
+            if pair is None:
+                break
+            code, val = pair
+            if code == 2 and val == "ENTITIES":
+                in_entities = True
+                break
+
+        if not in_entities:
+            return layer_counts, geom
+
+        # Parse entities
+        while i < n:
+            pair = _next_pair()
+            if pair is None:
+                break
+            code, val = pair
+
+            # End of ENTITIES section
+            if code == 0 and val == "ENDSEC":
+                break
+
+            if code != 0 or val not in _supported:
+                continue
+
+            ent_type = val
+            layer = "0"
+            color = 256
+            x_vals: list[float] = []
+            y_vals: list[float] = []
+            closed = False
+            # For LINE entities
+            x1 = y1 = x2 = y2 = 0.0
+
+            # Read entity properties until next entity (code 0)
+            while i < n:
+                pair = _next_pair()
+                if pair is None:
+                    break
+                gc, gv = pair
+
+                if gc == 0:
+                    # We've hit the next entity — back up
+                    i -= 2
+                    break
+
+                if gc == 8:
+                    layer = gv
+                elif gc == 62:
+                    try:
+                        color = int(gv)
+                    except ValueError:
+                        pass
+                elif gc == 70 and ent_type in ("LWPOLYLINE", "POLYLINE"):
+                    try:
+                        flags = int(gv)
+                        closed = bool(flags & 1)
+                    except ValueError:
+                        pass
+                elif ent_type == "LWPOLYLINE":
+                    if gc == 10:
+                        x_vals.append(float(gv))
+                    elif gc == 20:
+                        y_vals.append(float(gv))
+                elif ent_type == "LINE":
+                    if gc == 10:
+                        x1 = float(gv)
+                    elif gc == 20:
+                        y1 = float(gv)
+                    elif gc == 11:
+                        x2 = float(gv)
+                    elif gc == 21:
+                        y2 = float(gv)
+                elif ent_type == "POINT":
+                    if gc == 10:
+                        x1 = float(gv)
+                    elif gc == 20:
+                        y1 = float(gv)
+
+            # Build geometry entry
+            layer_counts[layer] = layer_counts.get(layer, 0) + 1
+            geom.setdefault(layer, [])
+
+            if ent_type == "LWPOLYLINE":
+                coords = list(zip(x_vals, y_vals))
+                if len(coords) < 2:
+                    continue
+                if closed:
+                    if coords[-1] != coords[0]:
+                        coords.append(coords[0])
+                    geom[layer].append({
+                        "geom_type": "POLYGON", "coords": [coords],
+                        "entity_type": "AcDbLWPolyline", "color": color,
+                    })
+                else:
+                    geom[layer].append({
+                        "geom_type": "LINESTRING", "coords": coords,
+                        "entity_type": "AcDbLWPolyline", "color": color,
+                    })
+            elif ent_type == "LINE":
+                geom[layer].append({
+                    "geom_type": "LINESTRING",
+                    "coords": [(x1, y1), (x2, y2)],
+                    "entity_type": "AcDbLine", "color": color,
+                })
+            elif ent_type == "POINT":
+                geom[layer].append({
+                    "geom_type": "POINT",
+                    "coords": (x1, y1),
+                    "entity_type": "AcDbPoint", "color": color,
+                })
+            # POLYLINE (heavy/3D) vertices are sub-entities — skip for now,
+            # fallback COM path handles them.
+
+        return layer_counts, geom
 
     def _extract_dwg_geometry(
         self, doc: Any, selected_layers: set[str],
@@ -7420,7 +8405,11 @@ End Sub
                     fid INTEGER PRIMARY KEY AUTOINCREMENT,
                     geom BLOB,
                     entity_type TEXT,
+                    geom_type TEXT,
                     color INTEGER,
+                    vertices INTEGER,
+                    horiz_dist REAL,
+                    slope_dist REAL,
                     source_layer TEXT
                 )''')
 
@@ -7436,7 +8425,7 @@ End Sub
                     geom_blob: bytes | None = None
 
                     if ent["geom_type"] == "LINESTRING":
-                        pts = ent["coords"]
+                        pts: list[tuple[float, float]] = ent["coords"]
                         if transformer:
                             pts = [transformer(x, y) for x, y in pts]
                         geom_blob = self._make_gpkg_linestring_blob(  # type: ignore[attr-defined]
@@ -7473,12 +8462,34 @@ End Sub
                         max_y = max(max_y, py)
 
                     if geom_blob:
+                        import math as _math
+                        _gt = ent["geom_type"]
+                        _c3d: list[Any] = ent.get("coords_3d", [])
+                        if _gt == "LINESTRING":
+                            _nv = len(ent["coords"])
+                        elif _gt == "POLYGON":
+                            _nv = sum(len(r) for r in ent["coords"])
+                        else:
+                            _nv = 1
+                        # Compute distances from 3D coords
+                        _hd: float | None = None
+                        _sd: float | None = None
+                        if _gt == "LINESTRING" and _c3d and len(_c3d) >= 2:
+                            _hd = 0.0
+                            _sd = 0.0
+                            for _di in range(len(_c3d) - 1):
+                                _dx = _c3d[_di+1][0] - _c3d[_di][0]
+                                _dy = _c3d[_di+1][1] - _c3d[_di][1]
+                                _dz = _c3d[_di+1][2] - _c3d[_di][2]
+                                _hd += _math.sqrt(_dx*_dx + _dy*_dy)
+                                _sd += _math.sqrt(_dx*_dx + _dy*_dy + _dz*_dz)
                         conn.execute(
                             f'INSERT INTO "{safe_name}" '
-                            f"(geom, entity_type, color, source_layer) "
-                            f"VALUES (?,?,?,?)",
-                            (geom_blob, ent["entity_type"],
-                             ent["color"], layer_name))
+                            f"(geom, entity_type, geom_type, color, vertices, "
+                            f"horiz_dist, slope_dist, source_layer) "
+                            f"VALUES (?,?,?,?,?,?,?,?)",
+                            (geom_blob, ent["entity_type"], _gt,
+                             ent["color"], _nv, _hd, _sd, layer_name))
                         total += 1
 
                 conn.execute(
@@ -7496,246 +8507,934 @@ End Sub
             conn.commit()
         return total
 
-    def _show_dwg_layer_dialog(self, dwg_path: str, gpkg_path: str) -> list[str]:
+    def _write_dwg_geometry_to_shp(
+        self,
+        output_path: str,
+        geometry: dict[str, list[dict[str, Any]]],
+        srid: int = 0,
+    ) -> None:
+        """Append DWG line/polygon geometry to a Shapefile.
+
+        Creates a single combined Shapefile with all DWG entities.
+        Since shapefiles support only one geometry type, writes
+        POLYLINE (type 3) which can hold both lines and polygon rings.
+        """
+        # Collect all entities as polylines (polygons become closed polylines)
+        all_entities: list[dict[str, Any]] = []
+        for layer_name, ents in geometry.items():
+            for ent in ents:
+                all_entities.append({**ent, "layer": layer_name})
+
+        if not all_entities:
+            return
+
+        os.makedirs(os.path.dirname(output_path) or ".", exist_ok=True)
+        base = os.path.splitext(output_path)[0]
+
+        # .prj — write the CRS definition so GIS software knows the coordinate system
+        prj_wkt = ""
+        if srid:
+            try:
+                from pyproj import CRS as _CRS  # type: ignore[import-untyped]
+                _prj_crs: Any = _CRS.from_epsg(srid)  # type: ignore[reportUnknownVariableType,reportUnknownMemberType]
+                prj_wkt = str(_prj_crs.to_wkt("WKT1_ESRI"))  # type: ignore[reportUnknownMemberType]
+            except Exception:
+                if srid == 4326:
+                    prj_wkt = (
+                        'GEOGCS["GCS_WGS_1984",DATUM["D_WGS_1984",'
+                        'SPHEROID["WGS_1984",6378137.0,298.257223563]],'
+                        'PRIMEM["Greenwich",0.0],'
+                        'UNIT["Degree",0.0174532925199433]]'
+                    )
+        if prj_wkt:
+            with open(base + ".prj", "w", encoding="utf-8") as f:
+                f.write(prj_wkt)
+
+        # DBF fields
+        dbf_fields: list[tuple[str, str, int, int]] = [
+            ("layer", "C", 50, 0),
+            ("geom_type", "C", 15, 0),
+            ("ent_type", "C", 30, 0),
+            ("color", "N", 6, 0),
+            ("color_rgb", "C", 12, 0),
+            ("vertices", "N", 8, 0),
+            ("horiz_dist", "N", 14, 2),
+            ("slope_dist", "N", 14, 2),
+        ]
+        # ACI → RGB name for the shapefile attribute
+        _ACI_NAMES: dict[int, str] = {
+            1: "Red", 2: "Yellow", 3: "Green", 4: "Cyan",
+            5: "Blue", 6: "Magenta", 7: "White", 8: "DkGray",
+            9: "LtGray", 256: "ByLayer", 0: "ByBlock",
+        }
+        record_size = 1
+        for _, _, sz, _ in dbf_fields:
+            record_size += sz
+
+        # Compute bounding box
+        all_x: list[float] = []
+        all_y: list[float] = []
+        for ent in all_entities:
+            gt = ent["geom_type"]
+            if gt == "POINT":
+                all_x.append(ent["coords"][0])
+                all_y.append(ent["coords"][1])
+            elif gt == "LINESTRING":
+                for x, y in ent["coords"]:
+                    all_x.append(x)
+                    all_y.append(y)
+            elif gt == "POLYGON":
+                for ring in ent["coords"]:
+                    for x, y in ring:
+                        all_x.append(x)
+                        all_y.append(y)
+
+        xmin = min(all_x) if all_x else 0.0
+        ymin = min(all_y) if all_y else 0.0
+        xmax = max(all_x) if all_x else 0.0
+        ymax = max(all_y) if all_y else 0.0
+
+        # Build SHP records
+        num_records = len(all_entities)
+        shp_data = bytearray()
+        shx_offsets: list[tuple[int, int]] = []
+        shp_file_len = 50  # header in 16-bit words
+
+        for ent in all_entities:
+            gt = ent["geom_type"]
+            offset = shp_file_len
+
+            if gt == "POINT":
+                px, py = ent["coords"]
+                rec_content = struct.pack("<I", 1)  # Point
+                rec_content += struct.pack("<dd", px, py)
+            elif gt == "LINESTRING":
+                coords = ent["coords"]
+                ex = [c[0] for c in coords]
+                ey = [c[1] for c in coords]
+                rec_content = struct.pack("<I", 3)  # PolyLine
+                rec_content += struct.pack("<dddd", min(ex), min(ey), max(ex), max(ey))
+                rec_content += struct.pack("<II", 1, len(coords))  # 1 part
+                rec_content += struct.pack("<I", 0)  # part index
+                for x, y in coords:
+                    rec_content += struct.pack("<dd", x, y)
+            elif gt == "POLYGON":
+                rings = ent["coords"]
+                total_pts = sum(len(r) for r in rings)
+                ex = [pt[0] for r in rings for pt in r]
+                ey = [pt[1] for r in rings for pt in r]
+                rec_content = struct.pack("<I", 5)  # Polygon
+                rec_content += struct.pack("<dddd", min(ex), min(ey), max(ex), max(ey))
+                rec_content += struct.pack("<II", len(rings), total_pts)
+                idx = 0
+                for ring in rings:
+                    rec_content += struct.pack("<I", idx)
+                    idx += len(ring)
+                for ring in rings:
+                    for x, y in ring:
+                        rec_content += struct.pack("<dd", x, y)
+            else:
+                continue
+
+            content_words = len(rec_content) // 2
+            rec_header = struct.pack(">II", len(shx_offsets) + 1, content_words)
+            shp_data += rec_header + rec_content
+            shx_offsets.append((offset, content_words))
+            shp_file_len += 4 + content_words  # header (4 words) + content
+
+        # Determine dominant shape type for the file header
+        has_poly = any(e["geom_type"] in ("LINESTRING", "POLYGON") for e in all_entities)
+        has_polygon = any(e["geom_type"] == "POLYGON" for e in all_entities)
+        if has_polygon:
+            shape_type = 5  # Polygon
+        elif has_poly:
+            shape_type = 3  # PolyLine
+        else:
+            shape_type = 1  # Point
+
+        # Write .shp
+        with open(base + ".shp", "wb") as f:
+            f.write(struct.pack(">I", 9994))
+            f.write(b"\x00" * 20)
+            f.write(struct.pack(">I", shp_file_len))
+            f.write(struct.pack("<I", 1000))
+            f.write(struct.pack("<I", shape_type))
+            f.write(struct.pack("<dddd", xmin, ymin, xmax, ymax))
+            f.write(struct.pack("<dddd", 0.0, 0.0, 0.0, 0.0))  # z,m ranges
+            f.write(bytes(shp_data))
+
+        # Write .shx
+        shx_len = 50 + num_records * 4
+        with open(base + ".shx", "wb") as f:
+            f.write(struct.pack(">I", 9994))
+            f.write(b"\x00" * 20)
+            f.write(struct.pack(">I", shx_len))
+            f.write(struct.pack("<I", 1000))
+            f.write(struct.pack("<I", shape_type))
+            f.write(struct.pack("<dddd", xmin, ymin, xmax, ymax))
+            f.write(struct.pack("<dddd", 0.0, 0.0, 0.0, 0.0))
+            for off, clen in shx_offsets:
+                f.write(struct.pack(">II", off, clen))
+
+        # Write .dbf
+        today = datetime.date.today()
+        header_size = 32 + len(dbf_fields) * 32 + 1
+        with open(base + ".dbf", "wb") as f:
+            f.write(struct.pack("<B", 3))
+            f.write(struct.pack("<3B", today.year - 1900, today.month, today.day))
+            f.write(struct.pack("<I", num_records))
+            f.write(struct.pack("<H", header_size))
+            f.write(struct.pack("<H", record_size))
+            f.write(b"\x00" * 20)
+            for fname, ftype, fsize, fdec in dbf_fields:
+                f.write(fname.encode("latin-1").ljust(11, b"\x00")[:11])
+                f.write(ftype.encode("latin-1"))
+                f.write(b"\x00" * 4)
+                f.write(struct.pack("<B", fsize))
+                f.write(struct.pack("<B", fdec))
+                f.write(b"\x00" * 14)
+            f.write(b"\r")
+            for ent in all_entities:
+                rec = b"\x20"
+                import math as _math
+                _aci = ent.get("color", 256)
+                _cname = _ACI_NAMES.get(_aci, f"ACI {_aci}")
+                _gt = ent["geom_type"]
+                _c3d: list[Any] = ent.get("coords_3d", [])
+                if _gt == "LINESTRING":
+                    _nv = len(ent["coords"])
+                elif _gt == "POLYGON":
+                    _nv = sum(len(r) for r in ent["coords"])
+                elif _gt == "POINT":
+                    _nv = 1
+                else:
+                    _nv = 0
+                # Compute distances from 3D coords
+                _hd = 0.0
+                _sd = 0.0
+                if _gt == "LINESTRING" and _c3d and len(_c3d) >= 2:
+                    for _di in range(len(_c3d) - 1):
+                        _dx = _c3d[_di+1][0] - _c3d[_di][0]
+                        _dy = _c3d[_di+1][1] - _c3d[_di][1]
+                        _dz = _c3d[_di+1][2] - _c3d[_di][2]
+                        _hd += _math.sqrt(_dx*_dx + _dy*_dy)
+                        _sd += _math.sqrt(_dx*_dx + _dy*_dy + _dz*_dz)
+                vals: list[str] = [ent.get("layer", ""), _gt,
+                        ent.get("entity_type", ""), str(_aci), _cname, str(_nv),
+                        f"{_hd:.2f}", f"{_sd:.2f}"]
+                for (_, ftype, fsize, _), val in zip(dbf_fields, vals):  # type: ignore[reportUnknownVariableType]
+                    s = str(val)
+                    if ftype == "N":
+                        rec += s.rjust(fsize)[:fsize].encode("latin-1")
+                    else:
+                        rec += s.ljust(fsize)[:fsize].encode("latin-1", errors="replace")
+                f.write(rec)
+            f.write(b"\x1a")
+
+    # Lazily-loaded Autodesk CS code → EPSG mapping from NameMapper.csv
+    _AUTODESK_CS_TO_EPSG: dict[str, int] | None = None
+
+    @staticmethod
+    def _load_autodesk_cs_map() -> dict[str, int]:
+        """Load the Autodesk→EPSG mapping from NameMapper.csv (4000+ entries).
+
+        The file ships with AutoCAD Map 3D at:
+        C:\\ProgramData\\Autodesk\\Geospatial Coordinate Systems <ver>\\NameMapper.csv
+        """
+        if DataValidationTool._AUTODESK_CS_TO_EPSG is not None:
+            return DataValidationTool._AUTODESK_CS_TO_EPSG
+
+        import csv
+        import glob as _glob
+        from collections import defaultdict
+
+        mapping: dict[str, int] = {}
+
+        # Find the NameMapper.csv
+        nm_path = ""
+        for pattern in [
+            r"C:\ProgramData\Autodesk\Geospatial Coordinate Systems*\NameMapper.csv",
+        ]:
+            hits = _glob.glob(pattern)
+            if hits:
+                nm_path = hits[-1]  # latest version
+                break
+
+        if nm_path and os.path.isfile(nm_path):
+            try:
+                with open(nm_path, encoding="utf-8") as f:
+                    rows = list(csv.DictReader(f))
+
+                # Group by GenericId
+                groups: dict[str, list[dict[str, str]]] = defaultdict(list)
+                for r in rows:
+                    groups[r["GenericId"]].append(r)
+
+                for _gid, members in groups.items():
+                    ad_name: str | None = None
+                    epsg_code: int | None = None
+                    for m in members:
+                        if m["Flavor"] == "Autodesk":
+                            ad_name = m["NameId"]
+                        if m["Flavor"] == "EPSG" and m["NumericId"] != "0":
+                            epsg_code = int(m["NumericId"])
+                    if ad_name and epsg_code:
+                        mapping[ad_name] = epsg_code
+            except Exception:
+                pass
+
+        DataValidationTool._AUTODESK_CS_TO_EPSG = mapping
+        return mapping
+
+    @staticmethod
+    def _resolve_autodesk_cs(cs_code: str) -> int:
+        """Resolve an Autodesk Map 3D CS code to an EPSG integer.
+
+        Uses the NameMapper.csv from the Autodesk install (4000+ mappings),
+        then falls back to pyproj and direct integer parsing.
+        Returns 0 if unresolvable.
+        """
+        if not cs_code or not cs_code.strip():
+            return 0
+        code = cs_code.strip()
+
+        # 1. Direct EPSG integer (user typed a number)
+        try:
+            return int(code)
+        except ValueError:
+            pass
+
+        # 2. Autodesk NameMapper.csv (CO83-NF → 2231, etc.)
+        mapping = DataValidationTool._load_autodesk_cs_map()
+        epsg = mapping.get(code, 0)
+        if epsg:
+            return epsg
+        # Try case-insensitive
+        code_upper = code.upper()
+        for k, v in mapping.items():
+            if k.upper() == code_upper:
+                return v
+
+        # 3. Try pyproj from_user_input (handles full CRS names, WKT, etc.)
+        try:
+            from pyproj import CRS as _CRS  # type: ignore[import-untyped]
+            _crs: Any = _CRS.from_user_input(code)  # type: ignore[reportUnknownVariableType,reportUnknownMemberType]
+            _e: Any = _crs.to_epsg()  # type: ignore[reportUnknownVariableType,reportUnknownMemberType]
+            if _e:
+                return int(_e)  # type: ignore[reportUnknownArgumentType]
+        except Exception:
+            pass
+
+        return 0
+
+    def _write_dwg_geometry_to_kml(
+        self,
+        output_path: str,
+        geometry: dict[str, list[dict[str, Any]]],
+        srid: int = 0,
+        source_crs: str = "",
+    ) -> None:
+        """Write DWG geometry (lines/polygons) as KML appended into an existing KMZ,
+        or as a standalone KML file.
+
+        Coordinates are reprojected to WGS 84 lon/lat via pyproj.  The source
+        CRS is resolved from *source_crs* (raw Autodesk/Map 3D CS code) or
+        *srid* (EPSG integer), whichever is available.
+
+        If output_path is a .kmz that already exists, the DWG geometry is added
+        to the existing KML inside it. Otherwise writes a new .kmz.
+        """
+        import zipfile
+
+        # Build a reprojection function — resolve CRS via mapping table + pyproj
+        _reproject: Any = None  # type: ignore[reportUnknownVariableType]
+        _resolved_epsg = 0
+        if source_crs:
+            _resolved_epsg = self._resolve_autodesk_cs(source_crs)  # type: ignore[attr-defined]
+        if not _resolved_epsg and srid not in (0, 4326):
+            _resolved_epsg = srid
+        if _resolved_epsg and _resolved_epsg != 4326:
+            try:
+                from pyproj import Transformer as _PT  # type: ignore[import-untyped]
+                _t: Any = _PT.from_crs(  # type: ignore[reportUnknownVariableType,reportUnknownMemberType]
+                    f"EPSG:{_resolved_epsg}", "EPSG:4326", always_xy=True)
+                _reproject = lambda x, y: _t.transform(x, y)  # type: ignore[reportUnknownVariableType,reportUnknownLambdaType]
+            except Exception:
+                pass
+
+        def _tx(x: float, y: float) -> tuple[float, float]:
+            """Transform coords to lon/lat if reprojection is available."""
+            if _reproject:
+                return _reproject(x, y)  # type: ignore[reportUnknownVariableType]
+            return x, y
+
+        stem = os.path.splitext(os.path.basename(output_path))[0]
+        kml_ns = "http://www.opengis.net/kml/2.2"
+
+        # Try to load existing KML from KMZ
+        existing_kml: bytes | None = None
+        if os.path.isfile(output_path) and output_path.lower().endswith(".kmz"):
+            try:
+                with zipfile.ZipFile(output_path, "r") as zf:
+                    existing_kml = zf.read("doc.kml")
+            except Exception:
+                pass
+
+        if existing_kml:
+            root = ET.fromstring(existing_kml)
+            # Find the Document element
+            doc_el = root.find(f"{{{kml_ns}}}Document")
+            if doc_el is None:
+                doc_el = root
+        else:
+            root = ET.Element("kml", attrib={"xmlns": kml_ns})
+            doc_el = ET.SubElement(root, "Document")
+            ET.SubElement(doc_el, "name").text = stem
+
+        # AutoCAD Color Index (ACI) → KML color (aaBBGGRR hex)
+        # Standard ACI: 1=red,2=yellow,3=green,4=cyan,5=blue,6=magenta,7=white
+        _ACI_RGB: dict[int, tuple[int, int, int]] = {
+            1: (255, 0, 0), 2: (255, 255, 0), 3: (0, 255, 0),
+            4: (0, 255, 255), 5: (0, 0, 255), 6: (255, 0, 255),
+            7: (255, 255, 255), 8: (128, 128, 128), 9: (192, 192, 192),
+            10: (255, 0, 0), 11: (255, 127, 127), 12: (204, 0, 0),
+            13: (204, 102, 102), 14: (153, 0, 0), 15: (153, 76, 76),
+            20: (255, 63, 0), 30: (255, 127, 0), 40: (255, 191, 0),
+            50: (255, 255, 0), 60: (191, 255, 0), 70: (127, 255, 0),
+            80: (63, 255, 0), 90: (0, 255, 0), 100: (0, 255, 63),
+            110: (0, 255, 127), 120: (0, 255, 191), 130: (0, 255, 255),
+            140: (0, 191, 255), 150: (0, 127, 255), 160: (0, 63, 255),
+            170: (0, 0, 255), 180: (63, 0, 255), 190: (127, 0, 255),
+            200: (191, 0, 255), 210: (255, 0, 255), 220: (255, 0, 191),
+            230: (255, 0, 127), 240: (255, 0, 63), 250: (51, 51, 51),
+            251: (80, 80, 80), 252: (105, 105, 105), 253: (130, 130, 130),
+            254: (190, 190, 190), 255: (255, 255, 255),
+        }
+
+        def _aci_to_kml_color(aci: int, alpha: int = 255) -> str:
+            """Convert ACI color to KML aaBBGGRR hex string."""
+            r, g, b = _ACI_RGB.get(aci, (255, 255, 255))
+            return f"{alpha:02x}{b:02x}{g:02x}{r:02x}"
+
+        # Create shared styles for each unique color (avoids bloat)
+        _style_ids: dict[int, str] = {}
+
+        # Add a folder for DWG geometry
+        dwg_folder = ET.SubElement(doc_el, "Folder")
+        ET.SubElement(dwg_folder, "name").text = "DWG Geometry"
+
+        _ent_counter = 0
+        for layer_name, ents in sorted(geometry.items()):
+            layer_folder = ET.SubElement(dwg_folder, "Folder")
+            ET.SubElement(layer_folder, "name").text = layer_name
+
+            for ent in ents:
+                _ent_counter += 1
+                gt = ent["geom_type"]
+                color_idx = ent.get("color", 256)
+                if color_idx == 256 or color_idx == 0:
+                    color_idx = 7  # ByLayer/ByBlock → white
+
+                # Create/reuse style for this color
+                if color_idx not in _style_ids:
+                    sid = f"dwg_color_{color_idx}"
+                    _style_ids[color_idx] = sid
+                    style = ET.SubElement(doc_el, "Style", attrib={"id": sid})
+                    ls_style = ET.SubElement(style, "LineStyle")
+                    ET.SubElement(ls_style, "color").text = _aci_to_kml_color(color_idx)
+                    ET.SubElement(ls_style, "width").text = "2"
+                    ps_style = ET.SubElement(style, "PolyStyle")
+                    ET.SubElement(ps_style, "color").text = _aci_to_kml_color(color_idx, alpha=80)
+                    ET.SubElement(ps_style, "outline").text = "1"
+                    icon_style = ET.SubElement(style, "IconStyle")
+                    ET.SubElement(icon_style, "color").text = _aci_to_kml_color(color_idx)
+
+                pm = ET.SubElement(layer_folder, "Placemark")
+                ET.SubElement(pm, "name").text = f"{layer_name} ({gt.lower()}) #{_ent_counter}"
+                ET.SubElement(pm, "styleUrl").text = f"#{_style_ids[color_idx]}"
+
+                # Extended data — attributes visible when clicking in Google Earth
+                ext = ET.SubElement(pm, "ExtendedData")
+                _ext_pairs: list[tuple[str, str]] = [
+                    ("Layer", layer_name),
+                    ("Geometry Type", gt),
+                    ("Entity Type", ent.get("entity_type", "")),
+                    ("ACI Color", str(color_idx)),
+                ]
+                for _dk, _dv in _ext_pairs:
+                    data = ET.SubElement(ext, "Data", attrib={"name": _dk})
+                    ET.SubElement(data, "value").text = _dv
+
+                # Add vertex count and line length info
+                import math as _math
+                if gt == "LINESTRING":
+                    n_verts = len(ent["coords"])
+                    data = ET.SubElement(ext, "Data", attrib={"name": "Vertices"})
+                    ET.SubElement(data, "value").text = str(n_verts)
+                    # Compute horizontal and slope distances from 3D coords (in source CRS units)
+                    _c3d: list[tuple[float, float, float]] = ent.get("coords_3d", [])
+                    if _c3d and len(_c3d) >= 2:
+                        _h_dist = 0.0
+                        _s_dist = 0.0
+                        for _i in range(len(_c3d) - 1):
+                            _dx = _c3d[_i+1][0] - _c3d[_i][0]
+                            _dy = _c3d[_i+1][1] - _c3d[_i][1]
+                            _dz = _c3d[_i+1][2] - _c3d[_i][2]
+                            _h_dist += _math.sqrt(_dx*_dx + _dy*_dy)
+                            _s_dist += _math.sqrt(_dx*_dx + _dy*_dy + _dz*_dz)
+                        data = ET.SubElement(ext, "Data", attrib={"name": "Horizontal Distance (ft)"})
+                        ET.SubElement(data, "value").text = f"{_h_dist:.2f}"
+                        data = ET.SubElement(ext, "Data", attrib={"name": "Slope Distance (ft)"})
+                        ET.SubElement(data, "value").text = f"{_s_dist:.2f}"
+                elif gt == "POLYGON":
+                    n_verts = sum(len(r) for r in ent["coords"])
+                    data = ET.SubElement(ext, "Data", attrib={"name": "Vertices"})
+                    ET.SubElement(data, "value").text = str(n_verts)
+
+                # Geometry
+                if gt == "LINESTRING":
+                    ls = ET.SubElement(pm, "LineString")
+                    ET.SubElement(ls, "tessellate").text = "1"
+                    coord_str = " ".join(
+                        f"{_tx(x, y)[0]},{_tx(x, y)[1]},0" for x, y in ent["coords"])
+                    ET.SubElement(ls, "coordinates").text = coord_str
+
+                elif gt == "POLYGON":
+                    poly = ET.SubElement(pm, "Polygon")
+                    ET.SubElement(poly, "tessellate").text = "1"
+                    for ri, ring in enumerate(ent["coords"]):
+                        boundary = ET.SubElement(
+                            poly,
+                            "outerBoundaryIs" if ri == 0 else "innerBoundaryIs")
+                        lr = ET.SubElement(boundary, "LinearRing")
+                        coord_str = " ".join(
+                            f"{_tx(x, y)[0]},{_tx(x, y)[1]},0" for x, y in ring)
+                        ET.SubElement(lr, "coordinates").text = coord_str
+
+                elif gt == "POINT":
+                    pt = ET.SubElement(pm, "Point")
+                    lon, lat = _tx(*ent["coords"])
+                    ET.SubElement(pt, "coordinates").text = f"{lon},{lat},0"
+
+        kml_bytes = ET.tostring(root, xml_declaration=True, encoding="UTF-8")
+        os.makedirs(os.path.dirname(output_path) or ".", exist_ok=True)
+        with zipfile.ZipFile(output_path, "w", zipfile.ZIP_DEFLATED) as zf:
+            zf.writestr("doc.kml", kml_bytes)
+
+    def _write_dwg_geometry_to_landxml(
+        self,
+        output_path: str,
+        geometry: dict[str, list[dict[str, Any]]],
+        srid: int = 0,
+        source_crs: str = "",
+    ) -> None:
+        """Append DWG geometry to an existing LandXML file as PlanFeatures.
+
+        Coordinates are reprojected to WGS 84 lat/lon if *srid* or
+        *source_crs* identifies a projected CRS.
+
+        If the file exists, parses it and adds geometry elements.
+        Otherwise creates a minimal LandXML with just the geometry.
+        """
+        # Build reprojection function (LandXML uses lat/lon like KML)
+        _reproject: Any = None  # type: ignore[reportUnknownVariableType]
+        _resolved_epsg = 0
+        if source_crs:
+            _resolved_epsg = self._resolve_autodesk_cs(source_crs)  # type: ignore[attr-defined]
+        if not _resolved_epsg and srid not in (0, 4326):
+            _resolved_epsg = srid
+        if _resolved_epsg and _resolved_epsg != 4326:
+            try:
+                from pyproj import Transformer as _PT  # type: ignore[import-untyped]
+                _t: Any = _PT.from_crs(  # type: ignore[reportUnknownVariableType,reportUnknownMemberType]
+                    f"EPSG:{_resolved_epsg}", "EPSG:4326", always_xy=True)
+                _reproject = lambda x, y: _t.transform(x, y)  # type: ignore[reportUnknownVariableType,reportUnknownLambdaType]
+            except Exception:
+                pass
+
+        def _tx(x: float, y: float) -> tuple[float, float]:
+            if _reproject:
+                return _reproject(x, y)  # type: ignore[reportUnknownVariableType]
+            return x, y
+
+        ns = "http://www.landxml.org/schema/LandXML-1.2"
+
+        if os.path.isfile(output_path):
+            tree = ET.parse(output_path)
+            root_el = tree.getroot()
+            # Strip namespace prefix for easier element creation
+            # Re-register namespace to avoid ns0: prefixes
+            ET.register_namespace("", ns)
+        else:
+            ET.register_namespace("", ns)
+            now = datetime.datetime.now()
+            root_el = ET.Element("LandXML", attrib={
+                "xmlns": ns,
+                "version": "1.2",
+                "date": now.strftime("%Y-%m-%d"),
+                "time": now.strftime("%H:%M:%S"),
+            })
+            stem = os.path.splitext(os.path.basename(output_path))[0]
+            ET.SubElement(root_el, "Project", attrib={"name": stem})
+            tree = ET.ElementTree(root_el)
+
+        # Add PlanFeatures for each layer
+        _ent_n = 0
+        for layer_name, ents in sorted(geometry.items()):
+            plan_feat = ET.SubElement(root_el, "PlanFeatures",
+                                      attrib={"name": layer_name})
+            for ent in ents:
+                _ent_n += 1
+                import math as _math
+                gt = ent["geom_type"]
+                _color = ent.get("color", 256)
+                _etype = ent.get("entity_type", "")
+                _c3d: list[Any] = ent.get("coords_3d", [])
+                if gt == "LINESTRING":
+                    _nv = len(ent["coords"])
+                    _hd = 0.0
+                    _sd = 0.0
+                    if _c3d and len(_c3d) >= 2:
+                        for _di in range(len(_c3d) - 1):
+                            _dx = _c3d[_di+1][0] - _c3d[_di][0]
+                            _dy = _c3d[_di+1][1] - _c3d[_di][1]
+                            _dz = _c3d[_di+1][2] - _c3d[_di][2]
+                            _hd += _math.sqrt(_dx*_dx + _dy*_dy)
+                            _sd += _math.sqrt(_dx*_dx + _dy*_dy + _dz*_dz)
+                    pf = ET.SubElement(plan_feat, "PlanFeature",
+                                       attrib={"name": f"{layer_name}_line_{_ent_n}",
+                                               "desc": f"layer={layer_name} type={_etype} color={_color} vertices={_nv} horiz_dist={_hd:.2f} slope_dist={_sd:.2f}"})
+                    coord_geom = ET.SubElement(pf, "CoordGeom")
+                    coords = ent["coords"]
+                    for j in range(len(coords) - 1):
+                        lon1, lat1 = _tx(coords[j][0], coords[j][1])
+                        lon2, lat2 = _tx(coords[j+1][0], coords[j+1][1])
+                        line = ET.SubElement(coord_geom, "Line")
+                        start = ET.SubElement(line, "Start")
+                        start.text = f"{lat1} {lon1}"
+                        end = ET.SubElement(line, "End")
+                        end.text = f"{lat2} {lon2}"
+
+                elif gt == "POLYGON":
+                    _nv = sum(len(r) for r in ent["coords"])
+                    pf = ET.SubElement(plan_feat, "PlanFeature",
+                                       attrib={"name": f"{layer_name}_polygon_{_ent_n}",
+                                               "desc": f"layer={layer_name} type={_etype} color={_color} vertices={_nv}"})
+                    coord_geom = ET.SubElement(pf, "CoordGeom")
+                    for ring in ent["coords"]:
+                        for j in range(len(ring) - 1):
+                            lon1, lat1 = _tx(ring[j][0], ring[j][1])
+                            lon2, lat2 = _tx(ring[j+1][0], ring[j+1][1])
+                            line = ET.SubElement(coord_geom, "Line")
+                            start = ET.SubElement(line, "Start")
+                            start.text = f"{lat1} {lon1}"
+                            end = ET.SubElement(line, "End")
+                            end.text = f"{lat2} {lon2}"
+
+                elif gt == "POINT":
+                    pf = ET.SubElement(plan_feat, "PlanFeature",
+                                       attrib={"name": f"{layer_name}_point_{_ent_n}",
+                                               "desc": f"layer={layer_name} type={_etype} color={_color}"})
+                    coord_geom = ET.SubElement(pf, "CoordGeom")
+                    lon, lat = _tx(*ent["coords"])
+                    il = ET.SubElement(coord_geom, "IrregularLine")
+                    start = ET.SubElement(il, "Start")
+                    start.text = f"{lat} {lon}"
+                    end = ET.SubElement(il, "End")
+                    end.text = f"{lat} {lon}"
+
+        os.makedirs(os.path.dirname(output_path) or ".", exist_ok=True)
+        ET.indent(tree, space="  ")
+        tree.write(output_path, xml_declaration=True, encoding="UTF-8")
+
+    def _show_dwg_layer_dialog(
+        self, dwg_path: str, gpkg_path: str,
+        previous_layers: list[str] | None = None,
+    ) -> tuple[list[str], dict[str, list[dict[str, Any]]], int, str]:
         """Show a layer-selection popup, extract DWG geometry, append to GPKG.
 
-        Returns the list of layer names that were exported (empty if skipped).
+        *previous_layers*, if provided, pre-checks those layers in the dialog
+        (from a prior export stored in the watchlist).  All other layers
+        default to unchecked.
+
+        Returns ``(exported_layer_names, geometry_dict, write_srid, cs_code)``.
         """
-        self.status.config(text="Opening DWG in AutoCAD (background)…")
+        self.status.config(text="Reading DWG file…")
         self.update_idletasks()
 
-        exported_layers: list[str] = []  # populated by the dialog callback
+        exported_layers: list[str] = []
+        extracted_geom: dict[str, list[dict[str, Any]]] = {}
+        final_srid: list[int] = [0]
+        cs_code = ""
 
         try:
-            acad, doc, we_started = self._open_dwg_readonly(  # type: ignore[attr-defined]
-                dwg_path)
+            layer_counts, _prescan_geom, cs_code = self._read_dwg_geometry_ezdxf(dwg_path)  # type: ignore[attr-defined]
         except Exception as exc:
             self.status.config(text="Ready")
             messagebox.showerror(
-                "AutoCAD Error",
-                f"Could not open DWG via AutoCAD COM:\n{exc}\n\n"
-                "Ensure AutoCAD Map 3D is installed.")
-            return exported_layers
+                "DWG Read Error",
+                f"Could not read DWG geometry:\n{exc}\n\n"
+                "Ensure the DWG file is accessible.")
+            return exported_layers, extracted_geom, final_srid[0], cs_code
 
-        try:
-            cs_code = self._read_dwg_cs_code(doc)  # type: ignore[attr-defined]
+        self.status.config(text="Ready")
 
-            # Count exportable entities per layer
-            ms = doc.ModelSpace
-            _exportable = {
-                "AcDbLWPolyline", "AcDbPolyline", "AcDb2dPolyline",
-                "AcDb3dPolyline", "AcDbLine", "AcDbPoint",
-            }
-            layer_counts: dict[str, int] = {}
-            for i in range(ms.Count):
-                try:
-                    ent = ms.Item(i)
-                    if ent.EntityName in _exportable:
-                        layer_counts[ent.Layer] = (
-                            layer_counts.get(ent.Layer, 0) + 1)
-                except Exception:
-                    continue
+        if not layer_counts:
+            messagebox.showinfo(
+                "No Geometry",
+                "No exportable geometry found in the DWG model space.\n"
+                "(Supported: polylines, lines, points)")
+            return exported_layers, extracted_geom, final_srid[0], cs_code
 
-            if not layer_counts:
+        # --- Build layer-selection dialog ---
+        win = tk.Toplevel(self)
+        win.title("Select DWG Layers for Export")
+        win.resizable(False, False)
+        win.grab_set()
+        win.lift()  # type: ignore[arg-type]
+        win.focus_force()
+
+        tk.Label(
+            win, text="Select DWG Layers to Export",
+            font=("Helvetica", 11, "bold"),
+        ).pack(padx=10, pady=(10, 4), anchor="w")
+        tk.Label(
+            win, text=f"DWG: {os.path.basename(dwg_path)}",
+            fg="#1F4E79",
+        ).pack(padx=10, pady=2, anchor="w")
+        if cs_code:
+            tk.Label(
+                win, text=f"Map 3D CS code: {cs_code}",
+            ).pack(padx=10, pady=2, anchor="w")
+        else:
+            tk.Label(
+                win, text="Map 3D CS code: not detected — enter EPSG below",
+                fg="#CC0000",
+            ).pack(padx=10, pady=2, anchor="w")
+
+        tk.Label(
+            win, text="Check the layers to include as geometry:",
+        ).pack(padx=10, pady=(8, 4), anchor="w")
+
+        # Scrollable checkbox list
+        list_frame = tk.Frame(win)
+        list_frame.pack(padx=10, pady=4, fill="both", expand=True)
+
+        canvas = tk.Canvas(
+            list_frame,
+            height=min(300, len(layer_counts) * 24 + 10),
+            width=380,
+        )
+        scrollbar = ttk.Scrollbar(
+            list_frame, orient="vertical", command=canvas.yview)  # type: ignore[arg-type]
+        inner = tk.Frame(canvas)
+        inner.bind(
+            "<Configure>",
+            lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
+        canvas.create_window((0, 0), window=inner, anchor="nw")
+        canvas.configure(yscrollcommand=scrollbar.set)
+        canvas.pack(side="left", fill="both", expand=True)
+        if len(layer_counts) > 12:
+            scrollbar.pack(side="right", fill="y")
+
+        _prev_set: set[str] = set(previous_layers) if previous_layers else set()
+        layer_vars: dict[str, tk.BooleanVar] = {}
+        for lname in sorted(layer_counts):
+            var = tk.BooleanVar(value=(lname in _prev_set))
+            layer_vars[lname] = var
+            tk.Checkbutton(
+                inner,
+                text=f"{lname}  ({layer_counts[lname]} entities)",
+                variable=var, anchor="w",
+            ).pack(padx=4, pady=1, anchor="w", fill="x")
+
+        # Select all / none
+        sel_frame = tk.Frame(win)
+        sel_frame.pack(padx=10, pady=2)
+        tk.Button(
+            sel_frame, text="Select All",
+            command=lambda: [v.set(True) for v in layer_vars.values()],
+        ).pack(side="left", padx=4)
+        tk.Button(
+            sel_frame, text="Select None",
+            command=lambda: [v.set(False) for v in layer_vars.values()],
+        ).pack(side="left", padx=4)
+
+        # CRS / EPSG dropdown — auto-fill from header if detected, else user picks
+        crs_frame = tk.Frame(win)
+        crs_frame.pack(padx=10, pady=(6, 2), fill="x")
+        tk.Label(
+            crs_frame, text="Coordinate System:",
+            font=("Helvetica", 9, "bold"),
+        ).pack(side="left")
+
+        # Build the CRS choices list from NameMapper.csv (Autodesk install)
+        _crs_choices: list[str] = []
+        _ad_map = self._load_autodesk_cs_map()  # type: ignore[attr-defined]
+        if _ad_map:
+            # Build "EPSG — Autodesk_Code — EPSG_Name" for each entry
+            # We need EPSG names too — build a reverse lookup
+            import csv as _csv
+            import glob as _glob
+            _epsg_names: dict[int, str] = {}
+            for _pat in [r"C:\ProgramData\Autodesk\Geospatial Coordinate Systems*\NameMapper.csv"]:
+                for _nmf in _glob.glob(_pat):
+                    try:
+                        with open(_nmf, encoding="utf-8") as _f:
+                            for _row in _csv.DictReader(_f):
+                                if _row["Flavor"] == "EPSG" and _row["NumericId"] != "0":
+                                    _epsg_names[int(_row["NumericId"])] = _row["NameId"]
+                    except Exception:
+                        pass
+                    break
+            # Build display strings — filter to relevant US CRS only
+            # (full 4000+ list overloads the tkinter Combobox)
+            _seen: set[int] = set()
+            _entries: list[tuple[str, int, str]] = []
+            for _ad_code, _epsg in _ad_map.items():
+                if _epsg not in _seen:
+                    _ename = _epsg_names.get(_epsg, "")
+                    # Keep: NAD83/NAD27 State Plane, UTM, WGS84
+                    if not _ename:
+                        continue
+                    _keep = ("NAD83 /" in _ename or "NAD27 /" in _ename
+                             or "WGS 84 / UTM" in _ename)
+                    if not _keep:
+                        continue
+                    _seen.add(_epsg)
+                    _entries.append((_ename, _epsg, _ad_code))
+            _entries.sort(key=lambda x: x[0])
+            for _ename, _epsg, _ad_code in _entries:
+                _crs_choices.append(f"{_epsg} — {_ename} [{_ad_code}]")
+        if not _crs_choices:
+            # Fallback if NameMapper.csv not found
+            _crs_choices = [
+                "2231 — NAD83 / Colorado North (ftUS) [CO83-NF]",
+                "2232 — NAD83 / Colorado Central (ftUS) [CO83-CF]",
+                "2233 — NAD83 / Colorado South (ftUS) [CO83-SF]",
+                "2275 — NAD83 / Texas North (ftUS) [TX83-NF]",
+                "2276 — NAD83 / Texas North Central (ftUS) [TX83-NCF]",
+                "2277 — NAD83 / Texas Central (ftUS) [TX83-CF]",
+                "2278 — NAD83 / Texas South Central (ftUS) [TX83-SCF]",
+                "2279 — NAD83 / Texas South (ftUS) [TX83-SF]",
+            ]
+
+        # Try to resolve auto-detected cs_code to an EPSG number
+        _auto_epsg = ""
+        if cs_code:
+            _resolved = self._resolve_autodesk_cs(cs_code)  # type: ignore[attr-defined]
+            if _resolved:
+                _auto_epsg = str(_resolved)
+                # Find the matching display string
+                for _ch in _crs_choices:
+                    if _ch.startswith(f"{_resolved} — "):
+                        _auto_epsg = _ch
+                        break
+        epsg_var = tk.StringVar(value=_auto_epsg)
+        epsg_combo = ttk.Combobox(crs_frame, textvariable=epsg_var,
+                                  values=_crs_choices, width=48)
+        epsg_combo.pack(side="left", padx=6, fill="x", expand=True)
+
+        dwg_status_lbl = tk.Label(win, text="", anchor="w")
+        dwg_status_lbl.pack(padx=10, pady=2, fill="x")
+
+        def _do_dwg_export() -> None:
+            selected = {n for n, v in layer_vars.items() if v.get()}
+            if not selected:
+                messagebox.showwarning(
+                    "No Layers", "Select at least one layer.", parent=win)
+                return
+
+            dwg_status_lbl.config(
+                text="Preparing geometry…", fg="#1F4E79")
+            win.update_idletasks()
+
+            geometry = {ly: ents for ly, ents in _prescan_geom.items()
+                        if ly in selected and ents}
+
+            if not geometry:
                 messagebox.showinfo(
                     "No Geometry",
-                    "No exportable geometry found in the DWG model space.\n"
-                    "(Supported: polylines, lines, points)")
-                return exported_layers
-
-            self.status.config(text="Ready")
-
-            # --- Build layer-selection dialog ---
-            win = tk.Toplevel(self)
-            win.title("Select DWG Layers for GPKG")
-            win.resizable(False, False)
-            win.grab_set()
-            win.lift()
-            win.focus_force()
-
-            tk.Label(
-                win, text="Select DWG Layers to Export",
-                font=("Helvetica", 11, "bold"),
-            ).pack(padx=10, pady=(10, 4), anchor="w")
-            tk.Label(
-                win, text=f"DWG: {os.path.basename(dwg_path)}",
-                fg="#1F4E79",
-            ).pack(padx=10, pady=2, anchor="w")
-            if cs_code:
-                tk.Label(
-                    win, text=f"Coordinate system: {cs_code}",
-                ).pack(padx=10, pady=2, anchor="w")
-
-            tk.Label(
-                win, text="Check the layers to include as geometry:",
-            ).pack(padx=10, pady=(8, 4), anchor="w")
-
-            # Scrollable checkbox list
-            list_frame = tk.Frame(win)
-            list_frame.pack(padx=10, pady=4, fill="both", expand=True)
-
-            canvas = tk.Canvas(
-                list_frame,
-                height=min(300, len(layer_counts) * 24 + 10),
-                width=380,
-            )
-            scrollbar = ttk.Scrollbar(
-                list_frame, orient="vertical", command=canvas.yview)
-            inner = tk.Frame(canvas)
-            inner.bind(
-                "<Configure>",
-                lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
-            canvas.create_window((0, 0), window=inner, anchor="nw")
-            canvas.configure(yscrollcommand=scrollbar.set)
-            canvas.pack(side="left", fill="both", expand=True)
-            if len(layer_counts) > 12:
-                scrollbar.pack(side="right", fill="y")
-
-            layer_vars: dict[str, tk.BooleanVar] = {}
-            for lname in sorted(layer_counts):
-                var = tk.BooleanVar(value=True)
-                layer_vars[lname] = var
-                tk.Checkbutton(
-                    inner,
-                    text=f"{lname}  ({layer_counts[lname]} entities)",
-                    variable=var, anchor="w",
-                ).pack(padx=4, pady=1, anchor="w", fill="x")
-
-            # Select all / none
-            sel_frame = tk.Frame(win)
-            sel_frame.pack(padx=10, pady=2)
-            tk.Button(
-                sel_frame, text="Select All",
-                command=lambda: [v.set(True) for v in layer_vars.values()],
-            ).pack(side="left", padx=4)
-            tk.Button(
-                sel_frame, text="Select None",
-                command=lambda: [v.set(False) for v in layer_vars.values()],
-            ).pack(side="left", padx=4)
-
-            # CRS note
-            if cs_code:
-                _crs_note = f"Geometry stored in native CRS ({cs_code})."
-            else:
-                _crs_note = ("CRS not detected — geometry stored as-is.  "
-                             "Assign CRS in GIS software.")
-            tk.Label(win, text=_crs_note, fg="#666666",
-                     font=("Helvetica", 8)).pack(
-                padx=10, pady=(4, 2), anchor="w")
-
-            dwg_status_lbl = tk.Label(win, text="", anchor="w")
-            dwg_status_lbl.pack(padx=10, pady=2, fill="x")
-
-            def _do_dwg_export() -> None:
-                selected = {n for n, v in layer_vars.items() if v.get()}
-                if not selected:
-                    messagebox.showwarning(
-                        "No Layers", "Select at least one layer.", parent=win)
-                    return
-
-                dwg_status_lbl.config(
-                    text="Extracting geometry…", fg="#1F4E79")
-                win.update_idletasks()
-
-                try:
-                    geometry = self._extract_dwg_geometry(  # type: ignore[attr-defined]
-                        doc, selected)
-                except Exception as exc:
-                    messagebox.showerror(
-                        "Extraction Error", str(exc), parent=win)
-                    dwg_status_lbl.config(text="")
-                    return
-
-                if not geometry:
-                    messagebox.showinfo(
-                        "No Geometry",
-                        "No exportable geometry on selected layers.",
-                        parent=win)
-                    dwg_status_lbl.config(text="")
-                    return
-
-                dwg_status_lbl.config(
-                    text="Writing geometry to GeoPackage…")
-                win.update_idletasks()
-
-                # Determine SRS — map known Autodesk CS codes to EPSG
-                write_srid = 0
-                _CS_TO_EPSG: dict[str, int] = {
-                    "LL84": 4326, "LL-WGS84": 4326,
-                    "LL83": 4269, "LL-NAD83": 4269,
-                }
-                if cs_code.upper() in _CS_TO_EPSG:
-                    write_srid = _CS_TO_EPSG[cs_code.upper()]
-
-                # Try pyproj transformation to WGS84 (optional)
-                transformer = None
-                if write_srid not in (0, 4326):
-                    try:
-                        from pyproj import Transformer as _PT  # type: ignore[import-untyped]
-                        _t = _PT.from_crs(
-                            f"EPSG:{write_srid}", "EPSG:4326",
-                            always_xy=True)
-                        transformer = lambda x, y: _t.transform(x, y)
-                        write_srid = 4326
-                    except Exception:
-                        pass  # keep native CRS
-
-                try:
-                    count = self._write_dwg_geometry_to_gpkg(  # type: ignore[attr-defined]
-                        gpkg_path, geometry,
-                        srid=write_srid, cs_description=cs_code,
-                        transformer=transformer)
-                except Exception as exc:
-                    messagebox.showerror(
-                        "Write Error",
-                        f"Failed to write DWG geometry:\n{exc}",
-                        parent=win)
-                    dwg_status_lbl.config(text="")
-                    return
-
-                n_layers = len(geometry)
-                if write_srid == 4326:
-                    crs_msg = "CRS: WGS 84 (EPSG:4326)"
-                elif cs_code:
-                    crs_msg = (f"CRS: {cs_code} (native — "
-                               f"assign EPSG in GIS if needed)")
-                else:
-                    crs_msg = "CRS: undefined — assign in GIS"
-
-                dwg_status_lbl.config(text="Done!", fg="#2E7D32")
-                exported_layers.extend(selected)
-                messagebox.showinfo(
-                    "DWG Geometry Added",
-                    f"Added {count} entities from {n_layers} layer(s) to:\n"
-                    f"  {os.path.basename(gpkg_path)}\n\n{crs_msg}",
+                    "No exportable geometry on selected layers.",
                     parent=win)
-                win.destroy()
+                dwg_status_lbl.config(text="")
+                return
 
-            btn_frame = tk.Frame(win)
-            btn_frame.pack(pady=(6, 10))
-            tk.Button(
-                btn_frame, text="Export Geometry", width=16,
-                bg="#1F4E79", fg="white", command=_do_dwg_export,
-            ).pack(side="left", padx=8)
-            tk.Button(
-                btn_frame, text="Skip", width=10, command=win.destroy,
-            ).pack(side="left", padx=8)
+            dwg_status_lbl.config(
+                text="Writing geometry to GeoPackage…")
+            win.update_idletasks()
 
-            win.wait_window()
-
-        finally:
-            try:
-                doc.Close(False)
-            except Exception:
-                pass
-            if we_started:
+            # Determine SRS from the CRS dropdown/entry
+            write_srid = 0
+            _epsg_input = epsg_var.get().strip()
+            if _epsg_input:
+                # Handle combo format "2231 — NAD83 / ..." or plain "2231"
+                _epsg_num_str = _epsg_input.split(" — ")[0].strip() if " — " in _epsg_input else _epsg_input
                 try:
-                    acad.Quit()
-                except Exception:
-                    pass
-            self.status.config(text="Ready")
+                    write_srid = int(_epsg_num_str)
+                except ValueError:
+                    write_srid = self._resolve_autodesk_cs(_epsg_num_str)  # type: ignore[attr-defined]
 
-        return exported_layers
+            # Try pyproj transformation to WGS84 (optional)
+            transformer = None
+            native_srid = write_srid  # preserve original SRID for KML/LandXML writers
+            if write_srid not in (0, 4326):
+                try:
+                    from pyproj import Transformer as _PT  # type: ignore[import-untyped]
+                    _t: Any = _PT.from_crs(  # type: ignore[reportUnknownVariableType,reportUnknownMemberType]
+                        f"EPSG:{write_srid}", "EPSG:4326",
+                        always_xy=True)
+                    transformer: Any = lambda x, y: _t.transform(x, y)  # type: ignore[reportUnknownVariableType,reportUnknownLambdaType]
+                    write_srid = 4326
+                except Exception:
+                    pass  # keep native CRS
+
+            try:
+                count = self._write_dwg_geometry_to_gpkg(  # type: ignore[attr-defined]
+                    gpkg_path, geometry,
+                    srid=write_srid, cs_description=cs_code,
+                    transformer=transformer)
+            except Exception as exc:
+                messagebox.showerror(
+                    "Write Error",
+                    f"Failed to write DWG geometry:\n{exc}",
+                    parent=win)
+                dwg_status_lbl.config(text="")
+                return
+
+            n_layers = len(geometry)
+            if write_srid == 4326:
+                crs_msg = "CRS: WGS 84 (EPSG:4326)"
+            elif cs_code:
+                crs_msg = (f"CRS: {cs_code} (native — "
+                           f"assign EPSG in GIS if needed)")
+            else:
+                crs_msg = "CRS: undefined — assign in GIS"
+
+            dwg_status_lbl.config(text="Done!", fg="#2E7D32")
+            exported_layers.extend(selected)
+            extracted_geom.update(geometry)
+            final_srid[0] = native_srid  # pass original CRS so KML/LandXML can reproject
+            messagebox.showinfo(
+                "DWG Geometry Added",
+                f"Added {count} entities from {n_layers} layer(s) to:\n"
+                f"  {os.path.basename(gpkg_path)}\n\n{crs_msg}",
+                parent=win)
+            win.destroy()
+
+        btn_frame = tk.Frame(win)
+        btn_frame.pack(pady=(6, 10))
+        tk.Button(
+            btn_frame, text="Export Geometry", width=16,
+            bg="#1F4E79", fg="white", command=_do_dwg_export,
+        ).pack(side="left", padx=8)
+        tk.Button(
+            btn_frame, text="Skip", width=10, command=win.destroy,
+        ).pack(side="left", padx=8)
+
+        win.wait_window()
+
+        return exported_layers, extracted_geom, final_srid[0], cs_code
 
     def _write_unresolved_excel(
         self,
@@ -7789,47 +9488,31 @@ End Sub
     ) -> tuple[dict[str, str], dict[str, str]]:
         """Locate media files referenced in JXL data for matched CRDB points.
 
-        Scans SYNC folder(s) found by walking up from each JXL's directory, plus
-        the CRDB's own directory tree as a fallback.
+        Uses the tiered media-index helper:
+          • Single JXL  — scans the JXL's parent directory tree.
+          • Multiple JXLs — scans each ``<stem> Files`` companion folder,
+            with a file-size SYNC fallback when a companion is missing.
 
         Returns:
             found   — {UPPER_point_name: absolute_file_path}
             missing — {UPPER_point_name: expected_filename}
         """
-        _media_exts = {".jpg", ".jpeg", ".png", ".tif", ".tiff", ".bmp", ".heic", ".mp4", ".mov"}
+        jxl_paths = list(jxl_map.keys())
 
-        # Collect unique SYNC roots.  JXL files live inside SYNC so walking up
-        # from each JXL dir reliably lands on the SYNC folder.
-        sync_roots: set[str] = set()
-        for jxl_path in jxl_map.keys():
-            s = self._find_sync_folder(os.path.dirname(jxl_path))
-            if s:
-                sync_roots.add(os.path.abspath(s))
-        # Fallback: try from CRDB location as well
-        crdb_sync = self._find_sync_folder(os.path.dirname(os.path.abspath(crdb_path)))
-        if crdb_sync:
-            sync_roots.add(os.path.abspath(crdb_sync))
+        # Build a synthetic jxl_data_map from matched_pts so the fallback
+        # can resolve XML-referenced subfolder paths for file-size matching.
+        # Group points by the JXL directory they came from (best guess: use
+        # the first JXL whose directory is an ancestor of the photo_path).
+        jxl_data_map: dict[str, dict[str, Any]] = {}
+        for jp in jxl_paths:
+            jxl_data_map[jp] = {"points": {}}
+        # Distribute matched_pts across JXLs (simple: all go to every JXL
+        # for fallback purposes — the basename-level dedup inside the helper
+        # keeps this correct).
+        for jp in jxl_paths:
+            jxl_data_map[jp]["points"] = dict(matched_pts)
 
-        # Build {basename_lower: full_path} index from all SYNC trees (cached per root)
-        media_index: dict[str, str] = {}
-        for sdir in sync_roots:
-            cached = self._media_index_cache.get(sdir)
-            if cached is not None:
-                for k, v in cached.items():
-                    if k not in media_index:
-                        media_index[k] = v
-                continue
-            root_index: dict[str, str] = {}
-            for dirpath, _, filenames in os.walk(sdir):
-                for fn in filenames:
-                    if os.path.splitext(fn)[1].lower() in _media_exts:
-                        key = fn.lower()
-                        if key not in root_index:
-                            root_index[key] = os.path.join(dirpath, fn)
-            self._media_index_cache[sdir] = root_index
-            for k, v in root_index.items():
-                if k not in media_index:
-                    media_index[k] = v
+        media_index = self._build_jxl_media_index(jxl_paths, jxl_data_map)
 
         found: dict[str, str] = {}
         missing: dict[str, str] = {}
@@ -8294,8 +9977,10 @@ End Sub
             _dwg_label = "(none found in CRDB folder)"
             _dwg_color = "#888888"
         tk.Label(win, text="DWG file:").grid(row=6, column=0, **pad)
-        dwg_lbl = tk.Label(win, text=_dwg_label, fg=_dwg_color)
-        dwg_lbl.grid(row=6, column=1, **pad)
+        _dwg_row = tk.Frame(win)
+        _dwg_row.grid(row=6, column=1, padx=10, pady=3, sticky="w")
+        dwg_lbl = tk.Label(_dwg_row, text=_dwg_label, fg=_dwg_color)
+        dwg_lbl.pack(side="left")
 
         def _browse_dwg() -> None:
             p = filedialog.askopenfilename(
@@ -8309,8 +9994,8 @@ End Sub
                 dwg_lbl.config(text=os.path.basename(p), fg="#2E7D32")
                 dwg_chk_var.set(True)
 
-        tk.Button(win, text="Browse…", command=_browse_dwg).grid(
-            row=6, column=1, padx=(300, 8), pady=3, sticky="w")
+        tk.Button(_dwg_row, text="Browse…", command=_browse_dwg).pack(
+            side="left", padx=(8, 0))
 
         # Client schema selector
         client_schemas = self._load_client_schemas()  # type: ignore[attr-defined]
@@ -8322,71 +10007,24 @@ End Sub
                                     values=client_values, width=30, state="readonly")
         client_combo.grid(row=7, column=1, padx=10, pady=3, sticky="w")
 
-        # Export format selector
-        tk.Label(win, text="Export format:").grid(row=8, column=0, **pad)
-        fmt_var = tk.StringVar(value="gpkg")
-        fmt_frame = tk.Frame(win)
-        fmt_frame.grid(row=8, column=1, padx=10, pady=3, sticky="w")
-        tk.Radiobutton(fmt_frame, text="GeoPackage (.gpkg)", variable=fmt_var, value="gpkg").pack(side="left", padx=(0, 12))
-        tk.Radiobutton(fmt_frame, text="CSV (RAW_POINTS)", variable=fmt_var, value="csv").pack(side="left", padx=(0, 12))
-
-        # DWG geometry checkbox (only relevant for GPKG)
+        # DWG geometry checkbox
         dwg_chk_var = tk.BooleanVar(value=bool(dwg_path_auto))
         dwg_chk = tk.Checkbutton(
             win,
             text="Include DWG geometry (select layers after export)",
             variable=dwg_chk_var,
         )
-        dwg_chk.grid(row=9, column=0, columnspan=2, padx=10, pady=2, sticky="w")
+        dwg_chk.grid(row=8, column=0, columnspan=2, padx=10, pady=2, sticky="w")
 
-        # Output path row
+        # Output folder (deterministic: ASBUILT/0_GIS/WEEKLY_UPDATE/YYYYMMDD)
         crdb_stem = os.path.splitext(os.path.basename(crdb_path))[0]
-        default_out = os.path.join(os.path.dirname(crdb_path), crdb_stem + ".gpkg")
-        out_var = tk.StringVar(value=default_out)
-        out_label = tk.Label(win, text="Output file:")
-        out_label.grid(row=10, column=0, **pad)
-        out_entry = tk.Entry(win, textvariable=out_var, width=44)
-        out_entry.grid(row=10, column=1, padx=(10, 2), pady=3, sticky="w")
-
-        def _on_format_change(*_: Any) -> None:
-            fmt = fmt_var.get()
-            ext = ".csv" if fmt == "csv" else ".gpkg"
-            cur = out_var.get().strip()
-            if cur:
-                out_var.set(os.path.splitext(cur)[0] + ext)
-            else:
-                out_var.set(os.path.join(os.path.dirname(crdb_path), crdb_stem + ext))
-            # DWG geometry only applies to GPKG
-            if fmt == "csv":
-                dwg_chk_var.set(False)
-                dwg_chk.config(state="disabled")
-            else:
-                dwg_chk.config(state="normal")
-
-        fmt_var.trace_add("write", _on_format_change)
-
-        def _browse_out() -> None:
-            fmt = fmt_var.get()
-            if fmt == "csv":
-                ft = [("CSV files", "*.csv"), ("All files", "*.*")]
-                ext = ".csv"
-                title = "Save CSV as"
-            else:
-                ft = [("GeoPackage", "*.gpkg"), ("All files", "*.*")]
-                ext = ".gpkg"
-                title = "Save GeoPackage as"
-            p = filedialog.asksaveasfilename(
-                title=title,
-                initialfile=crdb_stem + ext,
-                initialdir=os.path.dirname(crdb_path),
-                defaultextension=ext,
-                filetypes=ft,
-                parent=win,
-            )
-            if p:
-                out_var.set(p)
-
-        tk.Button(win, text="…", width=3, command=_browse_out).grid(row=10, column=1, padx=(360, 8), pady=3, sticky="w")
+        output_dir = self._find_gis_output_dir(crdb_path)  # type: ignore[attr-defined]
+        tk.Label(win, text="Output folder:").grid(row=9, column=0, **pad)
+        tk.Label(win, text=output_dir, fg="#1F4E79", wraplength=420, justify="left").grid(
+            row=9, column=1, **pad)
+        tk.Label(win, text="Export formats:", fg="#555555").grid(row=10, column=0, **pad)
+        tk.Label(win, text="GPKG, CSV, Shapefile, LandXML, KMZ", fg="#555555").grid(
+            row=10, column=1, **pad)
 
         # Unresolved-report checkbox
         report_var = tk.BooleanVar(value=bool(unresolved or ambiguous or media_missing))
@@ -8410,12 +10048,9 @@ End Sub
             _mf        = media_found_ref[0]
             _mm        = media_missing_ref[0]
             _jxl_map   = jxl_map_ref[0]
-            fmt = fmt_var.get()
 
-            out_path = out_var.get().strip()
-            if not out_path:
-                messagebox.showwarning("No Output Path", "Choose an output file path.", parent=win)
-                return
+            # Create the output directory
+            os.makedirs(output_dir, exist_ok=True)
 
             # Collect JXL metadata for CSV timestamp fields
             _jxl_meta: dict[str, Any] = {}
@@ -8432,21 +10067,171 @@ End Sub
             if _client_name and _client_name in client_schemas:
                 _client_schema = client_schemas[_client_name]
 
+            # --- Field code selection dialog ---
+            # Show a dialog for the user to pick which codes to export
+            # (CSV always gets all points; other formats get filtered)
+            _all_codes = sorted(set(r.get("code", "UNKNOWN") or "UNKNOWN" for r in rows
+                                    if not (isinstance(r.get("Z"), (int, float)) and r["Z"] <= -99999999)))
+            _code_counts: dict[str, int] = {}
+            for _r in rows:
+                _zv = _r.get("Z")
+                if _zv is not None and isinstance(_zv, (int, float)) and _zv <= -99999999:
+                    continue
+                _cc = _r.get("code", "UNKNOWN") or "UNKNOWN"
+                _code_counts[_cc] = _code_counts.get(_cc, 0) + 1
+
+            # Look up previously selected codes from watchlist
+            _prev_codes: list[str] = []
             try:
-                if fmt == "csv":
-                    self._write_crdb_csv(out_path, rows, _matched, fxl_data_ref[0], _mf, _jxl_meta, _client_schema)  # type: ignore[attr-defined]
-                else:
-                    self._write_gpkg(out_path, rows, _matched, fxl_data_ref[0], _mf)  # type: ignore[attr-defined]
-            except Exception as exc:
-                messagebox.showerror("Export Error", f"Export failed:\n{exc}", parent=win)
+                _wl_tmp = self._load_watchlist()  # type: ignore[attr-defined]
+                for _we in _wl_tmp.get("entries", []):
+                    if os.path.normcase(_we.get("crdb_path", "")) == os.path.normcase(crdb_path):
+                        _prev_codes = _we.get("export_codes", [])
+                        break
+            except Exception:
+                pass
+
+            _prev_code_set: set[str] = set(_prev_codes) if _prev_codes else set()
+            _selected_codes: list[str] = []
+
+            # Build the code selection dialog
+            _code_win = tk.Toplevel(self)
+            _code_win.title("Select Field Codes for Export")
+            _code_win.resizable(False, False)
+            _code_win.grab_set()
+            _code_win.lift()  # type: ignore[arg-type]
+            _code_win.focus_force()
+
+            tk.Label(
+                _code_win, text="Select Field Codes to Export",
+                font=("Helvetica", 11, "bold"),
+            ).pack(padx=10, pady=(10, 4), anchor="w")
+            tk.Label(
+                _code_win, text=f"CRDB: {os.path.basename(crdb_path)}",
+                fg="#1F4E79",
+            ).pack(padx=10, pady=2, anchor="w")
+            tk.Label(
+                _code_win, text="CSV always exports all points. Other formats export selected codes only.",
+                fg="#666666", font=("Helvetica", 8),
+            ).pack(padx=10, pady=2, anchor="w")
+
+            tk.Label(
+                _code_win, text="Check the field codes to include:",
+            ).pack(padx=10, pady=(8, 4), anchor="w")
+
+            # Scrollable checkbox list
+            _code_list_frame = tk.Frame(_code_win)
+            _code_list_frame.pack(padx=10, pady=4, fill="both", expand=True)
+            _code_canvas = tk.Canvas(
+                _code_list_frame,
+                height=min(300, len(_all_codes) * 24 + 10),
+                width=380,
+            )
+            _code_scrollbar = ttk.Scrollbar(
+                _code_list_frame, orient="vertical", command=_code_canvas.yview)  # type: ignore[arg-type]
+            _code_inner = tk.Frame(_code_canvas)
+            _code_inner.bind(
+                "<Configure>",
+                lambda e: _code_canvas.configure(scrollregion=_code_canvas.bbox("all")))
+            _code_canvas.create_window((0, 0), window=_code_inner, anchor="nw")
+            _code_canvas.configure(yscrollcommand=_code_scrollbar.set)
+            _code_canvas.pack(side="left", fill="both", expand=True)
+            if len(_all_codes) > 12:
+                _code_scrollbar.pack(side="right", fill="y")
+
+            _code_vars: dict[str, tk.BooleanVar] = {}
+            for _cname in _all_codes:
+                _cv = tk.BooleanVar(value=(_cname in _prev_code_set))
+                _code_vars[_cname] = _cv
+                tk.Checkbutton(
+                    _code_inner,
+                    text=f"{_cname}  ({_code_counts.get(_cname, 0)} points)",
+                    variable=_cv, anchor="w",
+                ).pack(padx=4, pady=1, anchor="w", fill="x")
+
+            # Select all / none
+            _code_sel_frame = tk.Frame(_code_win)
+            _code_sel_frame.pack(padx=10, pady=2)
+            tk.Button(
+                _code_sel_frame, text="Select All",
+                command=lambda: [v.set(True) for v in _code_vars.values()],
+            ).pack(side="left", padx=4)
+            tk.Button(
+                _code_sel_frame, text="Select None",
+                command=lambda: [v.set(False) for v in _code_vars.values()],
+            ).pack(side="left", padx=4)
+
+            _code_confirmed = [False]
+
+            def _on_code_export() -> None:
+                sel = [c for c, v in _code_vars.items() if v.get()]
+                if not sel:
+                    messagebox.showwarning(
+                        "No Codes", "Select at least one field code.", parent=_code_win)
+                    return
+                _selected_codes.extend(sel)
+                _code_confirmed[0] = True
+                _code_win.destroy()
+
+            _code_btn_frame = tk.Frame(_code_win)
+            _code_btn_frame.pack(pady=(6, 10))
+            tk.Button(
+                _code_btn_frame, text="Export Selected", width=16,
+                bg="#1F4E79", fg="white", command=_on_code_export,
+            ).pack(side="left", padx=8)
+            tk.Button(
+                _code_btn_frame, text="Cancel", width=10,
+                command=_code_win.destroy,
+            ).pack(side="left", padx=8)
+
+            _code_win.wait_window()
+
+            if not _code_confirmed[0]:
+                return  # user cancelled
+
+            # Filter rows for non-CSV formats
+            _selected_code_set = set(_selected_codes)
+            _filtered_rows = [r for r in rows
+                              if (r.get("code", "UNKNOWN") or "UNKNOWN") in _selected_code_set]
+
+            # Write all five formats — each is independent, failures don't block the rest
+            gpkg_path = os.path.join(output_dir, crdb_stem + ".gpkg")
+            csv_path = os.path.join(output_dir, crdb_stem + ".csv")
+            shp_path = os.path.join(output_dir, crdb_stem + ".shp")
+            xml_path = os.path.join(output_dir, crdb_stem + ".xml")
+            kmz_path = os.path.join(output_dir, crdb_stem + ".kmz")
+
+            written: list[str] = []
+            errors: list[str] = []
+
+            # CSV gets ALL rows; other formats get filtered rows
+            for label, func in [
+                ("GeoPackage", lambda: self._write_gpkg(gpkg_path, _filtered_rows, _matched, fxl_data_ref[0], _mf)),  # type: ignore[attr-defined]
+                ("CSV", lambda: self._write_crdb_csv(csv_path, rows, _matched, fxl_data_ref[0], _mf, _jxl_meta, _client_schema)),  # type: ignore[attr-defined]
+                ("Shapefile", lambda: self._write_crdb_shp(shp_path, _filtered_rows, _matched, _mf)),  # type: ignore[attr-defined]
+                ("LandXML", lambda: self._write_crdb_landxml(xml_path, _filtered_rows, _matched)),  # type: ignore[attr-defined]
+                ("KMZ", lambda: self._write_crdb_kmz(kmz_path, _filtered_rows, _matched, fxl_data_ref[0], _mf)),  # type: ignore[attr-defined]
+            ]:
+                try:
+                    func()
+                    written.append(label)
+                except Exception as exc:
+                    errors.append(f"{label}: {exc}")
+
+            if not written:
+                messagebox.showerror("Export Error",
+                                     "All exports failed:\n" + "\n".join(errors), parent=win)
                 return
 
-            fmt_label = "CSV" if fmt == "csv" else "GeoPackage"
-            msgs = [f"{fmt_label} written:\n  {out_path}",
-                    f"  {len(rows)} points, {len(codes_found)} feature code(s)"]
+            msgs = [f"Exported {len(_filtered_rows)} of {len(rows)} points "
+                    f"({len(_selected_codes)} of {len(_all_codes)} codes) to:",
+                    f"  {output_dir}",
+                    f"  Formats: {', '.join(written)}"]
+            if errors:
+                msgs.append(f"\nFailed: {'; '.join(errors)}")
 
             if report_var.get() and (_unres or _amb or _mm):
-                report_path = os.path.splitext(out_path)[0] + "_issues.xlsx"
+                report_path = os.path.join(os.path.dirname(crdb_path), crdb_stem + "_issues.xlsx")
                 try:
                     self._write_unresolved_excel(_unres, _amb, _mm, report_path)  # type: ignore[attr-defined]
                     msgs.append(f"Issues report: {os.path.basename(report_path)}")
@@ -8457,22 +10242,54 @@ End Sub
             messagebox.showinfo("Export Complete", "\n".join(msgs), parent=win)
             win.destroy()
 
-            # Launch DWG layer-selection popup if user opted in (GPKG only)
+            # Launch DWG layer-selection popup if user opted in
             _dwg_exported_layers: list[str] = []
-            if fmt == "gpkg" and dwg_chk_var.get() and dwg_var.get().strip():
-                _dwg_exported_layers = self._show_dwg_layer_dialog(  # type: ignore[attr-defined]
-                    dwg_var.get().strip(), out_path)
+            _dwg_geom: dict[str, list[dict[str, Any]]] = {}
+            _dwg_srid: int = 0
+            _dwg_cs: str = ""
+            if dwg_chk_var.get() and dwg_var.get().strip():
+                # Look up previously selected layers from watchlist
+                _prev_layers: list[str] = []
+                try:
+                    _wl = self._load_watchlist()  # type: ignore[attr-defined]
+                    for _wentry in _wl.get("entries", []):
+                        if os.path.normcase(_wentry.get("crdb_path", "")) == os.path.normcase(crdb_path):
+                            _prev_layers = _wentry.get("dwg_layers", [])
+                            break
+                except Exception:
+                    pass
+                _dwg_exported_layers, _dwg_geom, _dwg_srid, _dwg_cs = self._show_dwg_layer_dialog(  # type: ignore[attr-defined]
+                    dwg_var.get().strip(), gpkg_path, previous_layers=_prev_layers)
+
+                # Write DWG geometry to the other export formats
+                # KMZ and LandXML writers handle their own reprojection via srid/source_crs
+                if _dwg_geom:
+                    _dwg_shp = os.path.join(output_dir, crdb_stem + "_geometry.shp")
+                    _dwg_kmz = os.path.join(output_dir, crdb_stem + ".kmz")
+                    _dwg_xml = os.path.join(output_dir, crdb_stem + ".xml")
+                    for _label, _func in [
+                        ("SHP geometry", lambda: self._write_dwg_geometry_to_shp(_dwg_shp, _dwg_geom, _dwg_srid)),  # type: ignore[attr-defined]
+                        ("KMZ geometry", lambda: self._write_dwg_geometry_to_kml(_dwg_kmz, _dwg_geom, _dwg_srid, _dwg_cs)),  # type: ignore[attr-defined]
+                        ("LandXML geometry", lambda: self._write_dwg_geometry_to_landxml(_dwg_xml, _dwg_geom, _dwg_srid, _dwg_cs)),  # type: ignore[attr-defined]
+                    ]:
+                        try:
+                            _func()
+                        except Exception:
+                            pass  # geometry in non-GPKG formats is best-effort
 
             # Auto-register this CRDB in the daily watch list (after DWG
             # dialog so we can persist the selected layer names)
             try:
                 self._register_crdb_watch(  # type: ignore[attr-defined]
                     crdb_path=crdb_path,
-                    gpkg_output_path=out_path,
+                    gpkg_output_path=gpkg_path,
                     fxl_path=self.fxl_path if fxl_data_ref[0] else None,
                     jxl_map=_jxl_map,
                     dwg_path=dwg_var.get().strip() if _dwg_exported_layers else None,
                     dwg_layers=_dwg_exported_layers,
+                    dwg_srid=_dwg_srid if _dwg_exported_layers else 0,
+                    dwg_cs=_dwg_cs if _dwg_exported_layers else "",
+                    export_codes=_selected_codes,
                     client_name=_client_name if _client_name and _client_name in client_schemas else None,
                 )
             except Exception:
@@ -8551,33 +10368,33 @@ End Sub
         'points_layer' (auto-detected survey points layer name or None).
         """
         try:
-            import pyogrio
+            import pyogrio  # type: ignore[import-untyped]
         except ImportError:
             raise ImportError("pyogrio is required to read GDB files.\nInstall: pip install geopandas")
 
-        raw_layers = pyogrio.list_layers(gdb_path)
+        raw_layers: Any = pyogrio.list_layers(gdb_path)  # type: ignore[reportUnknownVariableType,reportUnknownMemberType]
         crs_str = ""
         layers: list[dict[str, Any]] = []
 
-        for layer_name, geom_type in raw_layers:
+        for layer_name, geom_type in raw_layers:  # type: ignore[reportUnknownVariableType]
             try:
-                info = pyogrio.read_info(gdb_path, layer=str(layer_name))
-                fields = list(info.get("fields", []))
-                dtypes = [str(d) for d in info.get("dtypes", [])]
-                count = int(info.get("features", 0))
-                layer_crs = str(info.get("crs", ""))
+                info: Any = pyogrio.read_info(gdb_path, layer=str(layer_name))  # type: ignore[reportUnknownVariableType,reportUnknownMemberType]
+                fields: list[str] = list(info.get("fields", []))  # type: ignore[reportUnknownMemberType,reportUnknownArgumentType]
+                dtypes: list[str] = [str(d) for d in info.get("dtypes", [])]  # type: ignore[reportUnknownVariableType,reportUnknownMemberType,reportUnknownArgumentType]
+                count: int = int(info.get("features", 0))  # type: ignore[reportUnknownMemberType,reportUnknownArgumentType]
+                layer_crs: str = str(info.get("crs", ""))  # type: ignore[reportUnknownMemberType,reportUnknownArgumentType]
                 if layer_crs and not crs_str:
                     crs_str = layer_crs
                 layers.append({
-                    "name": str(layer_name),
-                    "geometry_type": str(geom_type) if geom_type else "Table",
+                    "name": str(layer_name),  # type: ignore[reportUnknownArgumentType]
+                    "geometry_type": str(geom_type) if geom_type else "Table",  # type: ignore[reportUnknownArgumentType]
                     "feature_count": count,
-                    "fields": [{"name": f, "type": t} for f, t in zip(fields, dtypes)],
+                    "fields": [{"name": fn, "type": t} for fn, t in zip(fields, dtypes)],
                 })
             except Exception:
                 layers.append({
-                    "name": str(layer_name),
-                    "geometry_type": str(geom_type) if geom_type else "Table",
+                    "name": str(layer_name),  # type: ignore[reportUnknownArgumentType]
+                    "geometry_type": str(geom_type) if geom_type else "Table",  # type: ignore[reportUnknownArgumentType]
                     "feature_count": 0,
                     "fields": [],
                 })
@@ -8719,7 +10536,7 @@ End Sub
                 "layers": [],
             }
             for lyr in layers:
-                lyr_entry = {
+                lyr_entry: dict[str, Any] = {
                     "name": lyr["name"],
                     "geometry_type": lyr["geometry_type"],
                     "fields": [f["name"] for f in lyr["fields"]],
@@ -8778,7 +10595,7 @@ End Sub
         tree.column("points_layer", width=130)
         tree.column("fields", width=60)
         tree.pack(side="left", fill="both")
-        sb = ttk.Scrollbar(list_frame, orient="vertical", command=tree.yview)
+        sb = ttk.Scrollbar(list_frame, orient="vertical", command=tree.yview)  # type: ignore[arg-type]
         sb.pack(side="right", fill="y")
         tree.configure(yscrollcommand=sb.set)
 
@@ -8881,6 +10698,9 @@ End Sub
         jxl_map: dict[str, str],
         dwg_path: str | None = None,
         dwg_layers: list[str] | None = None,
+        dwg_srid: int = 0,
+        dwg_cs: str = "",
+        export_codes: list[str] | None = None,
         client_name: str | None = None,
     ) -> None:
         """Add or refresh a CRDB in the watch list, then ensure the Task Scheduler job exists."""
@@ -8905,6 +10725,9 @@ End Sub
                 entry["jxl_map"] = jxl_map
                 entry["dwg_path"] = dwg_path
                 entry["dwg_layers"] = dwg_layers or []
+                entry["dwg_srid"] = dwg_srid
+                entry["dwg_cs"] = dwg_cs
+                entry["export_codes"] = export_codes or []
                 if client_name is not None:
                     entry["client_name"] = client_name
                 entry["last_crdb_upload"] = now_str   # reset the 3-month clock
@@ -8921,6 +10744,9 @@ End Sub
                 "jxl_map": jxl_map,
                 "dwg_path": dwg_path,
                 "dwg_layers": dwg_layers or [],
+                "dwg_srid": dwg_srid,
+                "dwg_cs": dwg_cs,
+                "export_codes": export_codes or [],
                 "client_name": client_name or "",
                 "first_registered": now_str,
                 "last_crdb_upload": now_str,
@@ -8936,32 +10762,54 @@ End Sub
         self._ensure_task_scheduler()  # type: ignore[attr-defined]
 
     def _ensure_task_scheduler(self) -> None:
-        """Create (or silently overwrite) the daily 2 AM Windows Task Scheduler job."""
+        """Create (or silently overwrite) the daily 2 AM Windows Task Scheduler job.
+
+        Uses PowerShell to set ``StartWhenAvailable = $true`` so that if the
+        computer was off at 2 AM, the task runs as soon as the user logs in.
+        Falls back to plain ``schtasks`` if PowerShell fails.
+        """
         try:
             if getattr(sys, "frozen", False):
-                exe = f'"{sys.executable}"'
-                task_cmd = f'{exe} --crdb-check'
+                task_exe = sys.executable
+                task_args = "--crdb-check"
             else:
-                # Use pythonw.exe (no console window) for background operation
                 py_dir = os.path.dirname(sys.executable)
                 pythonw = os.path.join(py_dir, "pythonw.exe")
                 if not os.path.isfile(pythonw):
                     pythonw = sys.executable
                 script = os.path.abspath(__file__)
-                task_cmd = f'"{pythonw}" "{script}" --crdb-check'
+                task_exe = pythonw
+                task_args = f'"{script}" --crdb-check'
 
+            task_name = "DataValidationTool_CRDBCheck"
+
+            # Try PowerShell first — supports StartWhenAvailable
+            ps_script = (
+                f"$action = New-ScheduledTaskAction -Execute '{task_exe}' -Argument '{task_args}';"
+                f"$trigger = New-ScheduledTaskTrigger -Daily -At '2:00AM';"
+                f"$settings = New-ScheduledTaskSettingsSet -StartWhenAvailable -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries;"
+                f"Register-ScheduledTask -TaskName '{task_name}' -Action $action -Trigger $trigger -Settings $settings -Force"
+            )
+            result = subprocess.run(
+                ["powershell", "-WindowStyle", "Hidden", "-NonInteractive", "-Command", ps_script],
+                capture_output=True, check=False,
+                creationflags=0x08000000,  # CREATE_NO_WINDOW
+            )
+            if result.returncode == 0:
+                return  # success
+
+            # Fallback: plain schtasks (no StartWhenAvailable support)
             subprocess.run(
                 [
                     "schtasks", "/create",
-                    "/tn", "DataValidationTool_CRDBCheck",
-                    "/tr", task_cmd,
+                    "/tn", task_name,
+                    "/tr", f'"{task_exe}" {task_args}',
                     "/sc", "DAILY",
                     "/st", "02:00",
-                    "/f",          # overwrite if already exists
+                    "/f",
                     "/rl", "HIGHEST",
                 ],
-                capture_output=True,
-                check=False,
+                capture_output=True, check=False,
             )
         except Exception:
             pass  # Task Scheduler failure is non-fatal
@@ -9010,13 +10858,39 @@ End Sub
             self._save_watchlist(wl)  # type: ignore[attr-defined]
 
             messagebox.showinfo(
-                "CRDB Watch List — Updates Ready",
-                "The following GeoPackage files were automatically regenerated:\n\n"
+                "CRDB Watch List — Data Exported",
+                "The following CRDB files had changes and were automatically re-exported:\n\n"
                 + "\n".join(lines)
-                + "\n\nFiles are ready to send to the GIS department.",
+                + "\n\nAll export files (GPKG, CSV, SHP, LandXML, KMZ) are ready.",
             )
         except Exception:
             pass
+
+    def _startup_watchlist_check(self) -> None:
+        """Called ~2 s after startup — run a background watchlist check.
+
+        This catches any missed scheduled runs (e.g. computer was off at 2 AM).
+        Runs in a background thread so it doesn't block the UI.
+        """
+        import threading
+
+        watchlist_path = self._get_watchlist_path()  # type: ignore[attr-defined]
+        if not os.path.isfile(watchlist_path):
+            return
+
+        def _bg() -> None:
+            try:
+                _run_background_check(watchlist_path)
+            except Exception:
+                pass
+            # After the check, schedule notification display on the main thread
+            try:
+                self.after(500, self._check_pending_notifications)  # type: ignore[attr-defined]
+            except Exception:
+                pass
+
+        t = threading.Thread(target=_bg, daemon=True)
+        t.start()
 
     def _show_watchlist_dialog(self) -> None:
         """Display and manage the list of watched CRDB files."""
@@ -9262,6 +11136,15 @@ for _m in (
     "_load_crdb_rows", "_extract_jxl_hints", "_match_points_to_jxls",
     "_parse_jxl", "_make_gpkg_point_blob", "_write_gpkg", "parse_fxl",
     "_crdb_file_hash",
+    # Multi-format export methods (headless re-export)
+    "_write_crdb_csv", "_write_crdb_shp", "_write_crdb_landxml", "_write_crdb_kmz",
+    "_find_gis_output_dir",
+    "_parse_dxf_geometry",
+    "_read_dwg_geometry_ezdxf", "_convert_dwg_to_dxf",
+    "_resolve_autodesk_cs", "_load_autodesk_cs_map",
+    # DWG geometry to non-GPKG formats
+    "_write_dwg_geometry_to_shp", "_write_dwg_geometry_to_kml",
+    "_write_dwg_geometry_to_landxml",
     # DWG geometry methods (headless re-export)
     "_open_dwg_readonly", "_read_dwg_cs_code", "_extract_dwg_geometry",
     "_write_dwg_geometry_to_gpkg", "_make_gpkg_linestring_blob",
@@ -9329,7 +11212,7 @@ def _run_background_check(watchlist_path: str) -> None:
             updated_entries.append(entry)
             continue  # no change
 
-        # CRDB changed — re-export the GeoPackage
+        # CRDB changed — re-export all formats into a date-stamped GIS folder
         try:
             rows: list[dict[str, Any]] = runner._load_crdb_rows(crdb_path)  # type: ignore[attr-defined]
             matched, _, _ = runner._match_points_to_jxls(rows, jxl_map)  # type: ignore[attr-defined]
@@ -9341,30 +11224,89 @@ def _run_background_check(watchlist_path: str) -> None:
                 except Exception:
                     pass
 
-            runner._write_gpkg(gpkg_path, rows, matched, fxl_data, {})  # type: ignore[attr-defined]
+            # Compute output directory (ASBUILT/0_GIS/WEEKLY_UPDATE/YYYYMMDD)
+            _out_dir: str = runner._find_gis_output_dir(crdb_path)  # type: ignore[attr-defined]
+            os.makedirs(_out_dir, exist_ok=True)  # type: ignore[reportUnknownArgumentType]
+            _stem = os.path.splitext(os.path.basename(crdb_path))[0]
 
-            # Re-export DWG geometry if configured
+            # Filter rows by saved export_codes (CSV gets all, others get filtered)
+            _export_codes_w: list[str] = cast(list[str], entry.get("export_codes") or [])
+            _filtered: list[dict[str, Any]]
+            if _export_codes_w:
+                _ec_set = set(_export_codes_w)
+                _filtered = [r for r in cast(list[dict[str, Any]], rows)
+                             if (r.get("code", "UNKNOWN") or "UNKNOWN") in _ec_set]
+            else:
+                _filtered = cast(list[dict[str, Any]], rows)
+
+            # Write all five formats (best-effort each)
+            gpkg_path = os.path.join(_out_dir, _stem + ".gpkg")  # type: ignore[reportUnknownArgumentType]
+            runner._write_gpkg(gpkg_path, _filtered, matched, fxl_data, {})  # type: ignore[attr-defined]
+            for _wfunc in [
+                lambda: runner._write_crdb_csv(os.path.join(_out_dir, _stem + ".csv"), rows, matched, fxl_data, {}),  # type: ignore[attr-defined]
+                lambda: runner._write_crdb_shp(os.path.join(_out_dir, _stem + ".shp"), _filtered, matched),  # type: ignore[attr-defined]
+                lambda: runner._write_crdb_landxml(os.path.join(_out_dir, _stem + ".xml"), _filtered, matched),  # type: ignore[attr-defined]
+                lambda: runner._write_crdb_kmz(os.path.join(_out_dir, _stem + ".kmz"), _filtered, matched, fxl_data),  # type: ignore[attr-defined]
+            ]:
+                try:
+                    _wfunc()
+                except Exception:
+                    pass  # non-GPKG formats are best-effort in headless mode
+
+            # Re-export DWG geometry if configured — uses saved layers and CRS
             dwg_path_w: str = cast(str, entry.get("dwg_path") or "")
             dwg_layers_w: list[str] = cast(list[str], entry.get("dwg_layers") or [])
+            dwg_srid_w: int = int(entry.get("dwg_srid", 0) or 0)
+            dwg_cs_w: str = cast(str, entry.get("dwg_cs", "") or "")
             if dwg_path_w and dwg_layers_w and os.path.isfile(dwg_path_w):
                 try:
-                    _acad, _doc, _started = runner._open_dwg_readonly(dwg_path_w)  # type: ignore[attr-defined]
-                    try:
-                        _cs = runner._read_dwg_cs_code(_doc)  # type: ignore[attr-defined]
-                        _geom = runner._extract_dwg_geometry(  # type: ignore[attr-defined]
-                            _doc, set(dwg_layers_w))
-                        if _geom:
-                            runner._write_dwg_geometry_to_gpkg(  # type: ignore[attr-defined]
-                                gpkg_path, _geom, srid=0,
-                                cs_description=_cs)
-                    finally:
-                        try:
-                            _doc.Close(False)
-                        except Exception:
-                            pass
-                        if _started:
+                    # Use ezdxf approach (DWG→DXF via AutoCAD, read with ezdxf)
+                    _layer_counts: dict[str, int]
+                    _all_geom: dict[str, list[dict[str, Any]]]
+                    _cs: str
+                    _layer_counts, _all_geom, _cs = runner._read_dwg_geometry_ezdxf(dwg_path_w)  # type: ignore[attr-defined]
+                    _all_geom = cast(dict[str, list[dict[str, Any]]], _all_geom)
+                    _cs = cast(str, _cs)
+                    # Use saved CS if auto-detection failed
+                    if not _cs:
+                        _cs = dwg_cs_w
+                    # Filter to saved layers only
+                    _lset = set(dwg_layers_w)
+                    _geom: dict[str, list[dict[str, Any]]] = {
+                        ly: ents for ly, ents in _all_geom.items()
+                        if ly in _lset and ents}
+                    # Use saved SRID if auto-detection failed
+                    _srid: int = dwg_srid_w
+                    if _cs and not _srid:
+                        _srid = int(runner._resolve_autodesk_cs(_cs))  # type: ignore[attr-defined]
+
+                    if _geom:
+                        # GPKG: write with transformer
+                        _gpkg_srid = _srid
+                        _transformer: Any = None
+                        if _srid and _srid != 4326:
                             try:
-                                _acad.Quit()
+                                from pyproj import Transformer as _HPT  # type: ignore[import-untyped]
+                                _ht: Any = _HPT.from_crs(  # type: ignore[reportUnknownVariableType,reportUnknownMemberType]
+                                    f"EPSG:{_srid}", "EPSG:4326", always_xy=True)
+                                _transformer = lambda x, y: _ht.transform(x, y)  # type: ignore[reportUnknownVariableType,reportUnknownLambdaType]
+                                _gpkg_srid = 4326
+                            except Exception:
+                                pass
+                        runner._write_dwg_geometry_to_gpkg(  # type: ignore[attr-defined]
+                            gpkg_path, _geom, srid=_gpkg_srid,
+                            cs_description=_cs, transformer=_transformer)
+                        # Other formats
+                        for _dwg_wf in [
+                            lambda: runner._write_dwg_geometry_to_shp(  # type: ignore[attr-defined]
+                                os.path.join(_out_dir, _stem + "_geometry.shp"), _geom, _srid),
+                            lambda: runner._write_dwg_geometry_to_kml(  # type: ignore[attr-defined]
+                                os.path.join(_out_dir, _stem + ".kmz"), _geom, _srid, _cs),
+                            lambda: runner._write_dwg_geometry_to_landxml(  # type: ignore[attr-defined]
+                                os.path.join(_out_dir, _stem + ".xml"), _geom, _srid, _cs),
+                        ]:
+                            try:
+                                _dwg_wf()
                             except Exception:
                                 pass
                 except Exception:
@@ -9372,14 +11314,19 @@ def _run_background_check(watchlist_path: str) -> None:
 
             entry["last_file_hash"] = current_hash
             entry["last_file_mtime"] = os.path.getmtime(crdb_path)
-            newly_exported.append(os.path.basename(gpkg_path))
+            newly_exported.append(os.path.basename(crdb_path))
 
             pending.append({
                 "message": (f"{os.path.basename(crdb_path)} changed — "
-                            f"{os.path.basename(gpkg_path)} regenerated "
-                            f"({now.strftime('%Y-%m-%d %H:%M')})"),
+                            f"all exports regenerated to:\n"
+                            f"  {_out_dir}\n"
+                            f"  (GPKG, CSV, SHP, LandXML, KMZ"
+                            + (", DWG geometry" if dwg_path_w and dwg_layers_w else "")
+                            + f")\n"
+                            f"  {now.strftime('%Y-%m-%d %H:%M')}"),
                 "timestamp": now.isoformat(timespec="seconds"),
                 "gpkg_path": gpkg_path,
+                "output_dir": _out_dir,
             })
         except Exception as exc:
             # Log the error but keep the entry so it's retried tomorrow
@@ -9400,7 +11347,7 @@ def _run_background_check(watchlist_path: str) -> None:
     except Exception:
         pass
 
-    # Fire a Windows toast if any GPKGs were regenerated
+    # Fire a Windows toast if any exports were regenerated
     if newly_exported:
         names = ", ".join(newly_exported[:3])
         if len(newly_exported) > 3:
@@ -9411,7 +11358,7 @@ def _run_background_check(watchlist_path: str) -> None:
             "$n.Icon = [System.Drawing.SystemIcons]::Information; "
             "$n.BalloonTipIcon = 'Info'; "
             "$n.BalloonTipTitle = 'Data Validation Tool'; "
-            f"$n.BalloonTipText = 'GeoPackage files ready: {names.replace(chr(39), '')}'; "
+            f"$n.BalloonTipText = 'CRDB data changed and re-exported: {names.replace(chr(39), '')}'; "
             "$n.Visible = $true; "
             "$n.ShowBalloonTip(9000); "
             "Start-Sleep -Milliseconds 10000; "

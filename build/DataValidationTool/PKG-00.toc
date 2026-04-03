@@ -50,25 +50,29 @@
    "C:\\JOSH'S "
    'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks\\pyi_rth_multiprocessing.py',
    'PYSOURCE'),
-  ('pyi_rth_setuptools',
-   "C:\\JOSH'S "
-   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks\\pyi_rth_setuptools.py',
-   'PYSOURCE'),
   ('pyi_rth_pywintypes',
    "C:\\JOSH'S "
    'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\_pyinstaller_hooks_contrib\\rthooks\\pyi_rth_pywintypes.py',
+   'PYSOURCE'),
+  ('pyi_rth_setuptools',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks\\pyi_rth_setuptools.py',
    'PYSOURCE'),
   ('pyi_rth_pythoncom',
    "C:\\JOSH'S "
    'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\_pyinstaller_hooks_contrib\\rthooks\\pyi_rth_pythoncom.py',
    'PYSOURCE'),
+  ('pyi_rth_pyproj',
+   "C:\\JOSH'S "
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\_pyinstaller_hooks_contrib\\rthooks\\pyi_rth_pyproj.py',
+   'PYSOURCE'),
   ('pyi_rth__tkinter',
    "C:\\JOSH'S "
    'PROGRAMS\\DataValidationTool_3.1_Claude\\venv\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks\\pyi_rth__tkinter.py',
    'PYSOURCE'),
-  ('DataValidationTool-v3.1',
+  ('DataValidationTool-v3.2',
    "C:\\JOSH'S "
-   'PROGRAMS\\DataValidationTool_3.1_Claude\\DataValidationTool-v3.1.py',
+   'PROGRAMS\\DataValidationTool_3.1_Claude\\DataValidationTool-v3.2.py',
    'PYSOURCE')],
  'python313.dll',
  True,
