@@ -1,17 +1,31 @@
 # -*- mode: python ; coding: utf-8 -*-
-from PyInstaller.utils.hooks import collect_submodules
+from PyInstaller.utils.hooks import collect_submodules, collect_data_files
 
 hiddenimports = ['win32com.client', 'pythoncom']
 hiddenimports += collect_submodules('win32com')
 hiddenimports += collect_submodules('tkinterdnd2')
 hiddenimports += collect_submodules('pandas')
 hiddenimports += collect_submodules('openpyxl')
+hiddenimports += collect_submodules('ezdxf')
+hiddenimports += collect_submodules('pyproj')
+
+# pyproj needs its data files (proj.db, etc.) for CRS lookups
+datas = [('config.json', '.')]
+datas += collect_data_files('pyproj')
+datas += collect_data_files('ezdxf')
+
+# Try to include pyogrio if installed
+try:
+    hiddenimports += collect_submodules('pyogrio')
+    datas += collect_data_files('pyogrio')
+except Exception:
+    pass
 
 a = Analysis(
-    ['DataValidationTool-v3.1.py'],
+    ['DataValidationTool-v3.2.py'],
     pathex=[],
     binaries=[],
-    datas=[('config.json', '.')],
+    datas=datas,
     hiddenimports=hiddenimports,
     hookspath=[],
     hooksconfig={},
