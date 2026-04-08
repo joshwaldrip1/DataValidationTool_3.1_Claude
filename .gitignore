@@ -5,3 +5,4 @@ dist/
 venv/
 *.egg-info/
 .claude/settings.local.json
+update_token.json

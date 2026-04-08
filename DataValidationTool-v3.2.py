@@ -34,9 +34,23 @@ from urllib.error import URLError
 APP_VERSION = "3.2.1"
 _GITHUB_OWNER = "joshwaldrip1"
 _GITHUB_REPO  = "DataValidationTool"
-# Fine-grained PAT with read-only Contents access to the private repo.
+# Fine-grained PAT loaded from config.json at runtime ("github_token" key).
 # Generate at: GitHub → Settings → Developer settings → Fine-grained tokens
-_GITHUB_TOKEN = "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"
+_GITHUB_TOKEN = ""
+def _load_github_token() -> str:
+    """Read the GitHub PAT from update_token.json next to the exe/script."""
+    _base = os.path.dirname(sys.executable if getattr(sys, "frozen", False) else os.path.abspath(__file__))
+    token_path = os.path.join(_base, "update_token.json")
+    try:
+        with open(token_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        if isinstance(data, dict):
+            tok = data.get("github_token", "")
+            if isinstance(tok, str) and tok.strip():
+                return tok.strip()
+    except Exception:
+        pass
+    return ""
 
 # --- Minimal Protocols to type Excel COM objects (win32com) ---
 @runtime_checkable
@@ -380,12 +394,15 @@ class DataValidationTool(TkBase):
 
     def _check_for_updates(self) -> None:
         """Check GitHub Releases for a newer version (runs in a background thread)."""
+        global _GITHUB_TOKEN
+        if not _GITHUB_TOKEN:
+            _GITHUB_TOKEN = _load_github_token()
         if not _GITHUB_TOKEN:
             messagebox.showwarning(
                 "Update Check",
                 "No GitHub token configured.\n\n"
-                "A personal access token is required to check for updates "
-                "from the private repository. Contact your administrator.",
+                "Place an update_token.json file next to the executable with:\n"
+                "{\"github_token\": \"ghp_...\"}",
             )
             return
         self._progress_start("Checking for updates…")

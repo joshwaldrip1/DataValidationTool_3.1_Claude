@@ -10,7 +10,7 @@ hiddenimports += collect_submodules('ezdxf')
 hiddenimports += collect_submodules('pyproj')
 
 # pyproj needs its data files (proj.db, etc.) for CRS lookups
-datas = [('config.json', '.')]
+datas = [('config.json', '.'), ('update_token.json', '.')]
 datas += collect_data_files('pyproj')
 datas += collect_data_files('ezdxf')
 
