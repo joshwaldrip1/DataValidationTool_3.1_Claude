@@ -5016,5 +5016,441 @@
         ]
       }
     ]
+  },
+  "Conoco Phillips Company": {
+    "source_gdb": "UNIVERSITY_SAN_ANTONIO_20-42_1D_EXPANSION_20251110.gdb",
+    "crs": "EPSG:32039",
+    "points_layer": "L48_PERM_INF_PIPELINE",
+    "points_fields": [
+      {
+        "name": "COATING",
+        "type": "object"
+      },
+      {
+        "name": "COUNTY",
+        "type": "object"
+      },
+      {
+        "name": "DATE_INSTALLED",
+        "type": "object"
+      },
+      {
+        "name": "DATE_SURVEYED",
+        "type": "object"
+      },
+      {
+        "name": "GPS",
+        "type": "object"
+      },
+      {
+        "name": "LOCATION",
+        "type": "object"
+      },
+      {
+        "name": "MATERIAL",
+        "type": "object"
+      },
+      {
+        "name": "NAME",
+        "type": "object"
+      },
+      {
+        "name": "NOTES",
+        "type": "object"
+      },
+      {
+        "name": "ROAD_BORE",
+        "type": "object"
+      },
+      {
+        "name": "SDR_GRADE",
+        "type": "object"
+      },
+      {
+        "name": "STATE",
+        "type": "object"
+      },
+      {
+        "name": "TIME_SURVEYED",
+        "type": "object"
+      },
+      {
+        "name": "TYPE",
+        "type": "object"
+      },
+      {
+        "name": "MAOP_DESIGN",
+        "type": "object"
+      },
+      {
+        "name": "SURVEY_TYPE",
+        "type": "object"
+      },
+      {
+        "name": "MANUFACTURE",
+        "type": "object"
+      },
+      {
+        "name": "FACILITY_ORIGIN",
+        "type": "object"
+      },
+      {
+        "name": "WELL_ORIGIN",
+        "type": "object"
+      },
+      {
+        "name": "DIAMETER_ID",
+        "type": "float64"
+      },
+      {
+        "name": "SURVEY_COMPANY",
+        "type": "object"
+      },
+      {
+        "name": "SURVEY_PLAT",
+        "type": "object"
+      },
+      {
+        "name": "WORK_ORDER",
+        "type": "object"
+      },
+      {
+        "name": "MAOP_PSIG",
+        "type": "float64"
+      },
+      {
+        "name": "SHAPE_Length",
+        "type": "float64"
+      }
+    ],
+    "layers": [
+      {
+        "name": "WELD",
+        "geometry_type": "Point Z",
+        "fields": [
+          "TYPE",
+          "XRAY",
+          "JOINT_AHEAD",
+          "JOINT_BACK",
+          "HEAT_AHEAD",
+          "HEAT_BACK",
+          "JOINT_LENGTH",
+          "DEPTH_OF_COVER",
+          "PIPE_MATERIAL",
+          "PIPE_COATING",
+          "BASECOAT_FBE_MILLS",
+          "OVERCOAT_ARO_MILLS",
+          "MANUFACTURER",
+          "NOM_DIAMETER_INCH",
+          "WALL_THICKNESS",
+          "GRADE",
+          "SEAM",
+          "WELDERS",
+          "PIPE_NUMBER_AHEAD",
+          "PIPE_NUMBER_BACK",
+          "SPECIFICATION",
+          "ROAD_BORE",
+          "PRODUCT_TYPE",
+          "MAOP_DESIGN",
+          "SURVEY_TYPE",
+          "FACILITY_ORIGIN",
+          "WELL_ORIGIN",
+          "PHOTO",
+          "REMARKS",
+          "DATE_SHOT_TAKEN",
+          "TIME_SHOT_TAKEN"
+        ]
+      },
+      {
+        "name": "BEND",
+        "geometry_type": "Point Z",
+        "fields": [
+          "BEND_TYPE",
+          "BEND_TECHNIQUE",
+          "BEND_RADIUS",
+          "HORZ_ANGLE",
+          "VERT_ANGLE",
+          "HEAT_NUMBER",
+          "PIPE_MATERIAL",
+          "COATING",
+          "MANUFACTURER",
+          "NOM_DIAMETER_INCH",
+          "WALL_THICKNESS",
+          "GRADE",
+          "SEAM",
+          "SPECIFICATION",
+          "REMARKS",
+          "DATE_SHOT_TAKEN"
+        ]
+      },
+      {
+        "name": "EXPL",
+        "geometry_type": "Point Z",
+        "fields": [
+          "PIPELINE_ID_OR_NAME",
+          "NOM_DIAMETER_INCH",
+          "DEPTH_OF_COVER",
+          "CLEARANCE",
+          "DEPTH_METHOD",
+          "CROSSING_PROPOSED_CL",
+          "ABOVE_OR_BELOW_PL",
+          "CROSSING_ANGLE",
+          "COMPANY",
+          "REMARKS",
+          "DATE_SHOT_TAKEN"
+        ]
+      },
+      {
+        "name": "FLANGE",
+        "geometry_type": "Point Z",
+        "fields": [
+          "TYPE",
+          "PIPE_MATERIAL",
+          "COATING",
+          "MANUFACTURER",
+          "NOM_DIAMETER_INCH",
+          "WALL_THICKNESS",
+          "GRADE",
+          "SEAM",
+          "HEAT_NUMBER",
+          "SPECIFICATION",
+          "REMARKS",
+          "DATE_SHOT_TAKEN"
+        ]
+      },
+      {
+        "name": "POLY_SEAM",
+        "geometry_type": "Point Z",
+        "fields": [
+          "TYPE",
+          "DEPTH_OF_COVER",
+          "PIPE_MATERIAL",
+          "MANUFACTURER",
+          "NOM_DIAMETER_INCH",
+          "PIPE_NUMBER",
+          "REMARKS",
+          "DATE_SHOT_TAKEN"
+        ]
+      },
+      {
+        "name": "REDUCER",
+        "geometry_type": "Point Z",
+        "fields": [
+          "TYPE",
+          "LARGE_DIAMETER_INCH",
+          "LARGE_WALL_THICKNESS",
+          "REDUCED_DIAMETER_INCH",
+          "REDUCED_WALL_THICKNESS",
+          "HEAT_NUMBER",
+          "PIPE_MATERIAL",
+          "COATING",
+          "GRADE",
+          "SEAM",
+          "SPECIFICATION",
+          "REMARKS",
+          "DATE_SHOT_TAKEN"
+        ]
+      },
+      {
+        "name": "RISER",
+        "geometry_type": "Point Z",
+        "fields": [
+          "CUSTOMER",
+          "POSITION",
+          "PIPE_MATERIAL",
+          "PIPE_COATING",
+          "NOM_DIAMETER_INCH",
+          "REMARKS",
+          "DATE_SHOT_TAKEN"
+        ]
+      },
+      {
+        "name": "TAP",
+        "geometry_type": "Point Z",
+        "fields": [
+          "TYPE",
+          "TOP_SIDE_OR_BOTTOM",
+          "SIZE_IN",
+          "REMARKS",
+          "MEAS"
+        ]
+      },
+      {
+        "name": "TEE",
+        "geometry_type": "Point Z",
+        "fields": [
+          "TYPE",
+          "CARRIER_DIAMETER_INCH",
+          "CARRIER_WALL_THICKNESS",
+          "BRANCH_DIAMETER_INCH",
+          "BRANCH_WALL_THICKNESS",
+          "SCRAPER_BARS",
+          "MATERIAL",
+          "COATING",
+          "MANUFACTURER",
+          "GRADE",
+          "SEAM",
+          "HEAT_NUMBER",
+          "SPECIFICATION",
+          "REMARKS",
+          "DATE_SHOT_TAKEN"
+        ]
+      },
+      {
+        "name": "TOP_PIPE_AB",
+        "geometry_type": "Point Z",
+        "fields": [
+          "TYPE",
+          "ROAD_BORE",
+          "PRODUCT_TYPE",
+          "MAOP_DESIGN",
+          "SURVEY_TYPE",
+          "FACILITY_ORIGIN",
+          "WELL_ORIGIN",
+          "JOINT_NUMBER",
+          "PIPE_NUMBER",
+          "HEAT_NUMBER",
+          "JOINT_LENGTH",
+          "DEPTH_OF_COVER",
+          "PIPE_MATERIAL",
+          "PIPE_COATING",
+          "BASECOAT_FBE__MILLS",
+          "OVERCOAT_ARO_MILLS",
+          "MANUFACTURER",
+          "NOM_DIAMETER_INCH",
+          "WALL_THICKNESS",
+          "GRADE",
+          "SEAM",
+          "SPECIFICATION",
+          "REMARKS",
+          "DATE_SHOT_TAKEN",
+          "TIME_SHOT_TAKEN"
+        ]
+      },
+      {
+        "name": "VALVE",
+        "geometry_type": "Point Z",
+        "fields": [
+          "VALVE_TYPE",
+          "FACILITY_NAME",
+          "WELL_NAME",
+          "OWNER",
+          "VENDOR_NAME",
+          "MANUFACTURER",
+          "MNFRS_MODEL",
+          "MNFR_UNIT_NUMBER",
+          "MNFRS_DATE",
+          "SIZE",
+          "SERIAL_NUMBER",
+          "CONTROLLER_TYPE",
+          "EMITTING_TYPE",
+          "EMITTING_STATUS",
+          "CONTROL_STATUS",
+          "OPERATION_TYPE",
+          "LOCATION",
+          "STG_TRANSFER",
+          "GI_VERIFIED",
+          "SPECIFICATION",
+          "PHOTO_1",
+          "PHOTO_2",
+          "PHOTO_3",
+          "REMARKS",
+          "DATE_SHOT_TAKEN",
+          "TIME_SHOT_TAKEN"
+        ]
+      },
+      {
+        "name": "PIPE_SEGMENT",
+        "geometry_type": "MultiLineString Z",
+        "fields": [
+          "ROUTE_DESCRIPTION",
+          "TYPE",
+          "BEGIN_MEAS",
+          "END_MEAS",
+          "PIPE_MATERIAL",
+          "PIPE_COATING",
+          "BASECOAT__FBE__MILLS",
+          "BASECOAT__ARO__MILLS",
+          "MANUFACTURER",
+          "NOM_DIAMETER_INCH",
+          "WALL_THICKNESS",
+          "GRADE",
+          "SEAM",
+          "REMARKS",
+          "JOINT_NO",
+          "HEAT_NO",
+          "JOINT_LENGTH",
+          "DEPTH_OF_COVER",
+          "WELDERS",
+          "SHAPE_Length"
+        ]
+      },
+      {
+        "name": "L48_PERM_INF_PIPELINE",
+        "geometry_type": "MultiLineString Z",
+        "fields": [
+          "COATING",
+          "COUNTY",
+          "DATE_INSTALLED",
+          "DATE_SURVEYED",
+          "GPS",
+          "LOCATION",
+          "MATERIAL",
+          "NAME",
+          "NOTES",
+          "ROAD_BORE",
+          "SDR_GRADE",
+          "STATE",
+          "TIME_SURVEYED",
+          "TYPE",
+          "MAOP_DESIGN",
+          "SURVEY_TYPE",
+          "MANUFACTURE",
+          "FACILITY_ORIGIN",
+          "WELL_ORIGIN",
+          "DIAMETER_ID",
+          "SURVEY_COMPANY",
+          "SURVEY_PLAT",
+          "WORK_ORDER",
+          "MAOP_PSIG",
+          "SHAPE_Length"
+        ]
+      },
+      {
+        "name": "OVERHEAD_WIRES",
+        "geometry_type": "MultiLineString Z",
+        "fields": [
+          "TYPE",
+          "REMARKS",
+          "SHAPE_Length"
+        ]
+      },
+      {
+        "name": "SITE",
+        "geometry_type": "MultiPolygon",
+        "fields": [
+          "TYPE",
+          "REMARKS",
+          "SHAPE_Length",
+          "SHAPE_Area"
+        ]
+      },
+      {
+        "name": "FOREIGN_LINE",
+        "geometry_type": "MultiLineString Z",
+        "fields": [
+          "PIPELINE_ID_OR_NAME",
+          "NOM_DIAMETER_INCH",
+          "DEPTH_OF_COVER",
+          "DEPTH_METHOD",
+          "CROSSING_PROPOSED_CL",
+          "ABOVE_OR_BELOW_PL",
+          "CROSSING_ANGLE",
+          "COMPANY",
+          "DATE_SHOT_TAKEN",
+          "SHAPE_Length"
+        ]
+      }
+    ]
   }
 }

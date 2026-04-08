@@ -28,7 +28,9 @@
       "Bash(gh api:*)",
       "Bash(start \"https://github.com/settings/personal-access-tokens/new\")",
       "Bash(gh release create v3.2 --repo joshwaldrip1/DataValidationTool --target v3.2 --title 'Data Validation Tool v3.2' --notes ':*)",
-      "Bash(venv/Scripts/python -m PyInstaller DataValidationTool.spec --noconfirm)"
+      "Bash(venv/Scripts/python -m PyInstaller DataValidationTool.spec --noconfirm)",
+      "Bash(venv/Scripts/python -m PyInstaller DataValidationTool.spec --noconfirm --clean)",
+      "Bash(venv/Scripts/python.exe -c \"import py_compile; py_compile.compile\\('DataValidationTool-v3.2.py', doraise=True\\)\")"
     ]
   }
 }

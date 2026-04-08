@@ -40,15 +40,18 @@ _github_token: str = ""
 def _load_github_token() -> str:
     """Read the GitHub PAT from update_token.json next to the exe/script."""
     _base = os.path.dirname(sys.executable if getattr(sys, "frozen", False) else os.path.abspath(__file__))
-    token_path = os.path.join(_base, "update_token.json")
-    try:
-        with open(token_path, "r", encoding="utf-8") as f:
-            cfg: dict[str, Any] = json.load(f)
-        tok: str = str(cfg.get("github_token", ""))
-        if tok.strip():
-            return tok.strip()
-    except Exception:
-        pass
+    for candidate in [
+        os.path.join(_base, "update_token.json"),
+        os.path.join(_base, "_internal", "update_token.json"),
+    ]:
+        try:
+            with open(candidate, "r", encoding="utf-8") as f:
+                cfg: dict[str, Any] = json.load(f)
+            tok: str = str(cfg.get("github_token", ""))
+            if tok.strip():
+                return tok.strip()
+        except Exception:
+            continue
     return ""
 
 # --- Minimal Protocols to type Excel COM objects (win32com) ---
@@ -5453,6 +5456,84 @@ End Sub
                 return p
         return None
 
+    @staticmethod
+    def _levenshtein(a: str, b: str, max_dist: int = 2) -> int:
+        """Compute Levenshtein edit distance between *a* and *b*.
+
+        Returns early with ``max_dist + 1`` when the distance is known to
+        exceed *max_dist*, avoiding unnecessary work.
+        """
+        la, lb = len(a), len(b)
+        if abs(la - lb) > max_dist:
+            return max_dist + 1
+        if la > lb:
+            a, b, la, lb = b, a, lb, la
+        prev = list(range(la + 1))
+        for i in range(1, lb + 1):
+            curr = [i] + [0] * la
+            for j in range(1, la + 1):
+                cost = 0 if b[i - 1] == a[j - 1] else 1
+                curr[j] = min(curr[j - 1] + 1, prev[j] + 1, prev[j - 1] + cost)
+            if min(curr) > max_dist:
+                return max_dist + 1
+            prev = curr
+        return prev[la]
+
+    @staticmethod
+    def _gps_time_to_utc(gps_week: int, seconds: float) -> str:
+        """Convert GPS week + seconds-of-week to a UTC datetime string.
+
+        GPS epoch is 1980-01-06 00:00:00 UTC.  GPS time does not include
+        leap seconds, so we subtract the current GPS-UTC offset (18 s as of
+        2017-01-01 — valid through at least 2026).
+        """
+        import datetime as _dt
+        _GPS_EPOCH = _dt.datetime(1980, 1, 6, tzinfo=_dt.timezone.utc)
+        _LEAP_SECONDS = 18  # GPS-UTC offset since 2017-01-01
+        total_secs = gps_week * 604_800 + seconds - _LEAP_SECONDS
+        utc = _GPS_EPOCH + _dt.timedelta(seconds=total_secs)
+        return utc.strftime("%Y-%m-%d %H:%M:%S UTC")
+
+    @staticmethod
+    def _meridian_convergence(
+        proj_type: str,
+        central_lon: float | None,
+        parallel1: float | None,
+        parallel2: float | None,
+        point_lon: float | None,
+    ) -> float | None:
+        """Compute meridian convergence angle (degrees) at *point_lon*.
+
+        Supports Lambert Conformal Conic with two standard parallels
+        (``Lambert2Parallel``).  Returns ``None`` for unsupported projection
+        types or missing parameters.
+        """
+        import math as _math
+        if point_lon is None or central_lon is None:
+            return None
+        ptype = (proj_type or "").lower().replace(" ", "")
+        if ptype in ("lambert2parallel", "lambertconformalconic"):
+            if parallel1 is None or parallel2 is None:
+                return None
+            phi1 = _math.radians(parallel1)
+            phi2 = _math.radians(parallel2)
+            if abs(phi1 - phi2) < 1e-12:
+                n = _math.sin(phi1)
+            else:
+                n = (
+                    _math.log(_math.cos(phi1) / _math.cos(phi2))
+                    / _math.log(
+                        _math.tan(_math.pi / 4 + phi2 / 2)
+                        / _math.tan(_math.pi / 4 + phi1 / 2)
+                    )
+                )
+            return n * (point_lon - central_lon)
+        if ptype in ("transversemercator",):
+            # γ ≈ sin(φ) × Δλ  (first-order approximation; φ unknown here)
+            # Without the point latitude we cannot compute this accurately.
+            return None
+        return None
+
     def _parse_jxl(self, jxl_path: str) -> dict[str, Any]:
         """Parse a Trimble JobXML (.jxl) file and return structured job + point data."""
         cache_key = os.path.abspath(jxl_path)
@@ -5463,6 +5544,16 @@ End Sub
             "job_name": "", "timestamp": "", "date_str": "",
             "fxl_filename": "", "coordinate_system": "", "zone": "",
             "datum": "", "geoid": "", "distance_units": "", "height_units": "",
+            # Job-level metadata for GNSS report
+            "operator": "", "job_description": "", "job_notes": "",
+            "projection_type": "", "central_latitude": None, "central_longitude": None,
+            "false_northing": None, "false_easting": None,
+            "parallel1": None, "parallel2": None, "scale_factor": None,
+            "receiver_type": "", "receiver_serial": "", "receiver_firmware": "",
+            "antenna_type": "", "antenna_serial": "",
+            "antenna_measured_height": None, "antenna_reduced_height": None,
+            "time_zone_name": "", "hours_to_utc": None,
+            "elevation_mask": None, "pdop_mask": None,
             "points": {},
             "attrs_by_pt": {},  # {pt_name: [val1, val2, ...]} — populated alongside points
         }
@@ -5509,6 +5600,79 @@ End Sub
             if du:
                 result["distance_units"] = du
                 result["height_units"] = ur.findtext("HeightUnits") or ""
+
+        # ── Job-level metadata for GNSS report ──────────────────────────────
+        for jp in fieldbook.findall("JobPropertiesRecord"):
+            result["operator"] = result["operator"] or (jp.findtext("Operator") or "").strip()
+            result["job_description"] = result["job_description"] or (jp.findtext("Description") or "").strip()
+            result["job_notes"] = result["job_notes"] or (jp.findtext("JobNote") or "").strip()
+
+        for pr_rec in fieldbook.findall("ProjectionRecord"):
+            proj_el = pr_rec.find("Projection")
+            if proj_el is not None:
+                result["projection_type"] = result["projection_type"] or (proj_el.findtext("Type") or "")
+                def _pf(tag: str, el: ET.Element = proj_el) -> float | None:
+                    try:
+                        t = el.findtext(tag)
+                        return float(t) if t else None
+                    except Exception:
+                        return None
+                if result["central_longitude"] is None:
+                    result["central_latitude"] = _pf("CentralLatitude") or _pf("OriginLatitude")
+                    result["central_longitude"] = _pf("CentralLongitude") or _pf("OriginLongitude")
+                    result["false_northing"] = _pf("FalseNorthing")
+                    result["false_easting"] = _pf("FalseEasting")
+                    result["parallel1"] = _pf("Parallel1")
+                    result["parallel2"] = _pf("Parallel2")
+                    result["scale_factor"] = _pf("ScaleFactor")
+
+        for tz in fieldbook.findall("TimeZoneRecord"):
+            result["time_zone_name"] = result["time_zone_name"] or (tz.findtext("ZoneName") or "").strip()
+            if result["hours_to_utc"] is None:
+                try:
+                    result["hours_to_utc"] = float(tz.findtext("HoursToUTC") or "")
+                except Exception:
+                    pass
+
+        for rso in fieldbook.findall("RoverSurveyOptionsRecord"):
+            if result["elevation_mask"] is None:
+                try:
+                    result["elevation_mask"] = float(rso.findtext("ElevationMask") or "")
+                except Exception:
+                    pass
+            if result["pdop_mask"] is None:
+                try:
+                    result["pdop_mask"] = float(rso.findtext("PDOPMask") or "")
+                except Exception:
+                    pass
+
+        # Equipment & antenna — take the LAST record (most recently connected receiver)
+        _equip_ids: dict[str, dict[str, str]] = {}
+        for ge in fieldbook.findall("GPSEquipmentRecord"):
+            eid = ge.get("ID", "")
+            _equip_ids[eid] = {
+                "receiver_type": (ge.findtext("ReceiverType") or "").strip(),
+                "receiver_serial": (ge.findtext("ReceiverSerialNumber") or "").strip(),
+                "receiver_firmware": (ge.findtext("ReceiverFirmwareVersion") or "").strip(),
+                "antenna_type": (ge.findtext("AntennaType") or "").strip(),
+                "antenna_serial": (ge.findtext("AntennaSerialNumber") or "").strip(),
+            }
+        if _equip_ids:
+            last_equip = list(_equip_ids.values())[-1]
+            for k, v in last_equip.items():
+                result[k] = result[k] or v
+
+        for ar in fieldbook.findall("AntennaRecord"):
+            if result["antenna_measured_height"] is None:
+                try:
+                    result["antenna_measured_height"] = float(ar.findtext("MeasuredHeight") or "")
+                except Exception:
+                    pass
+            if result["antenna_reduced_height"] is None:
+                try:
+                    result["antenna_reduced_height"] = float(ar.findtext("ReducedHeight") or "")
+                except Exception:
+                    pass
 
         def _sfloat(text: str | None) -> float | None:
             try:
@@ -5580,15 +5744,30 @@ End Sub
                 "code": pr.findtext("Code") or "",
                 "method": pr.findtext("Method") or "",
                 "survey_method": pr.findtext("SurveyMethod") or "",
+                "classification": pr.findtext("Classification") or "",
                 "source": pr.findtext("Source") or "",
+                "point_timestamp": pr.get("TimeStamp", ""),
                 "wgs84_lat": None, "wgs84_lon": None, "wgs84_height": None,
                 "grid_north": None, "grid_east": None, "grid_elev": None,
                 "h_precision": None, "v_precision": None,
-                "pdop": None, "hdop": None, "vdop": None,
+                "raw_h_precision": None, "raw_v_precision": None,
+                "pdop": None, "hdop": None, "vdop": None, "gdop": None,
                 "num_satellites": None, "num_gps_svs": None,
                 "num_glonass_svs": None, "num_galileo_svs": None,
+                "num_qzss_svs": None, "num_beidou_svs": None, "num_navic_svs": None,
+                "num_positions_used": None,
+                "rtcm_age": None,
+                "start_time": "", "end_time": "", "obs_duration_s": None,
                 "poor_precision_warning": "", "excess_tilt_warning": "",
-                "bad_environment_warning": "", "photo_name": "",
+                "excess_movement_warning": "", "bad_environment_warning": "",
+                "magnetic_disturbance_warning": "",
+                "itrf_realisation": "", "itrf_epoch": None,
+                "imu_pitch": None, "imu_roll": None, "imu_yaw": None,
+                "imu_alignment_state": "",
+                "vcv_xx": None, "vcv_xy": None, "vcv_xz": None,
+                "vcv_yy": None, "vcv_yz": None, "vcv_zz": None,
+                "error_scale": None, "unit_variance": None,
+                "photo_name": "",
             }
             wgs = pr.find("WGS84")
             if wgs is not None:
@@ -5602,6 +5781,8 @@ End Sub
                     rx = _sfloat(rtx.findtext("X"))
                     ry = _sfloat(rtx.findtext("Y"))
                     rz = _sfloat(rtx.findtext("Z"))
+                    pt["itrf_realisation"] = (rtx.findtext("Realisation") or "").strip()
+                    pt["itrf_epoch"] = _sfloat(rtx.findtext("T"))
                     if rx is not None and ry is not None and rz is not None:
                         try:
                             lat, lon, h = _ecef_to_wgs84(rx, ry, rz)
@@ -5634,20 +5815,74 @@ End Sub
             if prec is not None:
                 pt["h_precision"] = _sfloat(prec.findtext("Horizontal"))
                 pt["v_precision"] = _sfloat(prec.findtext("Vertical"))
+                pt["raw_h_precision"] = _sfloat(prec.findtext("RawHorizontal"))
+                pt["raw_v_precision"] = _sfloat(prec.findtext("RawVertical"))
             qc = pr.find("QualityControl1")
             if qc is not None:
                 pt["pdop"] = _sfloat(qc.findtext("PDOP"))
                 pt["hdop"] = _sfloat(qc.findtext("HDOP"))
                 pt["vdop"] = _sfloat(qc.findtext("VDOP"))
+                pt["gdop"] = _sfloat(qc.findtext("GDOP"))
                 pt["num_satellites"] = _sint(qc.findtext("NumberOfSatellites"))
                 pt["num_gps_svs"] = _sint(qc.findtext("NumGPSSVs"))
                 pt["num_glonass_svs"] = _sint(qc.findtext("NumGLONASSSVs"))
                 pt["num_galileo_svs"] = _sint(qc.findtext("NumGalileoSVs"))
+                pt["num_qzss_svs"] = _sint(qc.findtext("NumQZSSSVs"))
+                pt["num_beidou_svs"] = _sint(qc.findtext("NumBeiDouSVs"))
+                pt["num_navic_svs"] = _sint(qc.findtext("NumNavICSVs"))
+                pt["num_positions_used"] = _sint(qc.findtext("NumberOfPositionsUsed"))
+                pt["rtcm_age"] = _sfloat(qc.findtext("RTCMAge"))
+                # Observation start / end times (GPS week + seconds → UTC)
+                st_el = qc.find("StartTime")
+                if st_el is not None:
+                    sw = _sint(st_el.findtext("GPSWeek"))
+                    ss = _sfloat(st_el.findtext("Seconds"))
+                    if sw is not None and ss is not None:
+                        pt["start_time"] = self._gps_time_to_utc(sw, ss)
+                et_el = qc.find("EndTime")
+                if et_el is not None:
+                    ew = _sint(et_el.findtext("GPSWeek"))
+                    es = _sfloat(et_el.findtext("Seconds"))
+                    if ew is not None and es is not None:
+                        pt["end_time"] = self._gps_time_to_utc(ew, es)
+                # Duration in seconds (if both times available)
+                if st_el is not None and et_el is not None:
+                    try:
+                        sw2 = _sint(st_el.findtext("GPSWeek")) or 0
+                        ss2 = _sfloat(st_el.findtext("Seconds")) or 0.0
+                        ew2 = _sint(et_el.findtext("GPSWeek")) or 0
+                        es2 = _sfloat(et_el.findtext("Seconds")) or 0.0
+                        dur = (ew2 - sw2) * 604_800 + (es2 - ss2)
+                        pt["obs_duration_s"] = round(dur, 1) if dur >= 0 else None
+                    except Exception:
+                        pass
                 warnings_el = qc.find("Warnings")
                 if warnings_el is not None:
                     pt["poor_precision_warning"] = warnings_el.findtext("PoorPrecisionsWarning") or ""
                     pt["excess_tilt_warning"] = warnings_el.findtext("ExcessTiltWarning") or ""
+                    pt["excess_movement_warning"] = warnings_el.findtext("ExcessMovementWarning") or ""
                     pt["bad_environment_warning"] = warnings_el.findtext("BadEnvironmentWarning") or ""
+                    pt["magnetic_disturbance_warning"] = warnings_el.findtext("MagneticDisturbanceWarning") or ""
+            # QualityControl2 — variance-covariance matrix
+            qc2 = pr.find("QualityControl2")
+            if qc2 is not None:
+                pt["vcv_xx"] = _sfloat(qc2.findtext("VCVxx"))
+                pt["vcv_xy"] = _sfloat(qc2.findtext("VCVxy"))
+                pt["vcv_xz"] = _sfloat(qc2.findtext("VCVxz"))
+                pt["vcv_yy"] = _sfloat(qc2.findtext("VCVyy"))
+                pt["vcv_yz"] = _sfloat(qc2.findtext("VCVyz"))
+                pt["vcv_zz"] = _sfloat(qc2.findtext("VCVzz"))
+                pt["error_scale"] = _sfloat(qc2.findtext("ErrorScale"))
+                pt["unit_variance"] = _sfloat(qc2.findtext("UnitVariance"))
+            # DeviceAxisOrientation — IMU/tilt data
+            dao = pr.find("DeviceAxisOrientation")
+            if dao is not None:
+                att = dao.find("Attitude")
+                if att is not None:
+                    pt["imu_pitch"] = _sfloat(att.findtext("Pitch"))
+                    pt["imu_roll"] = _sfloat(att.findtext("Roll"))
+                    pt["imu_yaw"] = _sfloat(att.findtext("Yaw"))
+                pt["imu_alignment_state"] = (dao.findtext("IMUAlignmentState") or "").strip()
             # Single pass: collect all attribute values AND locate the photo attribute.
             # Previously had a bare `break` that exited after the first attribute regardless
             # of type — photo_name was never set unless photo happened to be attr #1.
@@ -6077,6 +6312,180 @@ End Sub
         for pt_name in sorted(missing):
             ws.append([pt_name, missing[pt_name], "MISSING"])
         ws.sheet_state = "veryHidden"
+
+    # ---------- Project-wide photo rename ----------
+
+    def _find_project_root(self, path_hint: str) -> str | None:
+        """Walk up from *path_hint* to find the project root.
+
+        The project root is the directory whose child is ``ASBUILT``
+        (e.g. ``G:\\SURVEY\\CLIENT\\PROJECT``).  Returns ``None`` if not
+        found within 8 ancestor levels.
+        """
+        d = os.path.abspath(path_hint)
+        if os.path.isfile(d):
+            d = os.path.dirname(d)
+        for _ in range(8):
+            if os.path.isdir(os.path.join(d, "ASBUILT")):
+                return d
+            if os.path.basename(d).upper() == "ASBUILT":
+                return os.path.dirname(d)
+            parent = os.path.dirname(d)
+            if parent == d:
+                break
+            d = parent
+        return None
+
+    def _find_field_data_dir(self, project_root: str) -> str:
+        """Return the FIELD_DATA directory under ASBUILT."""
+        return os.path.join(project_root, "ASBUILT", "FIELD_DATA")
+
+    def _project_wide_photo_update(
+        self,
+        jxl_path_hint: str,
+        rename_map: dict[str, str],
+        source_dirs: set[str] | None = None,
+    ) -> tuple[int, int, list[str]]:
+        """After primary renames, update JXLs and media copies in the project.
+
+        *rename_map*: ``{old_basename_lower: new_basename}``
+        *source_dirs*: normalised directories where primary renames already
+        happened.  Used to protect companion folders of *other* JXLs that
+        may contain different photos with the same auto-generated basename.
+
+        1. Finds the project root from *jxl_path_hint*.
+        2. Discovers every ``.jxl`` file under the project root (excluding
+           ``_Original JXLs``).
+        3. Backs up each JXL to ``FIELD_DATA/_Original JXLs/`` before modifying.
+        4. Updates photo references in JXLs that share the source photos
+           (skips JXLs whose own companion folders hold independent copies).
+        5. Renames remaining media file copies (outside other JXLs'
+           companion folders).
+
+        Returns ``(jxls_updated, extra_media_renamed, errors)``.
+        """
+        project_root = self._find_project_root(jxl_path_hint)  # type: ignore[attr-defined]
+        if not project_root:
+            return 0, 0, ["Could not determine project root — project-wide update skipped."]
+
+        field_data = self._find_field_data_dir(project_root)  # type: ignore[attr-defined]
+        backup_dir = os.path.join(field_data, "_Original JXLs")
+
+        errors: list[str] = []
+
+        # ── 1. Find ALL JXL files in the project (excluding backup folder) ──
+        all_jxls: list[str] = []
+        for root, dirs, files in os.walk(project_root):
+            # Skip the backup folder entirely
+            if os.path.basename(root) == "_Original JXLs":
+                dirs.clear()
+                continue
+            for f in files:
+                if f.lower().endswith(".jxl"):
+                    all_jxls.append(os.path.join(root, f))
+
+        # ── 1b. Identify companion folders of other JXLs (cross-JXL safety) ──
+        _norm_source: set[str] = {os.path.normcase(os.path.abspath(d))
+                                  for d in source_dirs} if source_dirs else set()
+        _other_companions: set[str] = set()
+        for _jp in all_jxls:
+            _stem = os.path.splitext(os.path.basename(_jp))[0]
+            _comp = os.path.join(os.path.dirname(_jp), f"{_stem} Files")
+            if os.path.isdir(_comp):
+                _nc = os.path.normcase(os.path.abspath(_comp))
+                if _nc not in _norm_source:
+                    _other_companions.add(_nc)
+
+        # ── 2. For each JXL, check if it contains old photo names ───────
+        jxls_updated = 0
+        _old_keys = set(rename_map.keys())
+        for jxl_path in all_jxls:
+            # Cross-JXL safety: if this JXL has its own companion folder
+            # that was NOT the source of the renames AND that folder still
+            # contains files with the old basenames, the references inside
+            # this JXL point to its own independent photos — skip it.
+            if _norm_source:
+                _j_stem = os.path.splitext(os.path.basename(jxl_path))[0]
+                _j_comp = os.path.join(os.path.dirname(jxl_path),
+                                       f"{_j_stem} Files")
+                _j_nc = os.path.normcase(os.path.abspath(_j_comp))
+                if os.path.isdir(_j_comp) and _j_nc not in _norm_source:
+                    try:
+                        _cf: set[str] = {f.lower() for f in os.listdir(_j_comp)}
+                    except OSError:
+                        _cf = set[str]()
+                    if _cf & _old_keys:
+                        continue
+            try:
+                tree = ET.parse(jxl_path)
+                root_el = tree.getroot()
+                fieldbook = root_el.find("FieldBook")
+                if fieldbook is None:
+                    continue
+                changed = False
+                for pr in fieldbook.findall("PointRecord"):
+                    features_el = pr.find("Features")
+                    if features_el is None:
+                        continue
+                    for feat in features_el.findall("Feature"):
+                        for attr in feat.findall("Attribute"):
+                            if (attr.findtext("Type") or "").strip().lower() != "photo":
+                                continue
+                            val_el = attr.find("Value")
+                            if val_el is None or not val_el.text:
+                                continue
+                            current = val_el.text.strip()
+                            basename = os.path.basename(current.replace("\\", "/"))
+                            new_name = rename_map.get(basename.lower())
+                            if new_name:
+                                val_el.text = new_name
+                                changed = True
+                if changed:
+                    # Backup the original BEFORE writing changes
+                    os.makedirs(backup_dir, exist_ok=True)
+                    backup_path = os.path.join(backup_dir, os.path.basename(jxl_path))
+                    if not os.path.exists(backup_path):
+                        try:
+                            import shutil
+                            # Re-read the ORIGINAL file bytes (before our in-memory edits)
+                            # Actually, we already parsed the tree — the original is on disk
+                            # only if we haven't written yet.  Copy the file first.
+                            shutil.copy2(jxl_path, backup_path)
+                        except Exception as be:
+                            errors.append(f"Backup {os.path.basename(jxl_path)}: {be}")
+                    tree.write(jxl_path, encoding="unicode", xml_declaration=True)
+                    jxls_updated += 1
+            except Exception as e:
+                errors.append(f"JXL update {os.path.basename(jxl_path)}: {e}")
+
+        # ── 3. Find and rename remaining media file copies ──────────────
+        extra_media_renamed = 0
+        old_basenames = set(rename_map.keys())
+        for root, dirs, files in os.walk(project_root):
+            if os.path.basename(root) == "_Original JXLs":
+                dirs.clear()
+                continue
+            # Cross-JXL safety: never rename files inside another JXL's
+            # companion folder — those are independent photos that happen
+            # to share the same auto-generated basename.
+            _nr = os.path.normcase(os.path.abspath(root))
+            if _nr in _other_companions:
+                dirs.clear()
+                continue
+            for f in files:
+                if f.lower() in old_basenames:
+                    old_path = os.path.join(root, f)
+                    new_name = rename_map[f.lower()]
+                    new_path = os.path.join(root, new_name)
+                    if os.path.exists(new_path):
+                        continue  # already renamed or name collision
+                    try:
+                        os.rename(old_path, new_path)
+                        extra_media_renamed += 1
+                    except Exception as e:
+                        errors.append(f"Rename {f} in {root}: {e}")
+
+        return jxls_updated, extra_media_renamed, errors
 
     def _update_jxl_photo_names(
         self, jxl_path: str, renames: dict[str, tuple[str, str]]
@@ -6559,6 +6968,169 @@ End Sub
             pass
         return result
 
+    # ── Shared GNSS report column definitions ──────────────────────────────
+    _GNSS_REPORT_HEADERS: list[str] = [
+        # Identification
+        "Job", "Point Number", "Fuzzy Match (JXL Name)", "Field Code",
+        "Method", "Survey Method", "Classification",
+        # Coordinates — Grid
+        "Northing", "Easting", "Elevation",
+        # Coordinates — WGS84
+        "WGS84 Latitude", "WGS84 Longitude", "WGS84 Height (m)",
+        # Reference frame
+        "ITRF Realisation", "ITRF Epoch",
+        # Precision
+        "H Precision (m)", "V Precision (m)",
+        "Raw H Precision (m)", "Raw V Precision (m)",
+        # DOP
+        "PDOP", "HDOP", "VDOP", "GDOP",
+        # Satellites
+        "Num Satellites", "GPS SVs", "GLONASS SVs", "Galileo SVs",
+        "QZSS SVs", "BeiDou SVs", "NavIC SVs",
+        "Num Positions Used",
+        # Timing
+        "Point Timestamp", "Obs Start Time (UTC)", "Obs End Time (UTC)",
+        "Obs Duration (s)",
+        # Corrections
+        "RTCM Age (s)",
+        # Warnings
+        "Poor Precision", "Excess Tilt", "Excess Movement",
+        "Bad Environment", "Magnetic Disturbance",
+        # IMU / Tilt
+        "IMU Pitch (deg)", "IMU Roll (deg)", "IMU Yaw (deg)",
+        "IMU Alignment State",
+        # Variance-covariance
+        "VCVxx", "VCVxy", "VCVxz", "VCVyy", "VCVyz", "VCVzz",
+        "Error Scale", "Unit Variance",
+        # Meridian convergence (computed)
+        "Meridian Convergence (deg)",
+        # Job-level metadata (repeated per row for multi-JXL filtering)
+        "Coordinate System", "Zone", "Datum", "Geoid",
+        "Projection Type", "Central Latitude", "Central Longitude",
+        "Parallel 1", "Parallel 2",
+        "Receiver Type", "Receiver Serial", "Receiver Firmware",
+        "Antenna Type", "Antenna Serial",
+        "Antenna Measured Height", "Antenna Reduced Height",
+        "Time Zone", "UTC Offset (h)",
+        "Elevation Mask (deg)", "PDOP Mask",
+        "Operator", "Job Description", "Job Notes",
+        "Distance Units", "Height Units",
+        # Media
+        "Media File Name",
+    ]
+
+    def _gnss_report_row(
+        self,
+        job_label: str,
+        pt_name: str,
+        pt: dict[str, Any],
+        jxl_data: dict[str, Any],
+        *,
+        coord_n: Any = None,
+        coord_e: Any = None,
+        coord_z: Any = None,
+        media_name: str = "",
+    ) -> list[Any]:
+        """Build a single GNSS report row from parsed point + job data.
+
+        When *coord_n/e/z* are supplied (CRDB path), they override the JXL grid
+        values.  Otherwise, JXL ``grid_north/east/elev`` are used.
+        """
+        def _v(key: str) -> Any:
+            """Return value or empty string for None."""
+            val = pt.get(key)
+            return val if val is not None else ""
+
+        north = coord_n if coord_n is not None else _v("grid_north")
+        east = coord_e if coord_e is not None else _v("grid_east")
+        elev = coord_z if coord_z is not None else _v("grid_elev")
+        photo = media_name or pt.get("photo_name") or ""
+
+        convergence = self._meridian_convergence(
+            jxl_data.get("projection_type", ""),
+            jxl_data.get("central_longitude"),
+            jxl_data.get("parallel1"),
+            jxl_data.get("parallel2"),
+            pt.get("wgs84_lon"),
+        )
+
+        return [
+            # Identification
+            job_label,
+            pt_name,
+            pt.get("_fuzzy_jxl_name") or "",
+            pt.get("code") or "",
+            pt.get("method") or "",
+            pt.get("survey_method") or "",
+            pt.get("classification") or "",
+            # Grid coords
+            north, east, elev,
+            # WGS84
+            _v("wgs84_lat"), _v("wgs84_lon"), _v("wgs84_height"),
+            # Reference frame
+            pt.get("itrf_realisation") or "",
+            _v("itrf_epoch"),
+            # Precision
+            _v("h_precision"), _v("v_precision"),
+            _v("raw_h_precision"), _v("raw_v_precision"),
+            # DOP
+            _v("pdop"), _v("hdop"), _v("vdop"), _v("gdop"),
+            # Satellites
+            _v("num_satellites"), _v("num_gps_svs"), _v("num_glonass_svs"),
+            _v("num_galileo_svs"), _v("num_qzss_svs"), _v("num_beidou_svs"),
+            _v("num_navic_svs"), _v("num_positions_used"),
+            # Timing
+            pt.get("point_timestamp") or "",
+            pt.get("start_time") or "",
+            pt.get("end_time") or "",
+            _v("obs_duration_s"),
+            # Corrections
+            _v("rtcm_age"),
+            # Warnings
+            pt.get("poor_precision_warning") or "",
+            pt.get("excess_tilt_warning") or "",
+            pt.get("excess_movement_warning") or "",
+            pt.get("bad_environment_warning") or "",
+            pt.get("magnetic_disturbance_warning") or "",
+            # IMU
+            _v("imu_pitch"), _v("imu_roll"), _v("imu_yaw"),
+            pt.get("imu_alignment_state") or "",
+            # VCV
+            _v("vcv_xx"), _v("vcv_xy"), _v("vcv_xz"),
+            _v("vcv_yy"), _v("vcv_yz"), _v("vcv_zz"),
+            _v("error_scale"), _v("unit_variance"),
+            # Meridian convergence
+            convergence if convergence is not None else "",
+            # Job metadata
+            jxl_data.get("coordinate_system") or "",
+            jxl_data.get("zone") or "",
+            jxl_data.get("datum") or "",
+            jxl_data.get("geoid") or "",
+            jxl_data.get("projection_type") or "",
+            jxl_data.get("central_latitude") if jxl_data.get("central_latitude") is not None else "",
+            jxl_data.get("central_longitude") if jxl_data.get("central_longitude") is not None else "",
+            jxl_data.get("parallel1") if jxl_data.get("parallel1") is not None else "",
+            jxl_data.get("parallel2") if jxl_data.get("parallel2") is not None else "",
+            jxl_data.get("receiver_type") or "",
+            jxl_data.get("receiver_serial") or "",
+            jxl_data.get("receiver_firmware") or "",
+            jxl_data.get("antenna_type") or "",
+            jxl_data.get("antenna_serial") or "",
+            jxl_data.get("antenna_measured_height") if jxl_data.get("antenna_measured_height") is not None else "",
+            jxl_data.get("antenna_reduced_height") if jxl_data.get("antenna_reduced_height") is not None else "",
+            jxl_data.get("time_zone_name") or "",
+            jxl_data.get("hours_to_utc") if jxl_data.get("hours_to_utc") is not None else "",
+            jxl_data.get("elevation_mask") if jxl_data.get("elevation_mask") is not None else "",
+            jxl_data.get("pdop_mask") if jxl_data.get("pdop_mask") is not None else "",
+            jxl_data.get("operator") or "",
+            jxl_data.get("job_description") or "",
+            jxl_data.get("job_notes") or "",
+            jxl_data.get("distance_units") or "",
+            jxl_data.get("height_units") or "",
+            # Media
+            photo,
+        ]
+
     def _generate_gnss_report(self, jxl_paths: list[str]) -> None:
         """Export a CSV with point data and GNSS quality fields from one or more JXL files."""
         import csv as _csv
@@ -6573,14 +7145,6 @@ End Sub
 
         self._progress_start(f"Generating GNSS report from {len(jxl_paths)} JXL file(s)…")
 
-        headers = [
-            "Job", "Point Number", "Northing", "Easting", "Elevation",
-            "Field Code",
-            "H Precision (m)", "V Precision (m)", "PDOP", "Num Satellites", "Survey Method",
-            "WGS84 Latitude", "WGS84 Longitude", "WGS84 Height (m)",
-            "Media File Name",
-        ]
-
         rows: list[list[Any]] = []
         errors: list[str] = []
 
@@ -6592,23 +7156,7 @@ End Sub
                 for pt_name, pt in pts.items():
                     if pt.get("deleted"):
                         continue
-                    rows.append([
-                        job_name,
-                        pt_name,
-                        pt.get("grid_north") if pt.get("grid_north") is not None else "",
-                        pt.get("grid_east")  if pt.get("grid_east")  is not None else "",
-                        pt.get("grid_elev")  if pt.get("grid_elev")  is not None else "",
-                        pt.get("code") or "",
-                        pt.get("h_precision")    if pt.get("h_precision")    is not None else "",
-                        pt.get("v_precision")    if pt.get("v_precision")    is not None else "",
-                        pt.get("pdop")           if pt.get("pdop")           is not None else "",
-                        pt.get("num_satellites") if pt.get("num_satellites") is not None else "",
-                        pt.get("survey_method") or "",
-                        pt.get("wgs84_lat")    if pt.get("wgs84_lat")    is not None else "",
-                        pt.get("wgs84_lon")    if pt.get("wgs84_lon")    is not None else "",
-                        pt.get("wgs84_height") if pt.get("wgs84_height") is not None else "",
-                        pt.get("photo_name") or "",
-                    ])
+                    rows.append(self._gnss_report_row(job_name, pt_name, pt, jxl_data))
             except Exception as e:
                 errors.append(f"{os.path.basename(jxl_path)}: {e}")
 
@@ -6622,7 +7170,7 @@ End Sub
         try:
             with open(save_path, "w", newline="", encoding="cp1252", errors="replace") as f:
                 writer = _csv.writer(f)
-                writer.writerow(headers)
+                writer.writerow(self._GNSS_REPORT_HEADERS)
                 writer.writerows(rows)
             msg = (f"Saved {len(rows)} point(s) from {len(jxl_paths)} JXL file(s).\n"
                    f"{os.path.basename(save_path)}")
@@ -6751,39 +7299,58 @@ End Sub
         def _do_rename() -> None:
             selected = set(tv.selection())
             errors: list[str] = []
-            # pt_name → (old_basename, new_basename) for JXL update
             jxl_renames: dict[str, tuple[str, str]] = {}
+            pw_rename_map: dict[str, str] = {}
+            source_dirs: set[str] = set()
             renamed = 0
             for iid, (pt_name, old_path, new_path) in zip(iids, rename_items):
                 if iid not in selected:
                     continue
+                old_base = os.path.basename(old_path)
+                new_base = os.path.basename(new_path)
                 try:
                     if os.path.exists(new_path):
-                        errors.append(f"{os.path.basename(new_path)} — already exists, skipped")
+                        errors.append(f"{new_base} — already exists, skipped")
                         continue
                     os.rename(old_path, new_path)
-                    # Use the original JXL photo reference as the cell's current value
-                    # (may include a folder prefix like "TWA_022326_TTG Files\IMG.jpg").
-                    # Replacing the whole cell value drops the folder prefix so the
-                    # Excel cell ends up with just the new bare filename.
                     _pts: dict[str, Any] = jxl_data.get("points") or {}  # type: ignore[union-attr]
                     _pt: dict[str, Any] = _pts.get(pt_name) or {}
-                    # photo_path is the full JXL reference ("Folder\IMG.jpg") matching
-                    # the exact value written to the Excel cell; fall back to basename.
-                    orig_ref: str = str(_pt.get("photo_path") or _pt.get("photo_name") or os.path.basename(old_path))
-                    jxl_renames[pt_name] = (orig_ref, os.path.basename(new_path))
+                    orig_ref: str = str(_pt.get("photo_path") or _pt.get("photo_name") or old_base)
+                    jxl_renames[pt_name] = (orig_ref, new_base)
+                    pw_rename_map[old_base.lower()] = new_base
+                    source_dirs.add(os.path.normcase(
+                        os.path.abspath(os.path.dirname(old_path))))
                     renamed += 1
                 except Exception as ex:
-                    errors.append(f"{os.path.basename(old_path)} — {ex}")
-            # Update JXL photo Value elements and Excel Data sheet cells
-            if jxl_renames and jxl_path:
+                    errors.append(f"{old_base} — {ex}")
+
+            # ── Project-wide: backup originals, update JXLs + media ─────
+            pw_jxls = 0
+            pw_media = 0
+            pw_ran = False
+            if pw_rename_map and jxl_path:
+                pw_jxls, pw_media, pw_errors = self._project_wide_photo_update(  # type: ignore[attr-defined]
+                    jxl_path, pw_rename_map, source_dirs=source_dirs,
+                )
+                errors.extend(pw_errors)
+                pw_ran = True
+
+            # Fallback: if project root wasn't found, update the dropped JXL directly
+            if not pw_ran and jxl_renames and jxl_path:
                 self._update_jxl_photo_names(jxl_path, jxl_renames)
+
             if jxl_renames and update_excel:
                 self._update_excel_photo_cells(jxl_renames)
+
             win.destroy()
             summary = f"Renamed {renamed} file(s)."
-            if jxl_renames:
+            if pw_jxls:
+                summary += f"\n{pw_jxls} JXL file(s) updated project-wide."
+                summary += f"\n  (originals backed up to _Original JXLs)"
+            elif jxl_renames:
                 summary += "\nJXL and Excel sheet updated to match."
+            if pw_media:
+                summary += f"\n{pw_media} additional media copy/copies renamed."
             self._show_rename_result(summary, errors)  # type: ignore[attr-defined]
 
         tk.Button(btn_row, text="Select All", width=10, command=_select_all).grid(row=0, column=0, padx=4)
@@ -6890,22 +7457,58 @@ End Sub
             errors: list[str] = []
             by_jxl: dict[str, dict[str, tuple[str, str]]] = {}
             renamed = 0
+            pw_rename_map: dict[str, str] = {}
+            pw_conflicts: set[str] = set()
+            source_dirs: set[str] = set()
+            first_jxl_path = ""
             for iid, (pt_name, old_path, new_path, jxl_path, _, orig_ref) in zip(iids, rename_items):
                 if iid not in selected:
                     continue
+                if not first_jxl_path:
+                    first_jxl_path = jxl_path
+                old_base = os.path.basename(old_path)
+                new_base = os.path.basename(new_path)
                 try:
                     if os.path.exists(new_path):
-                        errors.append(f"{os.path.basename(new_path)} — already exists, skipped")
+                        errors.append(f"{new_base} — already exists, skipped")
                         continue
                     os.rename(old_path, new_path)
-                    by_jxl.setdefault(jxl_path, {})[pt_name] = (orig_ref, os.path.basename(new_path))
+                    by_jxl.setdefault(jxl_path, {})[pt_name] = (orig_ref, new_base)
+                    _key = old_base.lower()
+                    if _key in pw_conflicts:
+                        pass  # already flagged — don't propagate
+                    elif _key in pw_rename_map and pw_rename_map[_key] != new_base:
+                        errors.append(
+                            f"WARNING: '{old_base}' exists in multiple jobs "
+                            f"with different targets — project-wide rename "
+                            f"skipped for this file to prevent cross-job "
+                            f"corruption")
+                        del pw_rename_map[_key]
+                        pw_conflicts.add(_key)
+                    else:
+                        pw_rename_map[_key] = new_base
+                    source_dirs.add(os.path.normcase(
+                        os.path.abspath(os.path.dirname(old_path))))
                     renamed += 1
                 except Exception as ex:
-                    errors.append(f"{os.path.basename(old_path)} — {ex}")
+                    errors.append(f"{old_base} — {ex}")
 
-            for _jpath, _renames in by_jxl.items():
-                if _jpath:
-                    self._update_jxl_photo_names(_jpath, _renames)  # type: ignore[attr-defined]
+            # ── Project-wide: backup originals, update JXLs + media ─────
+            pw_jxls = 0
+            pw_media = 0
+            pw_ran = False
+            if pw_rename_map and first_jxl_path:
+                pw_jxls, pw_media, pw_errors = self._project_wide_photo_update(  # type: ignore[attr-defined]
+                    first_jxl_path, pw_rename_map, source_dirs=source_dirs,
+                )
+                errors.extend(pw_errors)
+                pw_ran = True
+
+            # Fallback: if project root wasn't found, update dropped JXLs directly
+            if not pw_ran:
+                for _jpath, _renames in by_jxl.items():
+                    if _jpath:
+                        self._update_jxl_photo_names(_jpath, _renames)  # type: ignore[attr-defined]
 
             if update_excel and by_jxl:
                 all_renames: dict[str, tuple[str, str]] = {}
@@ -6915,8 +7518,13 @@ End Sub
 
             win.destroy()
             summary = f"Renamed {renamed} file(s)."
-            if by_jxl:
+            if pw_jxls:
+                summary += f"\n{pw_jxls} JXL file(s) updated project-wide."
+                summary += f"\n  (originals backed up to _Original JXLs)"
+            elif by_jxl:
                 summary += f"\n{len(by_jxl)} JXL file(s) updated to match."
+            if pw_media:
+                summary += f"\n{pw_media} additional media copy/copies renamed."
             self._show_rename_result(summary, errors)  # type: ignore[attr-defined]
 
         tk.Button(btn_row, text="Select All", width=10, command=_select_all).grid(row=0, column=0, padx=4)
@@ -6942,6 +7550,14 @@ End Sub
         import sqlite3
         rows: list[dict[str, Any]] = []
         with sqlite3.connect(path) as conn:
+            # Carlson software may store text as cp1252 (Windows default).
+            # Try UTF-8 first; fall back to cp1252 so characters like ° survive.
+            def _decode(b: bytes) -> str:
+                try:
+                    return b.decode("utf-8")
+                except UnicodeDecodeError:
+                    return b.decode("cp1252")
+            conn.text_factory = _decode  # type: ignore[assignment]
             cur = conn.execute("SELECT P, N, E, Z, D FROM Coordinates ORDER BY P")
             for p_val, n_val, e_val, z_val, d_raw in cur.fetchall():
                 parts = [x.strip() for x in (d_raw or "").split(",")]
@@ -7075,9 +7691,15 @@ End Sub
     ) -> tuple[dict[str, dict[str, Any]], list[str], list[str]]:
         """Match each CRDB point to its JXL geodetic record.
 
+        After exact matching, a fuzzy second pass attempts to resolve
+        remaining points using Levenshtein edit distance (≤ 2).  When
+        multiple fuzzy candidates exist, the one whose feature code matches
+        the CRDB code is preferred.  Fuzzy-matched point dicts are tagged
+        with ``_fuzzy_jxl_name`` so callers can flag them in reports.
+
         Returns:
             matched   — {UPPER_point_name: jxl_point_dict}
-            unresolved — point names with no JXL match
+            unresolved — point names with no JXL match (exact or fuzzy)
             ambiguous  — point names found in multiple JXLs (first match used)
         """
         # Build {upper_point_name: [(stem, pt_dict)]} across all parsed JXLs
@@ -7098,15 +7720,64 @@ End Sub
         unresolved: list[str] = []
         ambiguous: list[str] = []
 
+        # ── Pass 1: exact name match ────────────────────────────────────
+        unresolved_rows: list[dict[str, Any]] = []
         for row in rows:
             key = row["point_name"].strip().upper()
             matches = all_pts.get(key, [])
             if not matches:
-                unresolved.append(row["point_name"])
+                unresolved_rows.append(row)
             else:
                 if len(matches) > 1:
                     ambiguous.append(row["point_name"])
                 matched[key] = matches[0][1]
+
+        # ── Pass 2: fuzzy name match for unresolved points ──────────────
+        if unresolved_rows and all_pts:
+            # JXL names already consumed by exact matches — don't double-dip
+            consumed: set[str] = set(matched.keys())
+            # Available JXL candidates
+            available: dict[str, dict[str, Any]] = {
+                jxl_key: entries[0][1]
+                for jxl_key, entries in all_pts.items()
+                if jxl_key not in consumed
+            }
+            still_unresolved: list[str] = []
+            for row in unresolved_rows:
+                crdb_key = row["point_name"].strip().upper()
+                crdb_code = (row.get("code") or "").upper()
+
+                best_jxl_key: str | None = None
+                best_dist = 3  # only accept ≤ 2
+                best_code_match = False
+
+                for jxl_key, jxl_pt in available.items():
+                    dist = self._levenshtein(crdb_key, jxl_key)  # type: ignore[attr-defined]
+                    if dist > 2:
+                        continue
+                    code_match = bool(
+                        crdb_code and (jxl_pt.get("code") or "").upper() == crdb_code
+                    )
+                    # Prefer: (1) lower edit distance, (2) matching code
+                    if (dist < best_dist
+                            or (dist == best_dist and code_match and not best_code_match)):
+                        best_dist = dist
+                        best_jxl_key = jxl_key
+                        best_code_match = code_match
+
+                if best_jxl_key is not None:
+                    # Shallow-copy the pt dict and tag the fuzzy match
+                    pt_copy = dict(available[best_jxl_key])
+                    pt_copy["_fuzzy_jxl_name"] = best_jxl_key
+                    matched[crdb_key] = pt_copy
+                    # Remove from available so it can't be consumed again
+                    del available[best_jxl_key]
+                else:
+                    still_unresolved.append(row["point_name"])
+
+            unresolved = still_unresolved
+        else:
+            unresolved = [r["point_name"] for r in unresolved_rows]
 
         return matched, unresolved, ambiguous
 
@@ -7119,6 +7790,61 @@ End Sub
         wkb = struct.pack("<BIdd", 1, 1, lon, lat)
         return header + wkb
 
+    @staticmethod
+    def _write_gpkg_srs_tables(conn: Any) -> None:
+        """Create the three mandatory GeoPackage metadata tables (SRS, contents, geometry_columns)."""
+        conn.execute("""
+            CREATE TABLE gpkg_spatial_ref_sys (
+                srs_name TEXT NOT NULL,
+                srs_id INTEGER NOT NULL PRIMARY KEY,
+                organization TEXT NOT NULL,
+                organization_coordsys_id INTEGER NOT NULL,
+                definition TEXT NOT NULL,
+                description TEXT
+            )""")
+        _srs_insert = (
+            "INSERT INTO gpkg_spatial_ref_sys"
+            "(srs_name,srs_id,organization,organization_coordsys_id,definition,description)"
+            " VALUES (?,?,?,?,?,?)"
+        )
+        _wgs84_wkt = (
+            'GEOGCS["WGS 84",DATUM["WGS_1984",'
+            'SPHEROID["WGS 84",6378137,298.257223563]],'
+            'PRIMEM["Greenwich",0],'
+            'UNIT["degree",0.0174532925199433,'
+            'AUTHORITY["EPSG","9122"]],'
+            'AUTHORITY["EPSG","4326"]]'
+        )
+        conn.executemany(_srs_insert, [
+            ("Undefined Cartesian SRS",  -1, "NONE", -1, "undefined",
+             "undefined cartesian coordinate reference system"),
+            ("Undefined Geographic SRS",  0, "NONE",  0, "undefined",
+             "undefined geographic coordinate reference system"),
+            ("WGS 84 geographic 2D",  4326, "EPSG", 4326, _wgs84_wkt,
+             "longitude/latitude coordinates in decimal degrees on the WGS 84 spheroid"),
+        ])
+        conn.execute("""
+            CREATE TABLE gpkg_contents (
+                table_name TEXT NOT NULL PRIMARY KEY,
+                data_type TEXT NOT NULL,
+                identifier TEXT,
+                description TEXT DEFAULT '',
+                last_change DATETIME NOT NULL
+                    DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
+                min_x REAL, min_y REAL, max_x REAL, max_y REAL,
+                srs_id INTEGER REFERENCES gpkg_spatial_ref_sys(srs_id)
+            )""")
+        conn.execute("""
+            CREATE TABLE gpkg_geometry_columns (
+                table_name TEXT NOT NULL,
+                column_name TEXT NOT NULL,
+                geometry_type_name TEXT NOT NULL,
+                srs_id INTEGER NOT NULL REFERENCES gpkg_spatial_ref_sys(srs_id),
+                z TINYINT NOT NULL,
+                m TINYINT NOT NULL,
+                CONSTRAINT pk_geom_cols PRIMARY KEY (table_name, column_name)
+            )""")
+
     def _write_gpkg(
         self,
         output_path: str,
@@ -7126,16 +7852,111 @@ End Sub
         matched_pts: dict[str, dict[str, Any]],
         fxl_data: dict[str, list[dict[str, Any]]],
         media_found: dict[str, str] | None = None,
+        jxl_meta: dict[str, Any] | None = None,
+        client_schema: dict[str, Any] | None = None,
     ) -> None:
         """Write a GeoPackage with one feature layer per distinct feature code.
 
-        Geometry is WGS84 lon/lat sourced from JXL.  Attribute column names come
-        from the FXL definition for each code; generic Attr1..N are used when the
-        FXL has no definition or fewer names than values.  GNSS quality fields and
-        media_file (basename only) are appended after the attribute columns.
+        When *client_schema* is provided, a single layer matching the client's
+        GDB points layer is written instead, using the shared field-mapping
+        logic.  Geometry is always WGS84 lon/lat sourced from JXL.
         """
         _media: dict[str, str] = media_found or {}
         import sqlite3
+
+        # ── Schema-driven single-layer path ──────────────────────────────
+        if client_schema and client_schema.get("points_fields"):
+            header = self._schema_header(client_schema)  # type: ignore[attr-defined]
+            attr_col_indices = self._schema_attr_indices(header)  # type: ignore[attr-defined]
+            _meta: dict[str, Any] = jxl_meta or {}
+            job_timestamp = _meta.get("timestamp", "")
+            layer_name = client_schema.get("points_layer") or "Points"
+            # Sanitize layer name for SQL
+            safe_layer = re.sub(r"[^A-Za-z0-9_]", "_", layer_name)
+
+            # Map pyogrio/numpy dtypes → SQLite types
+            _type_map: dict[str, str] = {
+                "float64": "REAL", "float32": "REAL",
+                "int64": "INTEGER", "int32": "INTEGER",
+            }
+            schema_fields = client_schema["points_fields"]
+            sql_cols: list[str] = [
+                "fid INTEGER PRIMARY KEY AUTOINCREMENT",
+                "geom BLOB",
+            ]
+            ins_field_names: list[str] = ["geom"]
+            for f in schema_fields:
+                fname = re.sub(r"[^A-Za-z0-9_]", "_", f["name"])
+                sql_type = _type_map.get(f.get("type", ""), "TEXT")
+                sql_cols.append(f'"{fname}" {sql_type}')
+                ins_field_names.append(f'"{fname}"')
+
+            os.makedirs(os.path.dirname(output_path) or ".", exist_ok=True)
+            if os.path.exists(output_path):
+                try:
+                    os.remove(output_path)
+                except PermissionError:
+                    raise PermissionError(
+                        f"The output file is open in another application.\n"
+                        f"Close it there first, then click Export again.\n\n"
+                        f"{output_path}"
+                    )
+
+            with sqlite3.connect(output_path) as conn:
+                conn.execute("PRAGMA application_id = 0x47503130")
+                conn.execute("PRAGMA user_version = 10200")
+                self._write_gpkg_srs_tables(conn)  # type: ignore[attr-defined]
+
+                conn.execute(f'CREATE TABLE "{safe_layer}" ({", ".join(sql_cols)})')
+                conn.execute(
+                    "INSERT INTO gpkg_geometry_columns VALUES (?, 'geom', 'POINT', 4326, 0, 0)",
+                    (safe_layer,),
+                )
+                ins_sql = (
+                    f'INSERT INTO "{safe_layer}" ({", ".join(ins_field_names)}) '
+                    f'VALUES ({", ".join(["?"] * len(ins_field_names))})'
+                )
+
+                lons: list[float] = []
+                lats: list[float] = []
+                batch: list[list[Any]] = []
+                for row in rows:
+                    _z_val = row.get("Z")
+                    if _z_val is not None and isinstance(_z_val, (int, float)) and _z_val <= -99999999:
+                        continue
+                    pkey = row["point_name"].strip().upper()
+                    pt_jxl = matched_pts.get(pkey)
+                    photo = self._resolve_photo(row, pt_jxl, _media)  # type: ignore[attr-defined]
+                    vals = self._build_schema_row(  # type: ignore[attr-defined]
+                        header, attr_col_indices, row, pt_jxl, photo, job_timestamp,
+                    )
+                    lon: float | None = None
+                    lat: float | None = None
+                    if pt_jxl:
+                        lon = cast(float | None, pt_jxl.get("wgs84_lon"))
+                        lat = cast(float | None, pt_jxl.get("wgs84_lat"))
+                    geom_blob: bytes | None = None
+                    if lon is not None and lat is not None:
+                        geom_blob = self._make_gpkg_point_blob(lon, lat)  # type: ignore[attr-defined]
+                        lons.append(lon)
+                        lats.append(lat)
+                    batch.append([geom_blob] + vals)
+
+                conn.executemany(ins_sql, batch)
+                min_x = min(lons) if lons else None
+                min_y = min(lats) if lats else None
+                max_x = max(lons) if lons else None
+                max_y = max(lats) if lats else None
+                conn.execute(
+                    "INSERT INTO gpkg_contents "
+                    "(table_name, data_type, identifier, description, min_x, min_y, max_x, max_y, srs_id) "
+                    "VALUES (?, 'features', ?, '', ?, ?, ?, ?, 4326)",
+                    (safe_layer, safe_layer, min_x, min_y, max_x, max_y),
+                )
+                conn.commit()
+            return
+
+        # ── Per-code layers (no schema) ──────────────────────────────────
 
         # Group rows by code, skipping sentinel elevations
         by_code: dict[str, list[dict[str, Any]]] = {}
@@ -7182,63 +8003,7 @@ End Sub
         with sqlite3.connect(output_path) as conn:
             conn.execute("PRAGMA application_id = 0x47503130")  # GP10 — GPKG magic
             conn.execute("PRAGMA user_version = 10200")
-
-            # --- GPKG spec tables ---
-            conn.execute("""
-                CREATE TABLE gpkg_spatial_ref_sys (
-                    srs_name TEXT NOT NULL,
-                    srs_id INTEGER NOT NULL PRIMARY KEY,
-                    organization TEXT NOT NULL,
-                    organization_coordsys_id INTEGER NOT NULL,
-                    definition TEXT NOT NULL,
-                    description TEXT
-                )""")
-            # Use parameterized inserts so the WKT string (which contains double-quotes
-            # and commas) is passed as a bound parameter rather than inlined into SQL.
-            _srs_insert = (
-                "INSERT INTO gpkg_spatial_ref_sys"
-                "(srs_name,srs_id,organization,organization_coordsys_id,definition,description)"
-                " VALUES (?,?,?,?,?,?)"
-            )
-            _wgs84_wkt = (
-                'GEOGCS["WGS 84",DATUM["WGS_1984",'
-                'SPHEROID["WGS 84",6378137,298.257223563]],'
-                'PRIMEM["Greenwich",0],'
-                'UNIT["degree",0.0174532925199433,'
-                'AUTHORITY["EPSG","9122"]],'
-                'AUTHORITY["EPSG","4326"]]'
-            )
-            conn.executemany(_srs_insert, [
-                ("Undefined Cartesian SRS",  -1, "NONE", -1, "undefined",
-                 "undefined cartesian coordinate reference system"),
-                ("Undefined Geographic SRS",  0, "NONE",  0, "undefined",
-                 "undefined geographic coordinate reference system"),
-                ("WGS 84 geographic 2D",  4326, "EPSG", 4326, _wgs84_wkt,
-                 "longitude/latitude coordinates in decimal degrees on the WGS 84 spheroid"),
-            ])
-
-            conn.execute("""
-                CREATE TABLE gpkg_contents (
-                    table_name TEXT NOT NULL PRIMARY KEY,
-                    data_type TEXT NOT NULL,
-                    identifier TEXT,
-                    description TEXT DEFAULT '',
-                    last_change DATETIME NOT NULL
-                        DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
-                    min_x REAL, min_y REAL, max_x REAL, max_y REAL,
-                    srs_id INTEGER REFERENCES gpkg_spatial_ref_sys(srs_id)
-                )""")
-
-            conn.execute("""
-                CREATE TABLE gpkg_geometry_columns (
-                    table_name TEXT NOT NULL,
-                    column_name TEXT NOT NULL,
-                    geometry_type_name TEXT NOT NULL,
-                    srs_id INTEGER NOT NULL REFERENCES gpkg_spatial_ref_sys(srs_id),
-                    z TINYINT NOT NULL,
-                    m TINYINT NOT NULL,
-                    CONSTRAINT pk_geom_cols PRIMARY KEY (table_name, column_name)
-                )""")
+            self._write_gpkg_srs_tables(conn)  # type: ignore[attr-defined]
 
             # --- One feature table per code ---
             for code, code_rows in sorted(by_code.items()):
@@ -7339,7 +8104,7 @@ End Sub
 
             conn.commit()
 
-    # ---------- CSV export (RAW_POINTS schema) ----------
+    # ---------- Shared GDB-schema field resolution ----------
 
     # Known field-name mappings from GDB field names to CRDB/JXL source values.
     # Keys are lowercase GDB field names; values are either a CRDB row key,
@@ -7364,6 +8129,103 @@ End Sub
         "weld_report": "@empty", "file": "@empty", "comments": "@empty",
     }
 
+    # Pre-compiled pattern for detecting attribute-slot columns (ATT_1, ATTR_2, …)
+    _ATTR_COL_RE: re.Pattern[str] = re.compile(
+        r"^att(?:r(?:ibute)?)?[_\s]?(\d+)$", re.IGNORECASE
+    )
+
+    def _schema_header(self, client_schema: dict[str, Any] | None) -> list[str]:
+        """Return the column header list from a client schema, or a default."""
+        if client_schema and client_schema.get("points_fields"):
+            return [f["name"] for f in client_schema["points_fields"]]
+        max_attrs = 28
+        return (
+            ["POINT", "NORTH", "EAST", "ELEV", "CODE"]
+            + [f"ATT_{i}" for i in range(1, max_attrs + 1)]
+            + [
+                "PHOTO", "TAG_IDENTIFIER", "Timestamp", "DATE_COLLECTED",
+                "SOURCE", "POSITION_SOURCE",
+                "PDOP", "HDOP", "VDOP", "SATS",
+                "Precision_Horizontal", "Precision_Vertical",
+                "UNIQUE_ID", "SURVEY_COORD_X", "SURVEY_COORD_Y", "SURVEY_COORD_Z",
+                "WELD_REPORT", "FILE", "COMMENTS", "DESCRIPTION",
+            ]
+        )
+
+    def _build_schema_row(
+        self,
+        header: list[str],
+        attr_col_indices: dict[int, int],
+        row: dict[str, Any],
+        pt_jxl: dict[str, Any] | None,
+        photo: str,
+        job_timestamp: str,
+    ) -> list[Any]:
+        """Resolve one CRDB point into a list of values aligned with *header*.
+
+        Uses ``_CSV_FIELD_MAP`` for named columns and *attr_col_indices* for
+        positional attribute slots.  Shared by CSV, GeoPackage, Shapefile,
+        and KMZ writers.
+        """
+        attrs = row.get("attrs", [])
+        _specials: dict[str, Any] = {
+            "@point_name": row["point_name"],
+            "@N": row["N"], "@E": row["E"], "@Z": row["Z"],
+            "@code": row["code"],
+            "@photo": photo,
+            "@timestamp": job_timestamp,
+            "@tag_id": "",
+            "@unique_id": "",
+            "@empty": "",
+            "@wgs84_lat": "", "@wgs84_lon": "", "@wgs84_height": "",
+        }
+        if pt_jxl:
+            for jk in ("wgs84_lat", "wgs84_lon", "wgs84_height"):
+                v = pt_jxl.get(jk)
+                _specials[f"@{jk}"] = v if v is not None else ""
+
+        out: list[Any] = [""] * len(header)
+        _attr_idx_vals = set(attr_col_indices.values())
+        for hi, col_name in enumerate(header):
+            if hi in _attr_idx_vals:
+                attr_num = next(k for k, v in attr_col_indices.items() if v == hi)
+                out[hi] = attrs[attr_num - 1] if attr_num - 1 < len(attrs) else ""
+                continue
+            key = col_name.lower()
+            mapped = self._CSV_FIELD_MAP.get(key)
+            if mapped is not None:
+                if mapped.startswith("@"):
+                    out[hi] = _specials.get(mapped, "")
+                elif pt_jxl:
+                    v = pt_jxl.get(mapped)
+                    out[hi] = v if v is not None else ""
+        return out
+
+    def _schema_attr_indices(self, header: list[str]) -> dict[int, int]:
+        """Return ``{1-based_attr_number: header_index}`` for attribute slots."""
+        indices: dict[int, int] = {}
+        for hi, col_name in enumerate(header):
+            m = self._ATTR_COL_RE.match(col_name)
+            if m:
+                indices[int(m.group(1))] = hi
+        return indices
+
+    def _resolve_photo(
+        self,
+        row: dict[str, Any],
+        pt_jxl: dict[str, Any] | None,
+        media: dict[str, str],
+    ) -> str:
+        """Return the best available photo filename for a CRDB row."""
+        pkey = row["point_name"].strip().upper()
+        media_path = media.get(pkey, "")
+        photo = os.path.basename(media_path) if media_path else ""
+        if not photo and pt_jxl and pt_jxl.get("photo_name"):
+            photo = pt_jxl["photo_name"]
+        return photo
+
+    # ---------- CSV export ----------
+
     def _write_crdb_csv(
         self,
         output_path: str,
@@ -7386,32 +8248,8 @@ End Sub
         _meta: dict[str, Any] = jxl_meta or {}
         job_timestamp = _meta.get("timestamp", "")
 
-        # Determine header from client schema or default
-        if client_schema and client_schema.get("points_fields"):
-            header = [f["name"] for f in client_schema["points_fields"]]
-        else:
-            max_attrs = 28
-            attr_headers = [f"ATT_{i}" for i in range(1, max_attrs + 1)]
-            header = (
-                ["POINT", "NORTH", "EAST", "ELEV", "CODE"]
-                + attr_headers
-                + [
-                    "PHOTO", "TAG_IDENTIFIER", "Timestamp", "DATE_COLLECTED",
-                    "SOURCE", "POSITION_SOURCE",
-                    "PDOP", "HDOP", "VDOP", "SATS",
-                    "Precision_Horizontal", "Precision_Vertical",
-                    "UNIQUE_ID", "SURVEY_COORD_X", "SURVEY_COORD_Y", "SURVEY_COORD_Z",
-                    "WELD_REPORT", "FILE", "COMMENTS", "DESCRIPTION",
-                ]
-            )
-
-        # Detect which header columns are attribute slots (ATT_1, ATTR_2, etc.)
-        _attr_pat = re.compile(r"^att(?:r(?:ibute)?)?[_\s]?(\d+)$", re.IGNORECASE)
-        attr_col_indices: dict[int, int] = {}  # {1-based attr num: header index}
-        for hi, col_name in enumerate(header):
-            m = _attr_pat.match(col_name)
-            if m:
-                attr_col_indices[int(m.group(1))] = hi
+        header = self._schema_header(client_schema)  # type: ignore[attr-defined]
+        attr_col_indices = self._schema_attr_indices(header)  # type: ignore[attr-defined]
 
         os.makedirs(os.path.dirname(output_path) or ".", exist_ok=True)
         with open(output_path, "w", newline="", encoding="utf-8-sig") as f:
@@ -7419,59 +8257,15 @@ End Sub
             writer.writerow(header)
 
             for row in rows:
-                # Skip points with sentinel "no data" elevations
                 _z_val = row.get("Z")
                 if _z_val is not None and isinstance(_z_val, (int, float)) and _z_val <= -99999999:
                     continue
                 pkey = row["point_name"].strip().upper()
                 pt_jxl = matched_pts.get(pkey)
-                attrs = row.get("attrs", [])
-
-                # Media / photo
-                media_path = _media.get(pkey, "")
-                photo = os.path.basename(media_path) if media_path else ""
-                if not photo and pt_jxl and pt_jxl.get("photo_name"):
-                    photo = pt_jxl["photo_name"]
-
-                # Build a lookup dict for resolving "@" special keys
-                _specials: dict[str, Any] = {
-                    "@point_name": row["point_name"],
-                    "@N": row["N"], "@E": row["E"], "@Z": row["Z"],
-                    "@code": row["code"],
-                    "@photo": photo,
-                    "@timestamp": job_timestamp,
-                    "@tag_id": "",
-                    "@unique_id": "",
-                    "@empty": "",
-                    "@wgs84_lat": "", "@wgs84_lon": "", "@wgs84_height": "",
-                }
-                if pt_jxl:
-                    for jk in ("wgs84_lat", "wgs84_lon", "wgs84_height"):
-                        v = pt_jxl.get(jk)
-                        _specials[f"@{jk}"] = v if v is not None else ""
-
-                # Build output row by mapping each header column
-                csv_row: list[Any] = [""] * len(header)
-                for hi, col_name in enumerate(header):
-                    # Check if this is an attribute slot (ATT_1, ATTR_2, etc.)
-                    if hi in attr_col_indices.values():
-                        attr_num = next(k for k, v in attr_col_indices.items() if v == hi)
-                        csv_row[hi] = attrs[attr_num - 1] if attr_num - 1 < len(attrs) else ""
-                        continue
-                    # Look up in field map
-                    key = col_name.lower()
-                    mapped = self._CSV_FIELD_MAP.get(key)
-                    if mapped is not None:
-                        if mapped.startswith("@"):
-                            csv_row[hi] = _specials.get(mapped, "")
-                        else:
-                            # JXL point field
-                            if pt_jxl:
-                                v = pt_jxl.get(mapped)
-                                csv_row[hi] = v if v is not None else ""
-                    # else: leave as empty string (unknown column)
-
-                writer.writerow(csv_row)
+                photo = self._resolve_photo(row, pt_jxl, _media)  # type: ignore[attr-defined]
+                writer.writerow(self._build_schema_row(  # type: ignore[attr-defined]
+                    header, attr_col_indices, row, pt_jxl, photo, job_timestamp,
+                ))
 
     # ---------- Multi-format export helpers ----------
 
@@ -7516,35 +8310,64 @@ End Sub
         rows: list[dict[str, Any]],
         matched_pts: dict[str, dict[str, Any]],
         media_found: dict[str, str] | None = None,
+        jxl_meta: dict[str, Any] | None = None,
+        client_schema: dict[str, Any] | None = None,
     ) -> None:
         """Write a single combined Shapefile (.shp/.shx/.dbf/.prj) with all points.
 
+        When *client_schema* is provided, DBF field names and column order
+        match the client's GDB schema (truncated to 10 chars for DBF limits).
         Pure-Python writer using struct — no external dependencies.
         Geometry is WGS84 Point from JXL geodetic data.
         """
         _media: dict[str, str] = media_found or {}
-        max_attrs = 28
 
-        # --- Define DBF field descriptors ---
-        # (name, type, size, decimal)
-        dbf_fields: list[tuple[str, str, int, int]] = [
-            ("point_name", "C", 50, 0),
-            ("N", "N", 20, 10),
-            ("E", "N", 20, 10),
-            ("Z", "N", 20, 10),
-            ("code", "C", 30, 0),
-        ]
-        for i in range(1, max_attrs + 1):
-            dbf_fields.append((f"ATT_{i}", "C", 80, 0))
-        dbf_fields += [
-            ("h_prec", "N", 12, 4),
-            ("v_prec", "N", 12, 4),
-            ("pdop", "N", 8, 2),
-            ("sats", "N", 4, 0),
-            ("method", "C", 20, 0),
-            ("media", "C", 100, 0),
-            ("src_jxl", "C", 100, 0),
-        ]
+        # ── Build DBF field descriptors ──────────────────────────────────
+        use_schema = bool(client_schema and client_schema.get("points_fields"))
+        header: list[str] = []
+        attr_col_indices: dict[int, int] = {}
+        job_timestamp = ""
+
+        if use_schema:
+            header = self._schema_header(client_schema)  # type: ignore[attr-defined]
+            attr_col_indices = self._schema_attr_indices(header)  # type: ignore[attr-defined]
+            _meta: dict[str, Any] = jxl_meta or {}
+            job_timestamp = _meta.get("timestamp", "")
+            # All schema fields → Character 254 (safest for mixed types)
+            dbf_fields: list[tuple[str, str, int, int]] = []
+            _seen_names: dict[str, int] = {}
+            assert client_schema is not None  # narrowing for Pylance (guarded by use_schema)
+            _pts_fields = cast(list[dict[str, str]], client_schema["points_fields"])
+            for f in _pts_fields:
+                raw = re.sub(r"[^A-Za-z0-9_]", "_", f["name"])[:10]
+                # Deduplicate truncated names
+                if raw in _seen_names:
+                    _seen_names[raw] += 1
+                    suffix = str(_seen_names[raw])
+                    raw = raw[: 10 - len(suffix)] + suffix
+                else:
+                    _seen_names[raw] = 0
+                dbf_fields.append((raw, "C", 254, 0))
+        else:
+            max_attrs = 28
+            dbf_fields = [
+                ("point_name", "C", 50, 0),
+                ("N", "N", 20, 10),
+                ("E", "N", 20, 10),
+                ("Z", "N", 20, 10),
+                ("code", "C", 30, 0),
+            ]
+            for i in range(1, max_attrs + 1):
+                dbf_fields.append((f"ATT_{i}", "C", 80, 0))
+            dbf_fields += [
+                ("h_prec", "N", 12, 4),
+                ("v_prec", "N", 12, 4),
+                ("pdop", "N", 8, 2),
+                ("sats", "N", 4, 0),
+                ("method", "C", 20, 0),
+                ("media", "C", 100, 0),
+                ("src_jxl", "C", 100, 0),
+            ]
 
         record_size = 1  # deletion flag byte
         for _, _, sz, _ in dbf_fields:
@@ -7560,42 +8383,49 @@ End Sub
                 continue
             pkey = row["point_name"].strip().upper()
             pt_jxl = matched_pts.get(pkey)
+
             lon: float | None = None
             lat: float | None = None
-            h_prec = ""
-            v_prec = ""
-            pdop_val = ""
-            sats_val = ""
-            method = ""
-            src_jxl = ""
             if pt_jxl:
                 lon = cast(float | None, pt_jxl.get("wgs84_lon"))
                 lat = cast(float | None, pt_jxl.get("wgs84_lat"))
-                _hp = pt_jxl.get("h_precision")
-                h_prec = f"{_hp:.4f}" if _hp is not None else ""
-                _vp = pt_jxl.get("v_precision")
-                v_prec = f"{_vp:.4f}" if _vp is not None else ""
-                _pd = pt_jxl.get("pdop")
-                pdop_val = f"{_pd:.2f}" if _pd is not None else ""
-                _ns = pt_jxl.get("num_satellites")
-                sats_val = str(_ns) if _ns is not None else ""
-                method = str(pt_jxl.get("survey_method") or "")
-                src_jxl = str(pt_jxl.get("source") or "")
 
-            media_path = _media.get(pkey, "")
-            media_file = os.path.basename(media_path) if media_path else ""
-
-            attrs = row.get("attrs", [])
-            attr_vals = [attrs[i] if i < len(attrs) else "" for i in range(max_attrs)]
+            if use_schema:
+                photo = self._resolve_photo(row, pt_jxl, _media)  # type: ignore[attr-defined]
+                vals = self._build_schema_row(  # type: ignore[attr-defined]
+                    header, attr_col_indices, row, pt_jxl, photo, job_timestamp,
+                )
+            else:
+                h_prec = ""
+                v_prec = ""
+                pdop_val = ""
+                sats_val = ""
+                method = ""
+                src_jxl = ""
+                if pt_jxl:
+                    _hp = pt_jxl.get("h_precision")
+                    h_prec = f"{_hp:.4f}" if _hp is not None else ""
+                    _vp = pt_jxl.get("v_precision")
+                    v_prec = f"{_vp:.4f}" if _vp is not None else ""
+                    _pd = pt_jxl.get("pdop")
+                    pdop_val = f"{_pd:.2f}" if _pd is not None else ""
+                    _ns = pt_jxl.get("num_satellites")
+                    sats_val = str(_ns) if _ns is not None else ""
+                    method = str(pt_jxl.get("survey_method") or "")
+                    src_jxl = str(pt_jxl.get("source") or "")
+                media_path = _media.get(pkey, "")
+                media_file = os.path.basename(media_path) if media_path else ""
+                attrs = row.get("attrs", [])
+                attr_vals = [attrs[i] if i < len(attrs) else "" for i in range(max_attrs)]  # type: ignore[possibly-undefined]
+                vals = (
+                    [row["point_name"], row["N"], row["E"], row["Z"], row.get("code", "")]
+                    + attr_vals
+                    + [h_prec, v_prec, pdop_val, sats_val, method, media_file, src_jxl]
+                )
 
             # Build DBF record
             rec = b"\x20"  # not deleted
-            for (fname, ftype, fsize, fdec), val in zip(
-                dbf_fields,
-                [row["point_name"], row["N"], row["E"], row["Z"], row.get("code", "")]
-                + attr_vals
-                + [h_prec, v_prec, pdop_val, sats_val, method, media_file, src_jxl],
-            ):
+            for (fname, ftype, fsize, fdec), val in zip(dbf_fields, vals):
                 if ftype == "N":
                     s = str(val).strip() if val not in (None, "") else ""
                     rec += s.rjust(fsize)[:fsize].encode("latin-1")
@@ -7780,16 +8610,28 @@ End Sub
         matched_pts: dict[str, dict[str, Any]],
         fxl_data: dict[str, list[dict[str, Any]]],
         media_found: dict[str, str] | None = None,
+        jxl_meta: dict[str, Any] | None = None,
+        client_schema: dict[str, Any] | None = None,
     ) -> None:
         """Write a KMZ file (zipped KML) with one Folder per feature code.
 
-        Each Placemark includes point name, code, attributes, GNSS quality,
-        and media filename in the description.
+        When *client_schema* is provided, the Placemark description uses
+        the client's GDB field names as labels instead of FXL names.
         """
         import zipfile
 
         _media: dict[str, str] = media_found or {}
         stem = os.path.splitext(os.path.basename(output_path))[0]
+        use_schema = bool(client_schema and client_schema.get("points_fields"))
+
+        header: list[str] = []
+        attr_col_indices: dict[int, int] = {}
+        job_timestamp = ""
+        if use_schema:
+            header = self._schema_header(client_schema)  # type: ignore[attr-defined]
+            attr_col_indices = self._schema_attr_indices(header)  # type: ignore[attr-defined]
+            _meta: dict[str, Any] = jxl_meta or {}
+            job_timestamp = _meta.get("timestamp", "")
 
         # Group rows by code, skipping sentinel elevations
         by_code: dict[str, list[dict[str, Any]]] = {}
@@ -7810,7 +8652,7 @@ End Sub
             folder = ET.SubElement(document, "Folder")
             ET.SubElement(folder, "name").text = code
 
-            # Get FXL attribute names for this code
+            # Get FXL attribute names for this code (used when no schema)
             fxl_attrs = fxl_data.get(code, [])
 
             for row in code_rows:
@@ -7831,33 +8673,43 @@ End Sub
                 pm = ET.SubElement(folder, "Placemark")
                 ET.SubElement(pm, "name").text = row["point_name"]
 
-                # Build description with attributes and GNSS data
-                desc_parts: list[str] = [f"Code: {code}"]
-                attrs = row.get("attrs", [])
-                for i, val in enumerate(attrs):
-                    if val:
-                        attr_name = (fxl_attrs[i].get("name", f"Attr{i+1}")
-                                     if i < len(fxl_attrs) else f"Attr{i+1}")
-                        desc_parts.append(f"{attr_name}: {val}")
-                if pt_jxl:
-                    hp = pt_jxl.get("h_precision")
-                    vp = pt_jxl.get("v_precision")
-                    if hp is not None:
-                        desc_parts.append(f"H Precision: {hp:.4f}")
-                    if vp is not None:
-                        desc_parts.append(f"V Precision: {vp:.4f}")
-                    pd_val = pt_jxl.get("pdop")
-                    if pd_val is not None:
-                        desc_parts.append(f"PDOP: {pd_val:.2f}")
-                    ns_val = pt_jxl.get("num_satellites")
-                    if ns_val is not None:
-                        desc_parts.append(f"Satellites: {ns_val}")
-                    sm = pt_jxl.get("survey_method")
-                    if sm:
-                        desc_parts.append(f"Method: {sm}")
-                media_path = _media.get(pkey, "")
-                if media_path:
-                    desc_parts.append(f"Photo: {os.path.basename(media_path)}")
+                # Build description
+                if use_schema:
+                    photo = self._resolve_photo(row, pt_jxl, _media)  # type: ignore[attr-defined]
+                    vals = self._build_schema_row(  # type: ignore[attr-defined]
+                        header, attr_col_indices, row, pt_jxl, photo, job_timestamp,
+                    )
+                    desc_parts: list[str] = []
+                    for col_name, val in zip(header, vals):
+                        if val not in (None, ""):
+                            desc_parts.append(f"{col_name}: {val}")
+                else:
+                    desc_parts = [f"Code: {code}"]
+                    attrs = row.get("attrs", [])
+                    for i, val in enumerate(attrs):
+                        if val:
+                            attr_name = (fxl_attrs[i].get("name", f"Attr{i+1}")
+                                         if i < len(fxl_attrs) else f"Attr{i+1}")
+                            desc_parts.append(f"{attr_name}: {val}")
+                    if pt_jxl:
+                        hp = pt_jxl.get("h_precision")
+                        vp = pt_jxl.get("v_precision")
+                        if hp is not None:
+                            desc_parts.append(f"H Precision: {hp:.4f}")
+                        if vp is not None:
+                            desc_parts.append(f"V Precision: {vp:.4f}")
+                        pd_val = pt_jxl.get("pdop")
+                        if pd_val is not None:
+                            desc_parts.append(f"PDOP: {pd_val:.2f}")
+                        ns_val = pt_jxl.get("num_satellites")
+                        if ns_val is not None:
+                            desc_parts.append(f"Satellites: {ns_val}")
+                        sm = pt_jxl.get("survey_method")
+                        if sm:
+                            desc_parts.append(f"Method: {sm}")
+                    media_path = _media.get(pkey, "")
+                    if media_path:
+                        desc_parts.append(f"Photo: {os.path.basename(media_path)}")
 
                 ET.SubElement(pm, "description").text = "\n".join(desc_parts)
 
@@ -9395,17 +10247,35 @@ End Sub
             height=min(300, len(layer_counts) * 24 + 10),
             width=380,
         )
-        scrollbar = ttk.Scrollbar(
+        _vsb = ttk.Scrollbar(
             list_frame, orient="vertical", command=canvas.yview)  # type: ignore[arg-type]
+        _hsb = ttk.Scrollbar(
+            list_frame, orient="horizontal", command=canvas.xview)  # type: ignore[arg-type]
         inner = tk.Frame(canvas)
         inner.bind(
             "<Configure>",
             lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
         canvas.create_window((0, 0), window=inner, anchor="nw")
-        canvas.configure(yscrollcommand=scrollbar.set)
-        canvas.pack(side="left", fill="both", expand=True)
+        canvas.configure(yscrollcommand=_vsb.set, xscrollcommand=_hsb.set)
+        canvas.grid(row=0, column=0, sticky="nsew")
         if len(layer_counts) > 12:
-            scrollbar.pack(side="right", fill="y")
+            _vsb.grid(row=0, column=1, sticky="ns")
+        _hsb.grid(row=1, column=0, sticky="ew")
+        list_frame.grid_rowconfigure(0, weight=1)
+        list_frame.grid_columnconfigure(0, weight=1)
+
+        def _mw_y(e: tk.Event) -> None:  # type: ignore[type-arg]
+            canvas.yview_scroll(-1 * (e.delta // 120), "units")
+
+        def _mw_x(e: tk.Event) -> None:  # type: ignore[type-arg]
+            canvas.xview_scroll(-1 * (e.delta // 120), "units")
+
+        list_frame.bind("<Enter>",
+                        lambda e: (canvas.bind_all("<MouseWheel>", _mw_y),
+                                   canvas.bind_all("<Shift-MouseWheel>", _mw_x)))
+        list_frame.bind("<Leave>",
+                        lambda e: (canvas.unbind_all("<MouseWheel>"),
+                                   canvas.unbind_all("<Shift-MouseWheel>")))
 
         _prev_set: set[str] = set(previous_layers) if previous_layers else set()
         layer_vars: dict[str, tk.BooleanVar] = {}
@@ -9839,44 +10709,33 @@ End Sub
         matched_pts: dict[str, dict[str, Any]],
         media_found: dict[str, str],
         crdb_path: str,
+        jxl_data: dict[str, Any] | None = None,
     ) -> None:
         """Write a GNSS report CSV using pre-matched CRDB/JXL data."""
         import csv as _csv
 
-        headers = [
-            "Job", "Point Number", "Northing", "Easting", "Elevation",
-            "Field Code",
-            "H Precision (m)", "V Precision (m)", "PDOP", "Num Satellites", "Survey Method",
-            "WGS84 Latitude", "WGS84 Longitude", "WGS84 Height (m)",
-            "Media File Name",
-        ]
         job_label = os.path.splitext(os.path.basename(crdb_path))[0]
+        jd: dict[str, Any] = jxl_data or {}
         report_rows: list[list[Any]] = []
         for row in rows:
             pt_name: str = row["point_name"]
             pt_jxl: dict[str, Any] = matched_pts.get(pt_name.upper()) or {}
             media_path = media_found.get(pt_name.upper(), "")
             media_name = os.path.basename(media_path) if media_path else ""
-            report_rows.append([
-                job_label,
-                pt_name,
-                row.get("N") if row.get("N") is not None else "",
-                row.get("E") if row.get("E") is not None else "",
-                row.get("Z") if row.get("Z") is not None else "",
-                row.get("code") or "",
-                pt_jxl.get("h_precision")    if pt_jxl.get("h_precision")    is not None else "",
-                pt_jxl.get("v_precision")    if pt_jxl.get("v_precision")    is not None else "",
-                pt_jxl.get("pdop")           if pt_jxl.get("pdop")           is not None else "",
-                pt_jxl.get("num_satellites") if pt_jxl.get("num_satellites") is not None else "",
-                pt_jxl.get("survey_method") or "",
-                pt_jxl.get("wgs84_lat")    if pt_jxl.get("wgs84_lat")    is not None else "",
-                pt_jxl.get("wgs84_lon")    if pt_jxl.get("wgs84_lon")    is not None else "",
-                pt_jxl.get("wgs84_height") if pt_jxl.get("wgs84_height") is not None else "",
-                media_name,
-            ])
+            # Override code from CRDB if JXL doesn't have it
+            if not pt_jxl.get("code") and row.get("code"):
+                pt_jxl = dict(pt_jxl)  # shallow copy to avoid mutating cache
+                pt_jxl["code"] = row.get("code") or ""
+            report_rows.append(self._gnss_report_row(
+                job_label, pt_name, pt_jxl, jd,
+                coord_n=row.get("N") if row.get("N") is not None else "",
+                coord_e=row.get("E") if row.get("E") is not None else "",
+                coord_z=row.get("Z") if row.get("Z") is not None else "",
+                media_name=media_name,
+            ))
         with open(save_path, "w", newline="", encoding="cp1252", errors="replace") as f:
             w = _csv.writer(f)
-            w.writerow(headers)
+            w.writerow(self._GNSS_REPORT_HEADERS)
             w.writerows(report_rows)
 
     def _crdb_gnss_report(self, crdb_paths: list[str]) -> None:
@@ -9892,13 +10751,6 @@ End Sub
 
         self._progress_start("Generating CRDB GNSS report…")
 
-        headers = [
-            "Job", "Point Number", "Northing", "Easting", "Elevation",
-            "Field Code",
-            "H Precision (m)", "V Precision (m)", "PDOP", "Num Satellites", "Survey Method",
-            "WGS84 Latitude", "WGS84 Longitude", "WGS84 Height (m)",
-            "Media File Name",
-        ]
         report_rows: list[list[Any]] = []
         errors: list[str] = []
 
@@ -9908,29 +10760,29 @@ End Sub
                 jxl_map = self._search_jxl_upward(crdb_path, set())  # type: ignore[attr-defined]
                 matched_pts, _, _ = self._match_points_to_jxls(rows, jxl_map)  # type: ignore[attr-defined]
                 media_found, _ = self._find_crdb_media(crdb_path, jxl_map, matched_pts)  # type: ignore[attr-defined]
+                # Grab job-level metadata from the first JXL
+                jxl_data: dict[str, Any] = {}
+                if jxl_map:
+                    try:
+                        jxl_data = self._parse_jxl(next(iter(jxl_map.keys())))  # type: ignore[attr-defined]
+                    except Exception:
+                        pass
                 job_label = os.path.splitext(os.path.basename(crdb_path))[0]
                 for row in rows:
                     pt_name: str = row["point_name"]
                     pt_jxl: dict[str, Any] = matched_pts.get(pt_name.upper()) or {}
                     media_path = media_found.get(pt_name.upper(), "")
                     media_name = os.path.basename(media_path) if media_path else ""
-                    report_rows.append([
-                        job_label,
-                        pt_name,
-                        row.get("N") if row.get("N") is not None else "",
-                        row.get("E") if row.get("E") is not None else "",
-                        row.get("Z") if row.get("Z") is not None else "",
-                        row.get("code") or "",
-                        pt_jxl.get("h_precision")    if pt_jxl.get("h_precision")    is not None else "",
-                        pt_jxl.get("v_precision")    if pt_jxl.get("v_precision")    is not None else "",
-                        pt_jxl.get("pdop")           if pt_jxl.get("pdop")           is not None else "",
-                        pt_jxl.get("num_satellites") if pt_jxl.get("num_satellites") is not None else "",
-                        pt_jxl.get("survey_method") or "",
-                        pt_jxl.get("wgs84_lat")    if pt_jxl.get("wgs84_lat")    is not None else "",
-                        pt_jxl.get("wgs84_lon")    if pt_jxl.get("wgs84_lon")    is not None else "",
-                        pt_jxl.get("wgs84_height") if pt_jxl.get("wgs84_height") is not None else "",
-                        media_name,
-                    ])
+                    if not pt_jxl.get("code") and row.get("code"):
+                        pt_jxl = dict(pt_jxl)
+                        pt_jxl["code"] = row.get("code") or ""
+                    report_rows.append(self._gnss_report_row(
+                        job_label, pt_name, pt_jxl, jxl_data,
+                        coord_n=row.get("N") if row.get("N") is not None else "",
+                        coord_e=row.get("E") if row.get("E") is not None else "",
+                        coord_z=row.get("Z") if row.get("Z") is not None else "",
+                        media_name=media_name,
+                    ))
             except Exception as e:
                 errors.append(f"{os.path.basename(crdb_path)}: {e}")
 
@@ -9939,8 +10791,9 @@ End Sub
 
         try:
             with open(save_path, "w", newline="", encoding="cp1252", errors="replace") as f:
-                _csv.writer(f).writerow(headers)
-                _csv.writer(f).writerows(report_rows)
+                w = _csv.writer(f)
+                w.writerow(self._GNSS_REPORT_HEADERS)
+                w.writerows(report_rows)
             msg = f"Saved {len(report_rows)} point(s).\n{os.path.basename(save_path)}"
             if errors:
                 msg += "\n\nErrors:\n" + "\n".join(errors)
@@ -10089,10 +10942,13 @@ End Sub
             if not new_map:
                 messagebox.showwarning("No JXL Files", "No .jxl files found in the selected folder.", parent=win)
                 return
-            # Re-run matching with the new JXL set
-            new_matched, new_unres, new_amb = self._match_points_to_jxls(rows, new_map)  # type: ignore[attr-defined]
-            new_mf, new_mm = self._find_crdb_media(crdb_path, new_map, new_matched)  # type: ignore[attr-defined]
-            jxl_map_ref[0] = new_map
+            # Merge browsed JXLs into the existing set (don't lose auto-discovered ones)
+            merged_map = dict(jxl_map_ref[0])
+            merged_map.update(new_map)
+            # Re-run matching with the combined JXL set
+            new_matched, new_unres, new_amb = self._match_points_to_jxls(rows, merged_map)  # type: ignore[attr-defined]
+            new_mf, new_mm = self._find_crdb_media(crdb_path, merged_map, new_matched)  # type: ignore[attr-defined]
+            jxl_map_ref[0] = merged_map
             matched_ref[0] = new_matched
             unresolved_ref[0] = new_unres
             ambiguous_ref[0] = new_amb
@@ -10179,11 +11035,58 @@ End Sub
         tk.Button(_dwg_row, text="Browse…", command=_browse_dwg).pack(
             side="left", padx=(8, 0))
 
-        # Client schema selector
+        # Client schema selector — auto-detect from directory structure
         client_schemas = self._load_client_schemas()  # type: ignore[attr-defined]
         tk.Label(win, text="Client schema:").grid(row=7, column=0, **pad)
         client_names = sorted(client_schemas.keys())
-        client_var = tk.StringVar(value=client_names[0] if client_names else "(none)")
+        _auto_schema = ""
+        _detected_client = ""
+        _proj_root = self._find_project_root(crdb_path)  # type: ignore[attr-defined]
+        if _proj_root:
+            _client_raw = os.path.basename(os.path.dirname(_proj_root))
+            if _client_raw and _client_raw.upper() != "SURVEY":
+                _detected_client = _client_raw.replace("_", " ").title()
+                _norm = _detected_client.lower()
+                for _cn in client_names:
+                    if _cn.lower() == _norm:
+                        _auto_schema = _cn
+                        break
+
+        # If we detected the client from the path but no schema exists,
+        # offer to import a GDB now or continue with a manual choice.
+        if _detected_client and not _auto_schema:
+            ans = messagebox.askyesno(
+                "No Client Schema",
+                f"No GDB schema found for '{_detected_client}'.\n\n"
+                f"Would you like to import a .gdb to create one?\n\n"
+                f"Choose 'No' to pick an existing schema or use generic export.",
+                parent=win,
+            )
+            if ans:
+                _gdb_folder = filedialog.askdirectory(
+                    title=f"Select .gdb folder for {_detected_client}",
+                    parent=win,
+                )
+                if _gdb_folder and _gdb_folder.lower().endswith(".gdb"):
+                    self._show_gdb_import_dialog(_gdb_folder)  # type: ignore[attr-defined]
+                    # Reload schemas after import
+                    client_schemas = self._load_client_schemas()  # type: ignore[attr-defined]
+                    client_names = sorted(client_schemas.keys())
+                    _norm = _detected_client.lower()
+                    for _cn in client_names:
+                        if _cn.lower() == _norm:
+                            _auto_schema = _cn
+                            break
+                elif _gdb_folder:
+                    messagebox.showwarning(
+                        "Not a GDB",
+                        "Please select an Esri File Geodatabase folder (*.gdb).",
+                        parent=win,
+                    )
+
+        if not _auto_schema:
+            _auto_schema = client_names[0] if client_names else "(none)"
+        client_var = tk.StringVar(value=_auto_schema)
         client_values = client_names + ["(none — generic export)"]
         client_combo = ttk.Combobox(win, textvariable=client_var,
                                     values=client_values, width=30, state="readonly")
@@ -10310,17 +11213,35 @@ End Sub
                 height=min(300, len(_all_codes) * 24 + 10),
                 width=380,
             )
-            _code_scrollbar = ttk.Scrollbar(
+            _code_vsb = ttk.Scrollbar(
                 _code_list_frame, orient="vertical", command=_code_canvas.yview)  # type: ignore[arg-type]
+            _code_hsb = ttk.Scrollbar(
+                _code_list_frame, orient="horizontal", command=_code_canvas.xview)  # type: ignore[arg-type]
             _code_inner = tk.Frame(_code_canvas)
             _code_inner.bind(
                 "<Configure>",
                 lambda e: _code_canvas.configure(scrollregion=_code_canvas.bbox("all")))
             _code_canvas.create_window((0, 0), window=_code_inner, anchor="nw")
-            _code_canvas.configure(yscrollcommand=_code_scrollbar.set)
-            _code_canvas.pack(side="left", fill="both", expand=True)
+            _code_canvas.configure(yscrollcommand=_code_vsb.set, xscrollcommand=_code_hsb.set)
+            _code_canvas.grid(row=0, column=0, sticky="nsew")
             if len(_all_codes) > 12:
-                _code_scrollbar.pack(side="right", fill="y")
+                _code_vsb.grid(row=0, column=1, sticky="ns")
+            _code_hsb.grid(row=1, column=0, sticky="ew")
+            _code_list_frame.grid_rowconfigure(0, weight=1)
+            _code_list_frame.grid_columnconfigure(0, weight=1)
+
+            def _code_mw_y(e: tk.Event) -> None:  # type: ignore[type-arg]
+                _code_canvas.yview_scroll(-1 * (e.delta // 120), "units")
+
+            def _code_mw_x(e: tk.Event) -> None:  # type: ignore[type-arg]
+                _code_canvas.xview_scroll(-1 * (e.delta // 120), "units")
+
+            _code_list_frame.bind("<Enter>",
+                                  lambda e: (_code_canvas.bind_all("<MouseWheel>", _code_mw_y),
+                                             _code_canvas.bind_all("<Shift-MouseWheel>", _code_mw_x)))
+            _code_list_frame.bind("<Leave>",
+                                  lambda e: (_code_canvas.unbind_all("<MouseWheel>"),
+                                             _code_canvas.unbind_all("<Shift-MouseWheel>")))
 
             _code_vars: dict[str, tk.BooleanVar] = {}
             for _cname in _all_codes:
@@ -10391,12 +11312,12 @@ End Sub
 
             # CSV gets ALL rows; other formats get filtered rows
             for label, func in [
-                ("GeoPackage", lambda: self._write_gpkg(gpkg_path, _filtered_rows, _matched, fxl_data_ref[0], _mf)),  # type: ignore[attr-defined]
+                ("GeoPackage", lambda: self._write_gpkg(gpkg_path, _filtered_rows, _matched, fxl_data_ref[0], _mf, _jxl_meta, _client_schema)),  # type: ignore[attr-defined]
                 ("CSV", lambda: self._write_crdb_csv(csv_path, rows, _matched, fxl_data_ref[0], _mf, _jxl_meta, _client_schema)),  # type: ignore[attr-defined]
-                ("Shapefile", lambda: self._write_crdb_shp(shp_path, _filtered_rows, _matched, _mf)),  # type: ignore[attr-defined]
+                ("Shapefile", lambda: self._write_crdb_shp(shp_path, _filtered_rows, _matched, _mf, _jxl_meta, _client_schema)),  # type: ignore[attr-defined]
                 ("LandXML", lambda: self._write_crdb_landxml(xml_path, _filtered_rows, _matched)),  # type: ignore[attr-defined]
-                ("KMZ", lambda: self._write_crdb_kmz(kmz_path, _filtered_rows, _matched, fxl_data_ref[0], _mf)),  # type: ignore[attr-defined]
-                ("GNSS Report", lambda: self._write_crdb_gnss_csv(gnss_path, rows, _matched, _mf, crdb_path)),  # type: ignore[attr-defined]
+                ("KMZ", lambda: self._write_crdb_kmz(kmz_path, _filtered_rows, _matched, fxl_data_ref[0], _mf, _jxl_meta, _client_schema)),  # type: ignore[attr-defined]
+                ("GNSS Report", lambda: self._write_crdb_gnss_csv(gnss_path, rows, _matched, _mf, crdb_path, _jxl_meta)),  # type: ignore[attr-defined]
             ]:
                 try:
                     func()
@@ -10605,8 +11526,37 @@ End Sub
             "points_layer": points_layer,
         }
 
+    def _build_gdb_schema_dict(
+        self,
+        gdb_path: str,
+        schema: dict[str, Any],
+        points_layer: str,
+    ) -> dict[str, Any]:
+        """Build the stored schema dict for a GDB + chosen points layer."""
+        layers = schema.get("layers", [])
+        stored: dict[str, Any] = {
+            "source_gdb": os.path.basename(gdb_path),
+            "crs": schema.get("crs", ""),
+            "points_layer": points_layer,
+            "points_fields": [],
+            "layers": [],
+        }
+        for lyr in layers:
+            lyr_entry: dict[str, Any] = {
+                "name": lyr["name"],
+                "geometry_type": lyr["geometry_type"],
+                "fields": [f["name"] for f in lyr["fields"]],
+            }
+            stored["layers"].append(lyr_entry)
+            if lyr["name"] == points_layer:
+                stored["points_fields"] = [
+                    {"name": f["name"], "type": f["type"]} for f in lyr["fields"]
+                ]
+        return stored
+
     def _show_gdb_import_dialog(self, gdb_path: str) -> None:
-        """Show dialog to import a GDB schema and associate it with a client name."""
+        """Import a GDB schema — automatically if a points layer can be detected,
+        otherwise show a dialog for the user to pick the layer and client name."""
         self._progress_start("Reading GDB schema…")
 
         try:
@@ -10621,6 +11571,57 @@ End Sub
         self.status.config(text="Ready")
         layers = schema.get("layers", [])
         points_layer = schema.get("points_layer")
+
+        # ── Auto-import fast path ────────────────────────────────────────
+        # Derive client name from the directory structure.  The standard
+        # layout is  …\SURVEY\<CLIENT>\<PROJECT>\ASBUILT\0_GIS\…\<name>.gdb
+        # so the client folder is the parent of the project root.
+        auto_client_name = ""
+        _proj_root = self._find_project_root(gdb_path)  # type: ignore[attr-defined]
+        if _proj_root:
+            _client_dir = os.path.dirname(_proj_root)
+            _client_raw = os.path.basename(_client_dir)
+            if _client_raw and _client_raw.upper() != "SURVEY":
+                auto_client_name = _client_raw.replace("_", " ").title()
+        if not auto_client_name:
+            # Fallback: use the GDB folder name (strip .gdb extension)
+            auto_client_name = os.path.splitext(os.path.basename(gdb_path))[0]
+
+        if points_layer and auto_client_name:
+            existing_schemas = self._load_client_schemas()  # type: ignore[attr-defined]
+
+            # If schema already exists, ask before overwriting
+            if auto_client_name in existing_schemas:
+                ans = messagebox.askyesno(
+                    "Client Exists",
+                    f"A schema for '{auto_client_name}' already exists.\n\n"
+                    f"Overwrite with this GDB's schema?",
+                )
+                if not ans:
+                    return
+
+            stored = self._build_gdb_schema_dict(gdb_path, schema, points_layer)  # type: ignore[attr-defined]
+            self._save_client_schema(auto_client_name, stored)  # type: ignore[attr-defined]
+            pts_count = len(stored["points_fields"])
+
+            # Count layer types for summary
+            point_layers = [l for l in layers if l["geometry_type"] and "point" in l["geometry_type"].lower()]
+            line_layers = [l for l in layers if l["geometry_type"] and "line" in l["geometry_type"].lower()]
+            poly_layers = [l for l in layers if l["geometry_type"] and "polygon" in l["geometry_type"].lower()]
+            table_layers = [l for l in layers if l["geometry_type"] == "Table"]
+
+            messagebox.showinfo(
+                "Schema Saved",
+                f"Client '{auto_client_name}' schema created automatically.\n\n"
+                f"  Survey points layer: {points_layer} ({pts_count} fields)\n"
+                f"  Layers: {len(point_layers)} point, {len(line_layers)} line, "
+                f"{len(poly_layers)} polygon, {len(table_layers)} table\n"
+                f"  CRS: {schema.get('crs', '')[:80] or '(unknown)'}",
+            )
+            return
+
+        # ── Manual dialog fallback ───────────────────────────────────────
+        # Points layer could not be auto-detected — let the user choose.
 
         # Count layer types
         point_layers = [l for l in layers if l["geometry_type"] and "point" in l["geometry_type"].lower()]
@@ -10652,6 +11653,11 @@ End Sub
         crs_display = schema.get("crs", "")[:80] or "(unknown)"
         tk.Label(win, text=crs_display, fg="#555555").grid(row=3, column=1, **pad)
 
+        if not points_layer:
+            tk.Label(win, text="  Could not auto-detect survey points layer.",
+                     fg="#C62828", font=("Segoe UI", 8)).grid(
+                row=3, column=1, columnspan=2, padx=10, pady=(0, 2), sticky="e")
+
         # Survey points layer selector
         tk.Label(win, text="Survey points layer:").grid(row=4, column=0, **pad)
         layer_names = [l["name"] for l in layers if l["geometry_type"] != "Table"]
@@ -10659,14 +11665,10 @@ End Sub
         pts_combo = ttk.Combobox(win, textvariable=pts_var, values=layer_names,
                                  width=30, state="readonly")
         pts_combo.grid(row=4, column=1, padx=10, pady=3, sticky="w")
-        if points_layer:
-            auto_txt = f"  (auto-detected: {points_layer})"
-            tk.Label(win, text=auto_txt, fg="#2E7D32", font=("Segoe UI", 8)).grid(
-                row=5, column=1, padx=10, sticky="w")
 
-        # Client name
+        # Client name — pre-fill from client folder (or GDB name as fallback)
         tk.Label(win, text="Client name:").grid(row=6, column=0, **pad)
-        client_var = tk.StringVar()
+        client_var = tk.StringVar(value=auto_client_name)
         existing_schemas = self._load_client_schemas()  # type: ignore[attr-defined]
         client_combo = ttk.Combobox(win, textvariable=client_var,
                                     values=sorted(existing_schemas.keys()),
@@ -10696,26 +11698,7 @@ End Sub
                 if not ans:
                     return
 
-            # Build the stored schema
-            stored: dict[str, Any] = {
-                "source_gdb": os.path.basename(gdb_path),
-                "crs": schema.get("crs", ""),
-                "points_layer": selected_pts_layer,
-                "points_fields": [],
-                "layers": [],
-            }
-            for lyr in layers:
-                lyr_entry: dict[str, Any] = {
-                    "name": lyr["name"],
-                    "geometry_type": lyr["geometry_type"],
-                    "fields": [f["name"] for f in lyr["fields"]],
-                }
-                stored["layers"].append(lyr_entry)
-                if lyr["name"] == selected_pts_layer:
-                    stored["points_fields"] = [
-                        {"name": f["name"], "type": f["type"]} for f in lyr["fields"]
-                    ]
-
+            stored = self._build_gdb_schema_dict(gdb_path, schema, selected_pts_layer)  # type: ignore[attr-defined]
             self._save_client_schema(client_name, stored)  # type: ignore[attr-defined]
             pts_count = len(stored["points_fields"])
             messagebox.showinfo(
