@@ -349,7 +349,7 @@ class DataValidationTool(TkBase):
                             "Drop files here to begin:\n"
                             "  • CSV — Validate or Generate GNSS Report\n"
                             "  • JXL — Validate, Rename Photos, or Generate GNSS Report\n"
-                            "  • CRDB — Validate, Fix Media Names, Generate GNSS Report, or Export GeoPackage\n"
+                            "  • CRDB — Export Data (GPKG, CSV, Shapefile, LandXML, KMZ, GNSS Report)\n"
                             "  • FXL — Load field definitions (required for CSV/JXL validation)")
         self.dropbox.config(state="disabled")
         self.dropbox.pack(fill="both", expand=True, padx=8, pady=8)
@@ -593,7 +593,7 @@ class DataValidationTool(TkBase):
                 self._show_gdb_import_dialog(gdb_path)  # type: ignore[attr-defined]
             return
 
-        # CRDB files → ask: fix media, GNSS report, or export data
+        # CRDB files → go straight to export (includes GNSS report)
         if crdbs:
             self._show_crdb_action_dialog(crdbs)  # type: ignore[attr-defined]
             return
@@ -9688,45 +9688,9 @@ End Sub
     # ---------- CRDB action chooser ----------
 
     def _show_crdb_action_dialog(self, crdb_paths: list[str]) -> None:
-        """Ask what to do with one or more dropped CRDB files."""
-        n = len(crdb_paths)
-        dlg = tk.Toplevel(self)
-        dlg.title("CRDB Action")
-        dlg.resizable(False, False)
-        dlg.grab_set()
-        _raise_window(dlg)
-
-        tk.Label(dlg, text=f"{n} CRDB file(s) loaded.",
-                 font=("Segoe UI", 10, "bold")).pack(padx=24, pady=(18, 2))
-        tk.Label(dlg, text="What would you like to do?",
-                 font=("Segoe UI", 9)).pack(padx=24, pady=(0, 14))
-
-        choice: list[str] = [""]
-
-        def _pick(c: str) -> None:
-            choice[0] = c
-            dlg.destroy()
-
-        bf = tk.Frame(dlg)
-        bf.pack(padx=24, pady=(0, 18))
-        tk.Button(bf, text="Validate",             width=22, command=lambda: _pick("validate")).grid(row=0, column=0, padx=8, pady=4)
-        tk.Button(bf, text="Fix Media Names",      width=22, command=lambda: _pick("media")).grid(row=0, column=1, padx=8, pady=4)
-        tk.Button(bf, text="Generate GNSS Report", width=22, command=lambda: _pick("report")).grid(row=1, column=0, padx=8, pady=4)
-        tk.Button(bf, text="Export Data",           width=22, command=lambda: _pick("gpkg")).grid(row=1, column=1, padx=8, pady=4)
-        tk.Button(bf, text="Cancel",               width=10, command=dlg.destroy).grid(row=2, column=0, columnspan=2, pady=(2, 0))
-
-        dlg.wait_window()
-
-        if choice[0] == "validate":
-            self._validate_crdb(crdb_paths)  # type: ignore[attr-defined]
-        elif choice[0] == "media":
-            for cp in crdb_paths:
-                self._crdb_rename_media(cp)  # type: ignore[attr-defined]
-        elif choice[0] == "report":
-            self._crdb_gnss_report(crdb_paths)  # type: ignore[attr-defined]
-        elif choice[0] == "gpkg":
-            for cp in crdb_paths:
-                self._show_crdb_export_dialog(cp)  # type: ignore[attr-defined]
+        """Handle one or more dropped CRDB files — go straight to export."""
+        for cp in crdb_paths:
+            self._show_crdb_export_dialog(cp)  # type: ignore[attr-defined]
 
     def _validate_crdb(self, crdb_paths: list[str]) -> None:
         """Validate CRDB point data through the same Excel pipeline as CSV validation.
@@ -9852,6 +9816,53 @@ End Sub
             messagebox.showerror("Error", str(e), parent=self)
         finally:
             self.status.config(text="Ready")
+
+    def _write_crdb_gnss_csv(
+        self,
+        save_path: str,
+        rows: list[dict[str, Any]],
+        matched_pts: dict[str, dict[str, Any]],
+        media_found: dict[str, str],
+        crdb_path: str,
+    ) -> None:
+        """Write a GNSS report CSV using pre-matched CRDB/JXL data."""
+        import csv as _csv
+
+        headers = [
+            "Job", "Point Number", "Northing", "Easting", "Elevation",
+            "Field Code",
+            "H Precision (m)", "V Precision (m)", "PDOP", "Num Satellites", "Survey Method",
+            "WGS84 Latitude", "WGS84 Longitude", "WGS84 Height (m)",
+            "Media File Name",
+        ]
+        job_label = os.path.splitext(os.path.basename(crdb_path))[0]
+        report_rows: list[list[Any]] = []
+        for row in rows:
+            pt_name: str = row["point_name"]
+            pt_jxl: dict[str, Any] = matched_pts.get(pt_name.upper()) or {}
+            media_path = media_found.get(pt_name.upper(), "")
+            media_name = os.path.basename(media_path) if media_path else ""
+            report_rows.append([
+                job_label,
+                pt_name,
+                row.get("N") if row.get("N") is not None else "",
+                row.get("E") if row.get("E") is not None else "",
+                row.get("Z") if row.get("Z") is not None else "",
+                row.get("code") or "",
+                pt_jxl.get("h_precision")    if pt_jxl.get("h_precision")    is not None else "",
+                pt_jxl.get("v_precision")    if pt_jxl.get("v_precision")    is not None else "",
+                pt_jxl.get("pdop")           if pt_jxl.get("pdop")           is not None else "",
+                pt_jxl.get("num_satellites") if pt_jxl.get("num_satellites") is not None else "",
+                pt_jxl.get("survey_method") or "",
+                pt_jxl.get("wgs84_lat")    if pt_jxl.get("wgs84_lat")    is not None else "",
+                pt_jxl.get("wgs84_lon")    if pt_jxl.get("wgs84_lon")    is not None else "",
+                pt_jxl.get("wgs84_height") if pt_jxl.get("wgs84_height") is not None else "",
+                media_name,
+            ])
+        with open(save_path, "w", newline="", encoding="cp1252", errors="replace") as f:
+            w = _csv.writer(f)
+            w.writerow(headers)
+            w.writerows(report_rows)
 
     def _crdb_gnss_report(self, crdb_paths: list[str]) -> None:
         """Generate a CSV GNSS report from one or more CRDBs, combining CRDB coords with JXL GNSS data."""
@@ -10179,7 +10190,7 @@ End Sub
         tk.Label(win, text=output_dir, fg="#1F4E79", wraplength=420, justify="left").grid(
             row=9, column=1, **pad)
         tk.Label(win, text="Export formats:", fg="#555555").grid(row=10, column=0, **pad)
-        tk.Label(win, text="GPKG, CSV, Shapefile, LandXML, KMZ", fg="#555555").grid(
+        tk.Label(win, text="GPKG, CSV, Shapefile, LandXML, KMZ, GNSS Report", fg="#555555").grid(
             row=10, column=1, **pad)
 
         # Unresolved-report checkbox
@@ -10350,12 +10361,13 @@ End Sub
             _filtered_rows = [r for r in rows
                               if (r.get("code", "UNKNOWN") or "UNKNOWN") in _selected_code_set]
 
-            # Write all five formats — each is independent, failures don't block the rest
+            # Write all formats — each is independent, failures don't block the rest
             gpkg_path = os.path.join(output_dir, crdb_stem + ".gpkg")
             csv_path = os.path.join(output_dir, crdb_stem + ".csv")
             shp_path = os.path.join(output_dir, crdb_stem + ".shp")
             xml_path = os.path.join(output_dir, crdb_stem + ".xml")
             kmz_path = os.path.join(output_dir, crdb_stem + ".kmz")
+            gnss_path = os.path.join(output_dir, crdb_stem + "_GNSS_Report.csv")
 
             written: list[str] = []
             errors: list[str] = []
@@ -10367,6 +10379,7 @@ End Sub
                 ("Shapefile", lambda: self._write_crdb_shp(shp_path, _filtered_rows, _matched, _mf)),  # type: ignore[attr-defined]
                 ("LandXML", lambda: self._write_crdb_landxml(xml_path, _filtered_rows, _matched)),  # type: ignore[attr-defined]
                 ("KMZ", lambda: self._write_crdb_kmz(kmz_path, _filtered_rows, _matched, fxl_data_ref[0], _mf)),  # type: ignore[attr-defined]
+                ("GNSS Report", lambda: self._write_crdb_gnss_csv(gnss_path, rows, _matched, _mf, crdb_path)),  # type: ignore[attr-defined]
             ]:
                 try:
                     func()
@@ -10462,26 +10475,6 @@ End Sub
                     f"but the files could not be located:\n\n" + "\n".join(lines),
                 )
 
-            # Offer rename for found media files that have auto-generated names.
-            # Collect all candidates across every JXL, then show one combined dialog.
-            _rename_jxl_items: list[tuple[str, dict[str, Any], dict[str, str]]] = []
-            for _jxl_path, _ in _jxl_map.items():
-                try:
-                    _jxl_d = self._parse_jxl(_jxl_path)  # type: ignore[attr-defined]
-                    _jxl_pts: dict[str, Any] = _jxl_d.get("points") or {}
-                    _photo_map: dict[str, str] = {
-                        pt_name: _mf[pt_name.upper()]
-                        for pt_name in _jxl_pts
-                        if pt_name.upper() in _mf
-                    }
-                    if _photo_map:
-                        _rename_jxl_items.append((_jxl_path, _jxl_d, _photo_map))
-                except Exception:
-                    pass
-            if _rename_jxl_items:
-                self._offer_photo_rename_multi(  # type: ignore[attr-defined]
-                    _rename_jxl_items, update_excel=False
-                )
 
         btn_row2 = tk.Frame(win)
         btn_row2.grid(row=13, column=0, columnspan=2, pady=(6, 10))
