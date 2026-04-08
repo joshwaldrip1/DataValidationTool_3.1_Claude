@@ -1,4 +1,4 @@
-# Data Validation Tool v3.2  (Windows)
+# Data Validation Tool v3.2.1  (Windows)
 # - Multi-file drag & drop (CSV + FXL together)
 # - Single Excel instance/workbook; single-run validation
 # - Full VBA module included (no missing methods)
@@ -31,7 +31,7 @@ from urllib.request import Request, urlopen
 from urllib.error import URLError
 
 # ── App version & update config ──────────────────────────────────
-APP_VERSION = "3.2"
+APP_VERSION = "3.2.1"
 _GITHUB_OWNER = "joshwaldrip1"
 _GITHUB_REPO  = "DataValidationTool"
 # Fine-grained PAT with read-only Contents access to the private repo.
@@ -5290,7 +5290,7 @@ End Sub
         sb.pack(side="right", fill="y")
         text.pack(fill="both", expand=True)
         help_content = (
-            "DATA VALIDATION TOOL v3.2 — Quick Reference\n"
+            "DATA VALIDATION TOOL v3.2.1 — Quick Reference\n"
             "═══════════════════════════════════════════\n\n"
             "HOW TO USE\n"
             "──────────\n"
