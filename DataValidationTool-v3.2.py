@@ -36,18 +36,17 @@ _GITHUB_OWNER = "joshwaldrip1"
 _GITHUB_REPO  = "DataValidationTool"
 # Fine-grained PAT loaded from config.json at runtime ("github_token" key).
 # Generate at: GitHub → Settings → Developer settings → Fine-grained tokens
-_GITHUB_TOKEN = ""
+_github_token: str = ""
 def _load_github_token() -> str:
     """Read the GitHub PAT from update_token.json next to the exe/script."""
     _base = os.path.dirname(sys.executable if getattr(sys, "frozen", False) else os.path.abspath(__file__))
     token_path = os.path.join(_base, "update_token.json")
     try:
         with open(token_path, "r", encoding="utf-8") as f:
-            data = json.load(f)
-        if isinstance(data, dict):
-            tok = data.get("github_token", "")
-            if isinstance(tok, str) and tok.strip():
-                return tok.strip()
+            cfg: dict[str, Any] = json.load(f)
+        tok: str = str(cfg.get("github_token", ""))
+        if tok.strip():
+            return tok.strip()
     except Exception:
         pass
     return ""
@@ -394,10 +393,10 @@ class DataValidationTool(TkBase):
 
     def _check_for_updates(self) -> None:
         """Check GitHub Releases for a newer version (runs in a background thread)."""
-        global _GITHUB_TOKEN
-        if not _GITHUB_TOKEN:
-            _GITHUB_TOKEN = _load_github_token()
-        if not _GITHUB_TOKEN:
+        global _github_token
+        if not _github_token:
+            _github_token = _load_github_token()
+        if not _github_token:
             messagebox.showwarning(
                 "Update Check",
                 "No GitHub token configured.\n\n"
@@ -413,7 +412,7 @@ class DataValidationTool(TkBase):
         try:
             url = f"https://api.github.com/repos/{_GITHUB_OWNER}/{_GITHUB_REPO}/releases/latest"
             req = Request(url)
-            req.add_header("Authorization", f"Bearer {_GITHUB_TOKEN}")
+            req.add_header("Authorization", f"Bearer {_github_token}")
             req.add_header("Accept", "application/vnd.github+json")
             with urlopen(req, timeout=15) as resp:
                 data = json.loads(resp.read().decode("utf-8"))
@@ -484,7 +483,7 @@ class DataValidationTool(TkBase):
         """Background thread: download asset and launch installer."""
         try:
             req = Request(url)
-            req.add_header("Authorization", f"Bearer {_GITHUB_TOKEN}")
+            req.add_header("Authorization", f"Bearer {_github_token}")
             req.add_header("Accept", "application/octet-stream")
             dest = os.path.join(tempfile.gettempdir(), asset_name)
             with urlopen(req, timeout=120) as resp:
