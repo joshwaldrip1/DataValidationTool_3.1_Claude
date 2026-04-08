@@ -40,15 +40,18 @@ _github_token: str = ""
 def _load_github_token() -> str:
     """Read the GitHub PAT from update_token.json next to the exe/script."""
     _base = os.path.dirname(sys.executable if getattr(sys, "frozen", False) else os.path.abspath(__file__))
-    token_path = os.path.join(_base, "update_token.json")
-    try:
-        with open(token_path, "r", encoding="utf-8") as f:
-            cfg: dict[str, Any] = json.load(f)
-        tok: str = str(cfg.get("github_token", ""))
-        if tok.strip():
-            return tok.strip()
-    except Exception:
-        pass
+    for candidate in [
+        os.path.join(_base, "update_token.json"),
+        os.path.join(_base, "_internal", "update_token.json"),
+    ]:
+        try:
+            with open(candidate, "r", encoding="utf-8") as f:
+                cfg: dict[str, Any] = json.load(f)
+            tok: str = str(cfg.get("github_token", ""))
+            if tok.strip():
+                return tok.strip()
+        except Exception:
+            continue
     return ""
 
 # --- Minimal Protocols to type Excel COM objects (win32com) ---
