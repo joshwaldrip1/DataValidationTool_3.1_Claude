@@ -388,8 +388,7 @@ class DataValidationTool(TkBase):
                 "from the private repository. Contact your administrator.",
             )
             return
-        self.status.config(text="Checking for updates…")
-        self.update_idletasks()
+        self._progress_start("Checking for updates…")
         threading.Thread(target=self._do_update_check, daemon=True).start()
 
     def _do_update_check(self) -> None:
@@ -442,6 +441,7 @@ class DataValidationTool(TkBase):
     def _update_result(self, status: str, message: str,
                        download_url: str = "", asset_name: str = "") -> None:
         """Handle update check result on the main thread."""
+        self._progress_stop()
         self.status.config(text="Ready")
         if status == "available" and download_url:
             if messagebox.askyesno("Update Available",
@@ -458,10 +458,7 @@ class DataValidationTool(TkBase):
 
     def _download_and_install(self, url: str, asset_name: str) -> None:
         """Download the setup EXE from GitHub and launch it."""
-        self.status.config(text=f"Downloading {asset_name}…")
-        self.progress.pack(pady=2)
-        self.progress.start(15)
-        self.update_idletasks()
+        self._progress_start(f"Downloading {asset_name}…")
         threading.Thread(
             target=self._do_download, args=(url, asset_name), daemon=True,
         ).start()
@@ -485,8 +482,7 @@ class DataValidationTool(TkBase):
             self.after(0, lambda: self._download_failed(str(e)))
 
     def _download_complete(self, installer_path: str) -> None:
-        self.progress.stop()
-        self.progress.pack_forget()
+        self._progress_stop()
         self.status.config(text="Download complete.")
         if messagebox.askyesno("Download Complete",
                                f"Installer saved to:\n{installer_path}\n\n"
@@ -499,8 +495,7 @@ class DataValidationTool(TkBase):
                 messagebox.showerror("Launch Error", f"Could not launch installer:\n{e}")
 
     def _download_failed(self, error: str) -> None:
-        self.progress.stop()
-        self.progress.pack_forget()
+        self._progress_stop()
         self.status.config(text="Ready")
         messagebox.showerror("Download Failed", f"Could not download the update:\n{error}")
 
@@ -1470,14 +1465,14 @@ class DataValidationTool(TkBase):
             return self._fxl_library_cache
         found: list[str] = []
         try:
-            self.status.config(text="Scanning FXL library…")
-            self.update_idletasks()
+            self._progress_start("Scanning FXL library…")
             for dirpath, _dirs, files in os.walk(self.fxl_library_path):
                 for fname in files:
                     if fname.lower().endswith((".fxl", ".xml")):
                         found.append(os.path.join(dirpath, fname))
         except Exception:
             pass
+        self._progress_stop()
         self._fxl_library_cache = sorted(found, key=lambda p: os.path.basename(p).lower())
         return self._fxl_library_cache
 
@@ -6152,8 +6147,7 @@ End Sub
 
         Uses _build_jxl_media_index (companion-folder search with file-size fallback).
         """
-        self.status.config(text=f"Scanning {len(jxl_paths)} JXL file(s) for photos…")
-        self.update_idletasks()
+        self._progress_start(f"Scanning {len(jxl_paths)} JXL file(s) for photos…")
 
         # Build jxl_map {abs_path: stem} and collect all points that have photos
         jxl_map: dict[str, str] = {}
@@ -6178,6 +6172,7 @@ End Sub
             messagebox.showwarning("JXL Parse Errors", "\n".join(errors))
 
         if not all_matched_pts:
+            self._progress_stop()
             self.status.config(text="Ready")
             messagebox.showinfo(
                 "No Photos Found",
@@ -6209,6 +6204,7 @@ End Sub
                 any_found = True
                 jxl_items.append((jxl_path, jxl_item_data, per_jxl_found))
 
+        self._progress_stop()
         self.status.config(text="Ready")
 
         if not any_found:
@@ -6408,8 +6404,7 @@ End Sub
                 messagebox.showwarning("No FXL", "An FXL must be loaded before validating a JXL.")
                 return
 
-        self.status.config(text=f"Parsing {len(jxl_paths)} JXL file(s)…")
-        self.update_idletasks()
+        self._progress_start(f"Parsing {len(jxl_paths)} JXL file(s)…")
 
         # Max attribute columns needed — determined by the widest field code in the FXL
         max_attrs: int = max((len(v) for v in self.fxl_data.values()), default=0)
@@ -6488,6 +6483,7 @@ End Sub
             messagebox.showwarning("JXL Parse Errors", "\n".join(errors))
 
         if not all_rows:
+            self._progress_stop()
             self.status.config(text="Ready")
             messagebox.showinfo("No Points", "No point records found in the dropped JXL file(s).")
             return
@@ -6515,6 +6511,7 @@ End Sub
         }
         self.attr_indices = list(range(5, 5 + max_attrs))
 
+        self._progress_stop()
         self.status.config(text="Ready")
         self._export_and_open_excel(open_new_excel_instance=(not self.single_excel_instance))  # type: ignore[attr-defined]
 
@@ -6558,8 +6555,7 @@ End Sub
         )
         save_path = os.path.join(first_dir, default_name)
 
-        self.status.config(text=f"Generating GNSS report from {len(jxl_paths)} JXL file(s)…")
-        self.update_idletasks()
+        self._progress_start(f"Generating GNSS report from {len(jxl_paths)} JXL file(s)…")
 
         headers = [
             "Job", "Point Number", "Northing", "Easting", "Elevation",
@@ -6600,6 +6596,7 @@ End Sub
             except Exception as e:
                 errors.append(f"{os.path.basename(jxl_path)}: {e}")
 
+        self._progress_stop()
         self.status.config(text="Ready")
 
         if not rows and not errors:
@@ -9315,8 +9312,7 @@ End Sub
 
         Returns ``(exported_layer_names, geometry_dict, write_srid, cs_code)``.
         """
-        self.status.config(text="Reading DWG file…")
-        self.update_idletasks()
+        self._progress_start("Reading DWG file…")
 
         exported_layers: list[str] = []
         extracted_geom: dict[str, list[dict[str, Any]]] = {}
@@ -9326,6 +9322,7 @@ End Sub
         try:
             layer_counts, _prescan_geom, cs_code = self._read_dwg_geometry_ezdxf(dwg_path)  # type: ignore[attr-defined]
         except Exception as exc:
+            self._progress_stop()
             self.status.config(text="Ready")
             messagebox.showerror(
                 "DWG Read Error",
@@ -9333,6 +9330,7 @@ End Sub
                 "Ensure the DWG file is accessible.")
             return exported_layers, extracted_geom, final_srid[0], cs_code
 
+        self._progress_stop()
         self.status.config(text="Ready")
 
         if not layer_counts:
@@ -9705,8 +9703,7 @@ End Sub
             messagebox.showwarning("No FXL", "An FXL must be loaded before validating a CRDB.")
             return
 
-        self.status.config(text=f"Parsing {len(crdb_paths)} CRDB file(s)…")
-        self.update_idletasks()
+        self._progress_start(f"Parsing {len(crdb_paths)} CRDB file(s)…")
 
         max_attrs: int = max((len(v) for v in self.fxl_data.values()), default=0)
         all_rows: list[list[Any]] = []
@@ -9732,6 +9729,7 @@ End Sub
         if errors:
             messagebox.showwarning("CRDB Load Errors", "\n".join(errors))
         if not all_rows:
+            self._progress_stop()
             self.status.config(text="Ready")
             messagebox.showinfo("No Points", "No point records found in the dropped CRDB file(s).")
             return
@@ -9769,13 +9767,13 @@ End Sub
         self.mapping = {"station": None, "pn": 0, "north": 1, "east": 2, "elev": 3, "fc": 4}
         self.attr_indices = list(range(5, 5 + max_attrs))
 
+        self._progress_stop()
         self.status.config(text="Ready")
         self._export_and_open_excel(open_new_excel_instance=(not self.single_excel_instance))  # type: ignore[attr-defined]
 
     def _crdb_rename_media(self, crdb_path: str) -> None:
         """Find JXLs for a CRDB, match points, then offer photo rename for found media."""
-        self.status.config(text=f"Scanning {os.path.basename(crdb_path)} for media…")
-        self.update_idletasks()
+        self._progress_start(f"Scanning {os.path.basename(crdb_path)} for media…")
         try:
             rows = self._load_crdb_rows(crdb_path)  # type: ignore[attr-defined]
             target_stems: set[str] = set()
@@ -9815,6 +9813,7 @@ End Sub
         except Exception as e:
             messagebox.showerror("Error", str(e), parent=self)
         finally:
+            self._progress_stop()
             self.status.config(text="Ready")
 
     def _write_crdb_gnss_csv(
@@ -9875,8 +9874,7 @@ End Sub
         )
         save_path = os.path.join(first_dir, default_name)
 
-        self.status.config(text="Generating CRDB GNSS report…")
-        self.update_idletasks()
+        self._progress_start("Generating CRDB GNSS report…")
 
         headers = [
             "Job", "Point Number", "Northing", "Easting", "Elevation",
@@ -9920,6 +9918,7 @@ End Sub
             except Exception as e:
                 errors.append(f"{os.path.basename(crdb_path)}: {e}")
 
+        self._progress_stop()
         self.status.config(text="Ready")
 
         try:
@@ -10208,6 +10207,7 @@ End Sub
         status_lbl.grid(row=12, column=0, columnspan=2, padx=10, pady=2, sticky="ew")
 
         def _do_export() -> None:
+            self._progress_start("Exporting CRDB data…")
             # Always use the ref containers — Browse may have updated them
             _matched   = matched_ref[0]
             _unres     = unresolved_ref[0]
@@ -10354,6 +10354,7 @@ End Sub
             _code_win.wait_window()
 
             if not _code_confirmed[0]:
+                self._progress_stop()
                 return  # user cancelled
 
             # Filter rows for non-CSV formats
@@ -10388,6 +10389,7 @@ End Sub
                     errors.append(f"{label}: {exc}")
 
             if not written:
+                self._progress_stop()
                 messagebox.showerror("Export Error",
                                      "All exports failed:\n" + "\n".join(errors), parent=win)
                 return
@@ -10407,6 +10409,7 @@ End Sub
                 except Exception:
                     msgs.append("(could not write issues report)")
 
+            self._progress_stop()
             status_lbl.config(text="  Export complete.", fg="#2E7D32")
             messagebox.showinfo("Export Complete", "\n".join(msgs), parent=win)
             win.destroy()
@@ -10588,16 +10591,17 @@ End Sub
 
     def _show_gdb_import_dialog(self, gdb_path: str) -> None:
         """Show dialog to import a GDB schema and associate it with a client name."""
-        self.status.config(text="Reading GDB schema…")
-        self.update_idletasks()
+        self._progress_start("Reading GDB schema…")
 
         try:
             schema = self._read_gdb_schema(gdb_path)  # type: ignore[attr-defined]
         except Exception as exc:
+            self._progress_stop()
             self.status.config(text="Ready")
             messagebox.showerror("GDB Read Error", f"Could not read GDB:\n{exc}")
             return
 
+        self._progress_stop()
         self.status.config(text="Ready")
         layers = schema.get("layers", [])
         points_layer = schema.get("points_layer")
