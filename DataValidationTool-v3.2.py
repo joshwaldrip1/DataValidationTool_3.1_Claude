@@ -36,7 +36,7 @@ _GITHUB_OWNER = "joshwaldrip1"
 _GITHUB_REPO  = "DataValidationTool"
 # Fine-grained PAT with read-only Contents access to the private repo.
 # Generate at: GitHub → Settings → Developer settings → Fine-grained tokens
-_GITHUB_TOKEN = "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"
+_GITHUB_TOKEN = "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"
 
 # --- Minimal Protocols to type Excel COM objects (win32com) ---
 @runtime_checkable
