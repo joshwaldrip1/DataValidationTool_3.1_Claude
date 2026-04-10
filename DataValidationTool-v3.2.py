@@ -6315,6 +6315,35 @@ End Sub
 
     # ---------- Project-wide photo rename ----------
 
+    @staticmethod
+    def _available_path(path: str) -> str:
+        """Return *path* if writable, else try ``stem_1.ext``, ``_2``, etc.
+
+        Handles the common case where the previous export is still open in
+        Excel or another program and the file is locked.
+        """
+        for candidate in [path]:
+            if not os.path.exists(candidate):
+                return candidate
+            try:
+                with open(candidate, "r+b"):
+                    pass
+                return candidate
+            except (PermissionError, OSError):
+                pass
+        stem, ext = os.path.splitext(path)
+        for i in range(1, 100):
+            candidate = f"{stem}_{i}{ext}"
+            if not os.path.exists(candidate):
+                return candidate
+            try:
+                with open(candidate, "r+b"):
+                    pass
+                return candidate
+            except (PermissionError, OSError):
+                continue
+        return path  # give up — let the caller handle the error
+
     def _find_project_root(self, path_hint: str) -> str | None:
         """Walk up from *path_hint* to find the project root.
 
@@ -7600,26 +7629,23 @@ End Sub
         crdb_path: str,
         target_stems: set[str],
     ) -> dict[str, str]:
-        """Search ancestor levels for .jxl files to match against CRDB points.
+        """Search the entire project directory for .jxl files.
 
-        Level 0 (parent of CRDB folder) is searched automatically.
-        For each level above that, the user is prompted before searching.
-        At each level, SYNC-named subfolders are scanned first, then the rest
-        of that ancestor's tree (excluding already-searched SYNC folders).
-        Returns {stem: absolute_jxl_path}.
+        Finds the project root (parent of ASBUILT) via ``_find_project_root``
+        and walks the full tree automatically — no user prompting.
+        Returns {abs_jxl_path: stem}.
         """
         crdb_dir = os.path.dirname(os.path.abspath(crdb_path))
         found: dict[str, str] = {}
 
         def _collect_jxls_from(root: str) -> dict[str, str]:
-            """Walk root for .jxl files, skipping the CRDB dir.
-
-            Returns {abs_path: stem}.
-            """
+            """Walk root for .jxl files. Returns {abs_path: stem}."""
             newly: dict[str, str] = {}
             for dirpath, dirs, filenames in os.walk(root):
-                dirs[:] = [dn for dn in dirs
-                           if os.path.abspath(os.path.join(dirpath, dn)) != crdb_dir]
+                # Skip backup folders
+                if os.path.basename(dirpath) == "_Original JXLs":
+                    dirs.clear()
+                    continue
                 for fn in filenames:
                     if fn.lower().endswith(".jxl"):
                         abs_path = os.path.abspath(os.path.join(dirpath, fn))
@@ -7627,60 +7653,23 @@ End Sub
                             newly[abs_path] = os.path.splitext(fn)[0]
             return newly
 
-        # Structured search: SYNC → Field Data → prompt to go higher.
-        # Locate the Field Data folder (and its SYNC child) by checking known
-        # naming variants relative to the CRDB's parent and grandparent.
-        _fd_names = ["FIELD_DATA", "Field_Data", "Field Data", "FieldData"]
-        _sync_dir: str | None = None
-        _field_data_dir: str | None = None
-        for _base in [os.path.dirname(crdb_dir), crdb_dir]:
-            for _fd_name in _fd_names:
-                _fd_candidate = os.path.join(_base, _fd_name)
-                if os.path.isdir(_fd_candidate):
-                    _field_data_dir = _fd_candidate
-                    _sc = os.path.join(_fd_candidate, "SYNC")
-                    if os.path.isdir(_sc):
-                        _sync_dir = _sc
+        # Search the entire project tree from the project root
+        project_root = self._find_project_root(crdb_path)  # type: ignore[attr-defined]
+        if project_root:
+            found.update(_collect_jxls_from(project_root))
+
+        # Fallback: if no project root or no JXLs found, search from the
+        # CRDB's parent directory upward through FIELD_DATA / SYNC
+        if not found:
+            _fd_names = ["FIELD_DATA", "Field_Data", "Field Data", "FieldData"]
+            for _base in [os.path.dirname(crdb_dir), crdb_dir]:
+                for _fd_name in _fd_names:
+                    _fd_candidate = os.path.join(_base, _fd_name)
+                    if os.path.isdir(_fd_candidate):
+                        found.update(_collect_jxls_from(_fd_candidate))
+                        break
+                if found:
                     break
-            if _field_data_dir:
-                break
-
-        # Stage 1: SYNC folder and all subfolders (automatic)
-        if _sync_dir:
-            found.update(_collect_jxls_from(_sync_dir))
-
-        # Stage 2: Field Data folder and all subfolders (automatic, skips
-        #          already-found JXLs from the SYNC walk above)
-        if _field_data_dir:
-            found.update(_collect_jxls_from(_field_data_dir))
-
-        if found:
-            return found
-
-        # Stage 3: Escalate up the directory tree, prompting at each level.
-        # Start from the parent of crdb_dir (e.g. ASBUILT) and go up to 6 levels.
-        levels: list[str] = []
-        d = os.path.dirname(crdb_dir)
-        for _ in range(6):
-            parent = os.path.dirname(d)
-            if not d or d == parent:
-                break  # reached filesystem root
-            levels.append(d)
-            d = parent
-
-        for ancestor in levels:
-            ans = messagebox.askyesno(
-                "Expand JXL Search",
-                f"No JXL files found yet. Search:\n\n"
-                f"  {ancestor}\n\n"
-                f"JXL files found so far: {len(found)}",
-                parent=self,
-            )
-            if not ans:
-                break
-            found.update(_collect_jxls_from(ancestor))
-            if found:
-                break
 
         return found
 
@@ -7867,7 +7856,7 @@ End Sub
         # ── Schema-driven single-layer path ──────────────────────────────
         if client_schema and client_schema.get("points_fields"):
             header = self._schema_header(client_schema)  # type: ignore[attr-defined]
-            attr_col_indices = self._schema_attr_indices(header)  # type: ignore[attr-defined]
+            attr_col_indices = self._schema_attr_indices(header, fxl_data)  # type: ignore[attr-defined]
             _meta: dict[str, Any] = jxl_meta or {}
             job_timestamp = _meta.get("timestamp", "")
             layer_name = client_schema.get("points_layer") or "Points"
@@ -8165,7 +8154,7 @@ End Sub
 
         Uses ``_CSV_FIELD_MAP`` for named columns and *attr_col_indices* for
         positional attribute slots.  Shared by CSV, GeoPackage, Shapefile,
-        and KMZ writers.
+        LandXML, and KMZ writers.
         """
         attrs = row.get("attrs", [])
         _specials: dict[str, Any] = {
@@ -8201,13 +8190,79 @@ End Sub
                     out[hi] = v if v is not None else ""
         return out
 
-    def _schema_attr_indices(self, header: list[str]) -> dict[int, int]:
-        """Return ``{1-based_attr_number: header_index}`` for attribute slots."""
+    # GIS housekeeping fields that are never CRDB attributes.
+    _GIS_HOUSEKEEPING: set[str] = {
+        "objectid", "fid", "oid", "globalid", "guid",
+        "shape", "shape_length", "shape_area", "shape_leng",
+    }
+
+    @staticmethod
+    def _normalize_field_name(name: str) -> str:
+        """Lowercase, collapse spaces/hyphens to underscores."""
+        return name.lower().replace(" ", "_").replace("-", "_")
+
+    def _schema_attr_indices(
+        self,
+        header: list[str],
+        fxl_data: dict[str, list[dict[str, Any]]] | None = None,
+    ) -> dict[int, int]:
+        """Return ``{1-based_attr_number: header_index}`` for attribute slots.
+
+        Resolution order:
+
+        1. Explicit ``ATT_n`` / ``ATTR_n`` column names.
+        2. **FXL name matching** — build a master name→position map from all
+           FXL codes and match header fields by normalised name.  This
+           correctly handles client GDB schemas whose fields are in
+           alphabetical (or any non-FXL) order.
+        3. **Positional fallback** — every non-standard, non-GIS-housekeeping
+           header field is assigned a sequential attribute number.
+        """
         indices: dict[int, int] = {}
+
+        # ── 1. Explicit ATT_n / ATTR_n columns ──────────────────────────
         for hi, col_name in enumerate(header):
             m = self._ATTR_COL_RE.match(col_name)
             if m:
                 indices[int(m.group(1))] = hi
+        if indices:
+            return indices
+
+        # ── 2. FXL name matching ─────────────────────────────────────────
+        if fxl_data:
+            # Build master FXL name→1-based-position map (first occurrence wins)
+            fxl_name_map: dict[str, int] = {}
+            for _attr_list in fxl_data.values():
+                for i, attr_def in enumerate(_attr_list):
+                    norm = self._normalize_field_name(
+                        attr_def.get("name") or "")
+                    if norm and norm not in fxl_name_map:
+                        fxl_name_map[norm] = i + 1  # 1-based
+            if fxl_name_map:
+                for hi, col_name in enumerate(header):
+                    key = col_name.lower()
+                    if key in self._CSV_FIELD_MAP:
+                        continue
+                    if key in self._GIS_HOUSEKEEPING:
+                        continue
+                    attr_num = fxl_name_map.get(
+                        self._normalize_field_name(col_name))
+                    if attr_num is not None:
+                        indices[attr_num] = hi
+        if indices:
+            return indices
+
+        # ── 3. Positional fallback ───────────────────────────────────────
+        attr_num = 1
+        for hi, col_name in enumerate(header):
+            key = col_name.lower()
+            if key in self._CSV_FIELD_MAP:
+                continue
+            if key in self._GIS_HOUSEKEEPING:
+                continue
+            indices[attr_num] = hi
+            attr_num += 1
+
         return indices
 
     def _resolve_photo(
@@ -8232,24 +8287,20 @@ End Sub
         rows: list[dict[str, Any]],
         matched_pts: dict[str, dict[str, Any]],
         fxl_data: dict[str, list[dict[str, Any]]],
-        media_found: dict[str, str] | None = None,
-        jxl_meta: dict[str, Any] | None = None,
-        client_schema: dict[str, Any] | None = None,
     ) -> None:
-        """Write CRDB point data as CSV matching a client's GDB schema.
+        """Write CRDB point data as CSV — CRDB coordinates and attributes are gospel.
 
-        If client_schema is provided, uses the points_fields from the stored
-        schema to determine column names and order.  Otherwise falls back to
-        the default RAW_POINTS layout.
+        Does NOT use the client GDB schema — that is for GPKG/SHP/KMZ/LandXML.
+        The CSV always has: POINT_NUMBER, NORTHING, EASTING, ELEVATION,
+        FIELD_CODE, ATT1, ATT2, … with all values from the CRDB directly.
         """
         import csv as _csv
 
-        _media: dict[str, str] = media_found or {}
-        _meta: dict[str, Any] = jxl_meta or {}
-        job_timestamp = _meta.get("timestamp", "")
+        # Determine the maximum attribute count across all rows
+        max_attrs = max((len(r.get("attrs", [])) for r in rows), default=0)
 
-        header = self._schema_header(client_schema)  # type: ignore[attr-defined]
-        attr_col_indices = self._schema_attr_indices(header)  # type: ignore[attr-defined]
+        header = (["POINT_NUMBER", "NORTHING", "EASTING", "ELEVATION", "FIELD_CODE"]
+                  + [f"ATT{i+1}" for i in range(max_attrs)])
 
         os.makedirs(os.path.dirname(output_path) or ".", exist_ok=True)
         with open(output_path, "w", newline="", encoding="utf-8-sig") as f:
@@ -8260,12 +8311,16 @@ End Sub
                 _z_val = row.get("Z")
                 if _z_val is not None and isinstance(_z_val, (int, float)) and _z_val <= -99999999:
                     continue
-                pkey = row["point_name"].strip().upper()
-                pt_jxl = matched_pts.get(pkey)
-                photo = self._resolve_photo(row, pt_jxl, _media)  # type: ignore[attr-defined]
-                writer.writerow(self._build_schema_row(  # type: ignore[attr-defined]
-                    header, attr_col_indices, row, pt_jxl, photo, job_timestamp,
-                ))
+                attrs = row.get("attrs", [])
+                # Pad attrs to max_attrs length
+                padded = attrs + [""] * (max_attrs - len(attrs))
+                writer.writerow([
+                    row["point_name"],
+                    row["N"],
+                    row["E"],
+                    row["Z"],
+                    row.get("code", ""),
+                ] + padded)
 
     # ---------- Multi-format export helpers ----------
 
@@ -8312,6 +8367,7 @@ End Sub
         media_found: dict[str, str] | None = None,
         jxl_meta: dict[str, Any] | None = None,
         client_schema: dict[str, Any] | None = None,
+        fxl_data: dict[str, list[dict[str, Any]]] | None = None,
     ) -> None:
         """Write a single combined Shapefile (.shp/.shx/.dbf/.prj) with all points.
 
@@ -8330,7 +8386,7 @@ End Sub
 
         if use_schema:
             header = self._schema_header(client_schema)  # type: ignore[attr-defined]
-            attr_col_indices = self._schema_attr_indices(header)  # type: ignore[attr-defined]
+            attr_col_indices = self._schema_attr_indices(header, fxl_data)  # type: ignore[attr-defined]
             _meta: dict[str, Any] = jxl_meta or {}
             job_timestamp = _meta.get("timestamp", "")
             # All schema fields → Character 254 (safest for mixed types)
@@ -8550,15 +8606,33 @@ End Sub
         output_path: str,
         rows: list[dict[str, Any]],
         matched_pts: dict[str, dict[str, Any]],
+        media_found: dict[str, str] | None = None,
+        jxl_meta: dict[str, Any] | None = None,
+        client_schema: dict[str, Any] | None = None,
+        fxl_data: dict[str, list[dict[str, Any]]] | None = None,
     ) -> None:
         """Write a LandXML 1.2 file with CgPoints for all survey points.
 
         Coordinates are WGS84 lat/lon/height from JXL. Points without
         geodetic data use local N/E/Z.
+
+        When *client_schema* is provided, each CgPoint gets a ``<Feature>``
+        child with ``<Property>`` elements carrying the schema field values.
         """
         ns = "http://www.landxml.org/schema/LandXML-1.2"
         now = datetime.datetime.now()
         stem = os.path.splitext(os.path.basename(output_path))[0]
+        _media: dict[str, str] = media_found or {}
+
+        use_schema = bool(client_schema and client_schema.get("points_fields"))
+        header: list[str] = []
+        attr_col_indices: dict[int, int] = {}
+        job_timestamp = ""
+        if use_schema:
+            header = self._schema_header(client_schema)  # type: ignore[attr-defined]
+            attr_col_indices = self._schema_attr_indices(header, fxl_data)  # type: ignore[attr-defined]
+            _meta: dict[str, Any] = jxl_meta or {}
+            job_timestamp = _meta.get("timestamp", "")
 
         root = ET.Element("LandXML", attrib={
             "xmlns": ns,
@@ -8598,6 +8672,19 @@ End Sub
             cg_pt = ET.SubElement(cg_points, "CgPoint", attrib=attribs)
             cg_pt.text = coord_text
 
+            # Attach client schema fields as <Feature><Property> elements
+            if use_schema:
+                photo = self._resolve_photo(row, pt_jxl, _media)  # type: ignore[attr-defined]
+                vals = self._build_schema_row(  # type: ignore[attr-defined]
+                    header, attr_col_indices, row, pt_jxl, photo, job_timestamp,
+                )
+                feat = ET.SubElement(cg_pt, "Feature", attrib={"name": "SurveyData"})
+                for col_name, val in zip(header, vals):
+                    if val not in (None, ""):
+                        ET.SubElement(feat, "Property", attrib={
+                            "label": col_name, "value": str(val),
+                        })
+
         os.makedirs(os.path.dirname(output_path) or ".", exist_ok=True)
         tree = ET.ElementTree(root)
         ET.indent(tree, space="  ")
@@ -8629,7 +8716,7 @@ End Sub
         job_timestamp = ""
         if use_schema:
             header = self._schema_header(client_schema)  # type: ignore[attr-defined]
-            attr_col_indices = self._schema_attr_indices(header)  # type: ignore[attr-defined]
+            attr_col_indices = self._schema_attr_indices(header, fxl_data)  # type: ignore[attr-defined]
             _meta: dict[str, Any] = jxl_meta or {}
             job_timestamp = _meta.get("timestamp", "")
 
@@ -9867,7 +9954,7 @@ End Sub
         """
         import zipfile
 
-        # Build a reprojection function — resolve CRS via mapping table + pyproj
+        # Build a reprojection function — resolve CRS via mapping table + pyproj.
         _reproject: Any = None  # type: ignore[reportUnknownVariableType]
         _resolved_epsg = 0
         if source_crs:
@@ -10057,7 +10144,7 @@ End Sub
         If the file exists, parses it and adds geometry elements.
         Otherwise creates a minimal LandXML with just the geometry.
         """
-        # Build reprojection function (LandXML uses lat/lon like KML)
+        # Build reprojection function — resolve CRS via mapping table + pyproj.
         _reproject: Any = None  # type: ignore[reportUnknownVariableType]
         _resolved_epsg = 0
         if source_crs:
@@ -11299,13 +11386,15 @@ End Sub
             _filtered_rows = [r for r in rows
                               if (r.get("code", "UNKNOWN") or "UNKNOWN") in _selected_code_set]
 
-            # Write all formats — each is independent, failures don't block the rest
-            gpkg_path = os.path.join(output_dir, crdb_stem + ".gpkg")
-            csv_path = os.path.join(output_dir, crdb_stem + ".csv")
-            shp_path = os.path.join(output_dir, crdb_stem + ".shp")
-            xml_path = os.path.join(output_dir, crdb_stem + ".xml")
-            kmz_path = os.path.join(output_dir, crdb_stem + ".kmz")
-            gnss_path = os.path.join(output_dir, crdb_stem + "_GNSS_Report.csv")
+            # Write all formats — each is independent, failures don't block the rest.
+            # _available_path adds _1, _2, … if a file is locked (e.g. open in Excel).
+            _ap = self._available_path
+            gpkg_path = _ap(os.path.join(output_dir, crdb_stem + ".gpkg"))
+            csv_path = _ap(os.path.join(output_dir, crdb_stem + ".csv"))
+            shp_path = _ap(os.path.join(output_dir, crdb_stem + ".shp"))
+            xml_path = _ap(os.path.join(output_dir, crdb_stem + ".xml"))
+            kmz_path = _ap(os.path.join(output_dir, crdb_stem + ".kmz"))
+            gnss_path = _ap(os.path.join(output_dir, crdb_stem + "_GNSS_Report.csv"))
 
             written: list[str] = []
             errors: list[str] = []
@@ -11313,9 +11402,9 @@ End Sub
             # CSV gets ALL rows; other formats get filtered rows
             for label, func in [
                 ("GeoPackage", lambda: self._write_gpkg(gpkg_path, _filtered_rows, _matched, fxl_data_ref[0], _mf, _jxl_meta, _client_schema)),  # type: ignore[attr-defined]
-                ("CSV", lambda: self._write_crdb_csv(csv_path, rows, _matched, fxl_data_ref[0], _mf, _jxl_meta, _client_schema)),  # type: ignore[attr-defined]
-                ("Shapefile", lambda: self._write_crdb_shp(shp_path, _filtered_rows, _matched, _mf, _jxl_meta, _client_schema)),  # type: ignore[attr-defined]
-                ("LandXML", lambda: self._write_crdb_landxml(xml_path, _filtered_rows, _matched)),  # type: ignore[attr-defined]
+                ("CSV", lambda: self._write_crdb_csv(csv_path, rows, _matched, fxl_data_ref[0])),  # type: ignore[attr-defined]
+                ("Shapefile", lambda: self._write_crdb_shp(shp_path, _filtered_rows, _matched, _mf, _jxl_meta, _client_schema, fxl_data_ref[0])),  # type: ignore[attr-defined]
+                ("LandXML", lambda: self._write_crdb_landxml(xml_path, _filtered_rows, _matched, _mf, _jxl_meta, _client_schema, fxl_data_ref[0])),  # type: ignore[attr-defined]
                 ("KMZ", lambda: self._write_crdb_kmz(kmz_path, _filtered_rows, _matched, fxl_data_ref[0], _mf, _jxl_meta, _client_schema)),  # type: ignore[attr-defined]
                 ("GNSS Report", lambda: self._write_crdb_gnss_csv(gnss_path, rows, _matched, _mf, crdb_path, _jxl_meta)),  # type: ignore[attr-defined]
             ]:
@@ -11339,7 +11428,7 @@ End Sub
                 msgs.append(f"\nFailed: {'; '.join(errors)}")
 
             if report_var.get() and (_unres or _amb or _mm):
-                report_path = os.path.join(os.path.dirname(crdb_path), crdb_stem + "_issues.xlsx")
+                report_path = _ap(os.path.join(os.path.dirname(crdb_path), crdb_stem + "_issues.xlsx"))
                 try:
                     self._write_unresolved_excel(_unres, _amb, _mm, report_path)  # type: ignore[attr-defined]
                     msgs.append(f"Issues report: {os.path.basename(report_path)}")
