@@ -31,7 +31,7 @@ from urllib.request import Request, urlopen
 from urllib.error import URLError
 
 # ── App version & update config ──────────────────────────────────
-APP_VERSION = "3.2.1"
+APP_VERSION = "3.2.2"
 _GITHUB_OWNER = "joshwaldrip1"
 _GITHUB_REPO  = "DataValidationTool"
 # Fine-grained PAT loaded from config.json at runtime ("github_token" key).
